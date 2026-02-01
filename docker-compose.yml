@@ -1,67 +1,93 @@
+# =============================================================================
+# PRODUCTION Docker Compose Configuration
+# Run with: docker-compose up -d
+# This file builds optimized production containers (no hot-reload, smaller images)
+# =============================================================================
+
 services:
+  # ===========================================================================
+  # MongoDB Database Container
+  # ===========================================================================
   mongo:
-    image: mongo:latest
-    command: mongod --quiet --logpath /dev/null
-    restart: always
+    image: mongo:latest                              # Official MongoDB image
+    command: mongod --quiet --logpath /dev/null      # Suppress verbose logging
+    restart: always                                  # Auto-restart on failure/reboot
     environment:
       # Provide your credentials here
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_ROOT_USERNAME: admin              # Root username (CHANGE IN PRODUCTION!)
+      MONGO_INITDB_ROOT_PASSWORD: admin              # Root password (CHANGE IN PRODUCTION!)
     ports:
-      - 27018:27017
+      - 27018:27017                                  # Host:Container port mapping
     volumes:
-      - mongodb_data:/data/db
-      - mongodb_config:/data/configdb
+      - mongodb_data:/data/db                        # Persist database data
+      - mongodb_config:/data/configdb                # Persist MongoDB config
 
+  # ===========================================================================
+  # Mongo Express - Web-based MongoDB Admin UI
+  # ===========================================================================
   mongo-express:
-    image: mongo-express:latest
+    image: mongo-express:latest                      # Web UI for browsing MongoDB
     restart: always
     ports:
-      - 8084:8081
+      - 8084:8081                                    # Access at http://localhost:8084
     environment:
-      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/   # Internal Docker network connection
+      ME_CONFIG_BASICAUTH_USERNAME: admin            # Web UI login
+      ME_CONFIG_BASICAUTH_PASSWORD: admin            # Web UI password
     depends_on:
-      - mongo
+      - mongo                                        # Start after MongoDB is running
 
+  # ===========================================================================
+  # Backend API Server (Node.js/Express) - PRODUCTION BUILD
+  # ===========================================================================
   mi-backend:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
-    env_file: ./backend/.env.docker
+      context: .                                     # Build from project root
+      dockerfile: ./backend/Dockerfile               # Production Dockerfile (optimized, no dev tools)
+    env_file: ./backend/.env.docker                  # Load environment config
     restart: always
     ports:
-      - 4004:4004
+      - 4004:4004                                    # API endpoint
     depends_on:
       - mongo
     volumes:
-      - cdn:/var/www/cdn/movinin
-      - backend_logs:/movinin/backend/logs
+      - cdn:/var/www/cdn/movinin                     # Shared CDN for uploaded files
+      - backend_logs:/movinin/backend/logs           # Persist logs
+      # NOTE: No source code mount - production uses built code inside container
 
+  # ===========================================================================
+  # Admin Panel (React) - PRODUCTION BUILD
+  # ===========================================================================
   mi-admin:
     build:
       context: .
-      dockerfile: ./admin/Dockerfile
+      dockerfile: ./admin/Dockerfile                 # Production Dockerfile (nginx serving built static files)
     depends_on:
       - mi-backend
     ports:
-      - 3003:3003
+      - 3003:3003                                    # Admin panel URL
+      # NOTE: No volume mounts - production serves pre-built static files
 
+  # ===========================================================================
+  # Frontend Customer App (React) - PRODUCTION BUILD
+  # ===========================================================================
   mi-frontend:
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: ./frontend/Dockerfile              # Production Dockerfile (nginx serving built static files)
     depends_on:
       - mi-backend
     ports:
-      - 8081:80
-      - 8443:443
+      - 8081:80                                      # HTTP (nginx default port 80 mapped to 8081)
+      - 8443:443                                     # HTTPS
     volumes:
-      - cdn:/var/www/cdn/movinin
+      - cdn:/var/www/cdn/movinin                     # Access uploaded files for serving images
 
+# =============================================================================
+# Named Volumes - Data persists across container restarts
+# =============================================================================
 volumes:
-  cdn:
-  mongodb_data:
-  mongodb_config:
-  backend_logs:
+  cdn:                                               # User uploads (images, documents)
+  mongodb_data:                                      # Database files
+  mongodb_config:                                    # MongoDB settings
+  backend_logs:                                      # Server logs

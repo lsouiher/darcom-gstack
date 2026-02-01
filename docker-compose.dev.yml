@@ -1,82 +1,110 @@
+# =============================================================================
+# DEVELOPMENT Docker Compose Configuration
+# Run with: docker-compose -f docker-compose.dev.yml up -d
+# This file sets up 5 containers for local development with hot-reload enabled
+# =============================================================================
+
 services:
+  # ===========================================================================
+  # MongoDB Database Container
+  # ===========================================================================
   mongo:
-    image: mongo:latest
-    command: mongod --quiet --logpath /dev/null
-    restart: always
+    image: mongo:latest                              # Use the official MongoDB image from Docker Hub
+    command: mongod --quiet --logpath /dev/null      # Run MongoDB with minimal logging (suppress noisy output)
+    restart: always                                  # Auto-restart if container crashes or Docker restarts
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_ROOT_USERNAME: admin              # Create root user "admin" on first startup
+      MONGO_INITDB_ROOT_PASSWORD: admin              # Password for root user (change in production!)
     ports:
-      - 27018:27017
+      - 27018:27017                                  # Map host port 27018 → container port 27017 (MongoDB default)
+                                                     # Access from host: mongodb://admin:admin@localhost:27018
     volumes:
-      - mongodb_data:/data/db
-      - mongodb_config:/data/configdb
+      - mongodb_data:/data/db                        # Persist database files (survives container restarts)
+      - mongodb_config:/data/configdb                # Persist MongoDB config (replica set configs, etc.)
 
+  # ===========================================================================
+  # Mongo Express - Web-based MongoDB Admin UI
+  # ===========================================================================
   mongo-express:
-    image: mongo-express:latest
-    restart: always
+    image: mongo-express:latest                      # Official web UI for MongoDB
+    restart: always                                  # Auto-restart on failure
     ports:
-      - 8084:8081
+      - 8084:8081                                    # Access at http://localhost:8084
     environment:
-      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/   # Connect to mongo service (uses Docker network name "mongo")
+      ME_CONFIG_BASICAUTH_USERNAME: admin            # Login username for the web UI
+      ME_CONFIG_BASICAUTH_PASSWORD: admin            # Login password for the web UI
     depends_on:
-      - mongo
+      - mongo                                        # Wait for mongo container to start first
 
+  # ===========================================================================
+  # Backend API Server (Node.js/Express)
+  # ===========================================================================
   mi-dev-backend:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile.dev
-    env_file: ./backend/.env.docker
-    restart: always
+      context: .                                     # Build context is the project root (can access all files)
+      dockerfile: ./backend/Dockerfile.dev           # Use development Dockerfile (includes nodemon for hot-reload)
+    env_file: ./backend/.env.docker                  # Load environment variables from this file
+    restart: always                                  # Auto-restart on failure
     ports:
-      - 4004:4004
+      - 4004:4004                                    # API available at http://localhost:4004
     depends_on:
-      - mongo
+      - mongo                                        # Wait for MongoDB to start first
     volumes:
-      - cdn:/var/www/cdn/movinin
-      - ./backend:/movinin/backend
-      - /movinin/backend/node_modules
-      - backend_logs:/movinin/backend/logs
+      - cdn:/var/www/cdn/movinin                     # Shared volume for uploaded files (images, avatars)
+      - ./backend:/movinin/backend                   # Mount local backend code INTO container (enables hot-reload)
+                                                     # Changes to ./backend files reflect immediately in container
+      - /movinin/backend/node_modules                # Anonymous volume: keeps container's node_modules separate
+                                                     # Prevents host node_modules from overwriting container's
+      - backend_logs:/movinin/backend/logs           # Persist log files
 
+  # ===========================================================================
+  # Admin Panel (React + Vite)
+  # ===========================================================================
   mi-dev-admin:
     build:
-      context: .
-      dockerfile: ./admin/Dockerfile.dev
-    env_file: ./admin/.env.docker
-    restart: always
+      context: .                                     # Build context is project root
+      dockerfile: ./admin/Dockerfile.dev             # Development Dockerfile with Vite dev server
+    env_file: ./admin/.env.docker                    # Load environment variables
+    restart: always                                  # Auto-restart on failure
     depends_on:
-      - mi-dev-backend
+      - mi-dev-backend                               # Wait for backend API to be available
     ports:
-      - 3003:3003
+      - 3003:3003                                    # Admin panel at http://localhost:3003
     volumes:
-      - ./admin:/movinin/admin
-      - /movinin/admin/node_modules
+      - ./admin:/movinin/admin                       # Mount local admin code (hot-reload: edit files, see changes)
+      - /movinin/admin/node_modules                  # Keep container's node_modules isolated
     environment:
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true                     # Enable file polling for hot-reload (needed in Docker/WSL)
+      - WATCHPACK_POLLING=true                       # Webpack/Vite polling for file changes (Docker doesn't support inotify well)
 
+  # ===========================================================================
+  # Frontend Customer App (React + Vite)
+  # ===========================================================================
   mi-dev-frontend:
     build:
-      context: .
-      dockerfile: ./frontend/Dockerfile.dev
-    env_file: ./frontend/.env.docker
-    restart: always
+      context: .                                     # Build context is project root
+      dockerfile: ./frontend/Dockerfile.dev          # Development Dockerfile with Vite dev server
+    env_file: ./frontend/.env.docker                 # Load environment variables
+    restart: always                                  # Auto-restart on failure
     depends_on:
-      - mi-dev-backend
+      - mi-dev-backend                               # Wait for backend API to be available
     ports:
-      - 8081:8081
-      - 8444:443
+      - 8081:8081                                    # Frontend at http://localhost:8081
+      - 8444:443                                     # HTTPS port (if configured)
     volumes:
-      - ./frontend:/movinin/frontend
-      - /movinin/frontend/node_modules
+      - ./frontend:/movinin/frontend                 # Mount local frontend code (hot-reload enabled)
+      - /movinin/frontend/node_modules               # Keep container's node_modules isolated
     environment:
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true                     # Enable file polling for hot-reload
+      - WATCHPACK_POLLING=true                       # Vite file watcher polling mode
 
+# =============================================================================
+# Named Volumes - Persistent storage that survives container restarts
+# Use "docker-compose down -v" to delete these volumes (fresh start)
+# =============================================================================
 volumes:
-  cdn:
-  mongodb_data:
-  mongodb_config:
-  backend_logs:
+  cdn:                                               # Uploaded files (property images, user avatars)
+  mongodb_data:                                      # MongoDB database files
+  mongodb_config:                                    # MongoDB configuration
+  backend_logs:                                      # API server logs
