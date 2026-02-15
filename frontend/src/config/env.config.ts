@@ -35,6 +35,10 @@ const CURRENCIES: Currency[] = [
     code: 'EUR',
     symbol: '€',
   },
+  {
+    code: 'DZD',
+    symbol: 'د.ج',
+  },
 ]
 
 const getPaymentGateway = () => {
