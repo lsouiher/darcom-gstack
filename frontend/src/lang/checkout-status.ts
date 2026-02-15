@@ -19,6 +19,14 @@ const strings = new LocalizedStrings({
     STATUS_TITLE: `${env.WEBSITE_NAME} Booking Confirmation`,
     STATUS_MESSAGE: 'Check your mailbox and follow the steps described in the booking confirmation email to book your property. You will find property address and Google Maps link in the confirmation email.',
   },
+  ar: {
+    CONGRATULATIONS: 'تهانينا!',
+    SUCCESS: 'تم الدفع بنجاح. لقد أرسلنا لك بريدًا إلكترونيًا للتأكيد.',
+    SUCCESS_PAY_LATER: 'تم الحجز بنجاح. لقد أرسلنا لك بريدًا إلكترونيًا للتأكيد.',
+    ERROR: 'حدث خطأ ما! حاول مرة أخرى لاحقًا',
+    STATUS_TITLE: `${env.WEBSITE_NAME} تأكيد الحجز`,
+    STATUS_MESSAGE: 'تحقق من بريدك الإلكتروني واتبع الخطوات الموضحة في رسالة تأكيد الحجز لحجز عقارك. ستجد عنوان العقار ورابط خرائط جوجل في رسالة التأكيد.',
+  },
 })
 
 langHelper.setLanguage(strings)

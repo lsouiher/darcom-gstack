@@ -14,6 +14,12 @@ const strings = new LocalizedStrings({
     VALIDATION_EMAIL_SENT: 'Validation email sent.',
     VALIDATION_EMAIL_ERROR: 'An error occurred while sending validation email.',
   },
+  ar: {
+    VALIDATE_EMAIL: 'تم إرسال بريد إلكتروني للتحقق إلى عنوان بريدك الإلكتروني. يرجى التحقق من صندوق البريد الخاص بك وتفعيل حسابك بالنقر على الرابط في البريد الإلكتروني. ستنتهي صلاحيته بعد يوم واحد. إذا لم تتلقَّ بريد التحقق، انقر على إعادة الإرسال.',
+    RESEND: 'إعادة الإرسال',
+    VALIDATION_EMAIL_SENT: 'تم إرسال بريد التحقق.',
+    VALIDATION_EMAIL_ERROR: 'حدث خطأ أثناء إرسال بريد التحقق.',
+  },
 })
 
 langHelper.setLanguage(strings)

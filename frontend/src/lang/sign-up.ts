@@ -12,6 +12,11 @@ const strings = new LocalizedStrings({
     SIGN_UP: 'Register',
     SIGN_UP_ERROR: 'An error occurred during sign up.',
   },
+  ar: {
+    SIGN_UP_HEADING: 'التسجيل',
+    SIGN_UP: 'تسجيل',
+    SIGN_UP_ERROR: 'حدث خطأ أثناء التسجيل.',
+  },
 })
 
 langHelper.setLanguage(strings)

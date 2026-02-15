@@ -21,6 +21,15 @@ const strings = new LocalizedStrings({
     CONTENT2: "Enjoy unmatched convenience, reliability, and value with our premier property rental service. From effortless bookings to high-quality properties, we're your trusted travel partner.",
     FIND_DEAL: 'Find Deal',
   },
+  ar: {
+    TITLE1: `${env.WEBSITE_NAME} - خدمة تأجير العقارات المتميزة`,
+    SUBTITLE1: 'شريكك الموثوق لتأجير العقارات',
+    CONTENT1: `في ${env.WEBSITE_NAME}، نحن ندرك أن كل رحلة فريدة من نوعها. نحن ملتزمون بتزويد عملائنا بمجموعة متنوعة من العقارات التي تلبي جميع احتياجات السفر. سواء كنت تستكشف مدينة، أو تتنقل للعمل، أو تبحث عن المغامرة، فإن خدمات تأجير العقارات الموثوقة لدينا تضمن أن تبدأ مغامرتك بسلاسة. مهمتنا هي تقديم خدمة عملاء استثنائية، مما يجعل تجربتك ممتعة وخالية من التوتر. مع أسعار تنافسية، ومجموعة متنوعة من العقارات المُصانة جيدًا، وفريق متفانٍ مستعد لمساعدتك، نسعى جاهدين لنكون شريكك الموثوق. اختر ${env.WEBSITE_NAME} لجميع احتياجات تأجير العقارات الخاصة بك واستمتع بحرية الاستكشاف بالسرعة التي تناسبك.`,
+    TITLE2: `لماذا تختار ${env.WEBSITE_NAME}`,
+    SUBTITLE2: 'تجربة التميز في كل رحلة',
+    CONTENT2: 'استمتع براحة وموثوقية وقيمة لا مثيل لها مع خدمة تأجير العقارات المتميزة لدينا. من الحجوزات السهلة إلى العقارات عالية الجودة، نحن شريكك الموثوق في السفر.',
+    FIND_DEAL: 'ابحث عن عرض',
+  },
 })
 
 langHelper.setLanguage(strings)

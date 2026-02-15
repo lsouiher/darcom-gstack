@@ -32,6 +32,21 @@
       PRIVACY_POLICY: 'Privacy Policy',
       COOKIE_POLICY: 'Cookie Policy',
     },
+    ar: {
+      SIGN_IN: 'تسجيل الدخول',
+      HOME: 'الرئيسية',
+      BOOKINGS: 'الحجوزات',
+      ABOUT: 'من نحن',
+      TOS: 'شروط الاستخدام',
+      CONTACT: 'اتصل بنا',
+      LANGUAGE: 'اللغة',
+      SETTINGS: 'الإعدادات',
+      SIGN_OUT: 'تسجيل الخروج',
+      AGENCIES: 'الوكالات',
+      LOCATIONS: 'الوجهات',
+      PRIVACY_POLICY: 'سياسة الخصوصية',
+      COOKIE_POLICY: 'سياسة ملفات تعريف الارتباط',
+    },
   })
 
   langHelper.setLanguage(strings)
