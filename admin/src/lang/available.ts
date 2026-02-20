@@ -13,7 +13,13 @@ const strings = new LocalizedStrings({
         AVAILABLE_INFO: 'This property is available.',
         UNAVAILABLE: 'Unavailable',
         UNAVAILABLE_INFO: 'This property is unavailable.',
-    }
+    },
+    ar: {
+        AVAILABLE: 'متاح',
+        AVAILABLE_INFO: 'هذا العقار متاح.',
+        UNAVAILABLE: 'غير متاح',
+        UNAVAILABLE_INFO: 'هذا العقار غير متاح.',
+    },
 })
 
 langHelper.setLanguage(strings)

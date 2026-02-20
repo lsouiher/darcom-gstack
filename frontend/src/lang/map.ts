@@ -8,6 +8,9 @@ const strings = new LocalizedStrings({
   en: {
     SELECT_LOCATION: 'Select Destination',
   },
+  ar: {
+    SELECT_LOCATION: 'اختر الوجهة',
+  },
 })
 
 langHelper.setLanguage(strings)

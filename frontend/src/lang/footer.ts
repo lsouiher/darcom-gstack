@@ -37,6 +37,22 @@ const strings = new LocalizedStrings({
     PRIVACY_POLICY: 'Privacy Policy',
     COOKIE_POLICY: 'Cookie Policy',
   },
+  ar: {
+    COPYRIGHT_PART1,
+    COPYRIGHT_PART2: '. جميع الحقوق محفوظة.',
+
+    CORPORATE: 'عن الشركة',
+    ABOUT: 'من نحن',
+    TOS: 'شروط الاستخدام',
+    RENT: 'استأجر عقارًا',
+    AGENCIES: 'الوكالات',
+    LOCATIONS: 'الوجهات',
+    SUPPORT: 'الدعم',
+    CONTACT: 'اتصل بنا',
+    SECURE_PAYMENT: `دفع آمن 100% مع ${env.WEBSITE_NAME}`,
+    PRIVACY_POLICY: 'سياسة الخصوصية',
+    COOKIE_POLICY: 'سياسة ملفات تعريف الارتباط',
+  },
 })
 
 langHelper.setLanguage(strings)

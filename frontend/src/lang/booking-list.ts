@@ -28,6 +28,19 @@ const strings = new LocalizedStrings({
     CANCEL_BOOKING: 'Are you sure you want to cancel this booking?',
     CANCEL_BOOKING_REQUEST_SENT: 'Your cancel request has been submited. We will contact you to finalize the cancellation procedure.',
   },
+  ar: {
+    PROPERTY: 'العقار',
+    AGENCY: 'الوكالة',
+    PRICE: 'السعر',
+    STATUS: 'الحالة',
+    EMPTY_LIST: 'لا توجد حجوزات.',
+    VIEW: 'عرض هذا الحجز',
+    DAYS: 'أيام',
+    COST: 'الإجمالي',
+    CANCEL: 'إلغاء هذا الحجز',
+    CANCEL_BOOKING: 'هل أنت متأكد أنك تريد إلغاء هذا الحجز؟',
+    CANCEL_BOOKING_REQUEST_SENT: 'تم تقديم طلب الإلغاء الخاص بك. سنتواصل معك لإتمام إجراءات الإلغاء.',
+  },
 })
 
 langHelper.setLanguage(strings)
