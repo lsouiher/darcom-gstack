@@ -1,6 +1,6 @@
 # Local Development Setup Guide
 
-This guide walks you through running Movin' In locally using Docker Desktop (no MongoDB installation required).
+This guide walks you through running DaryWin locally using Docker Desktop (no MongoDB installation required).
 
 ## Prerequisites
 
@@ -46,8 +46,8 @@ Copy-Item admin\.env.docker.example admin\.env.docker
 Edit `backend/.env.docker` and replace the placeholder values:
 
 ```bash
-MI_JWT_SECRET=your-secure-jwt-secret-key-here
-MI_COOKIE_SECRET=your-secure-cookie-secret-here
+DW_JWT_SECRET=your-secure-jwt-secret-key-here
+DW_COOKIE_SECRET=your-secure-cookie-secret-here
 ```
 
 Generate secure random strings for these values (e.g., use `openssl rand -hex 32`).
@@ -137,34 +137,34 @@ Key settings already configured for Docker:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| MI_DB_URI | `mongodb://admin:admin@mongo:27017/movinin` | MongoDB connection |
-| MI_PORT | 4004 | API port |
-| MI_ADMIN_HOST | `http://localhost:3003/` | Admin panel URL |
-| MI_FRONTEND_HOST | `http://localhost:8081/` | Frontend URL |
+| DW_DB_URI | `mongodb://admin:admin@mongo:27017/movinin` | MongoDB connection |
+| DW_PORT | 4004 | API port |
+| DW_ADMIN_HOST | `http://localhost:3003/` | Admin panel URL |
+| DW_FRONTEND_HOST | `http://localhost:8081/` | Frontend URL |
 
 **Required secrets to set:**
-- `MI_JWT_SECRET` - JWT signing key
-- `MI_COOKIE_SECRET` - Cookie encryption key
+- `DW_JWT_SECRET` - JWT signing key
+- `DW_COOKIE_SECRET` - Cookie encryption key
 
 **Optional (for full functionality):**
-- `MI_STRIPE_SECRET_KEY` - Stripe payments
-- `MI_PAYPAL_CLIENT_ID` / `MI_PAYPAL_CLIENT_SECRET` - PayPal payments
-- `MI_SMTP_PASS` - Email service (SendGrid)
-- `MI_RECAPTCHA_SECRET` - reCAPTCHA verification
+- `DW_STRIPE_SECRET_KEY` - Stripe payments
+- `DW_PAYPAL_CLIENT_ID` / `DW_PAYPAL_CLIENT_SECRET` - PayPal payments
+- `DW_SMTP_PASS` - Email service (SendGrid)
+- `DW_RECAPTCHA_SECRET` - reCAPTCHA verification
 
 ### Frontend (`frontend/.env.docker`)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| VITE_MI_API_HOST | `http://localhost:4004` | Backend API URL |
+| VITE_DW_API_HOST | `http://localhost:4004` | Backend API URL |
 | VITE_PORT | 8081 | Dev server port |
-| VITE_MI_PAYMENT_GATEWAY | Stripe | Payment provider |
+| VITE_DW_PAYMENT_GATEWAY | Stripe | Payment provider |
 
 ### Admin (`admin/.env.docker`)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| VITE_MI_API_HOST | `http://localhost:4004` | Backend API URL |
+| VITE_DW_API_HOST | `http://localhost:4004` | Backend API URL |
 | VITE_PORT | 3003 | Dev server port |
 
 ## Hot Reload
@@ -204,7 +204,7 @@ The mobile app is NOT included in Docker Compose. To run it:
    ```
 4. Update `mobile/.env`:
    ```
-   MI_API_HOST=http://YOUR_LOCAL_IP:4004
+   DW_API_HOST=http://YOUR_LOCAL_IP:4004
    ```
    (Use your machine's IP, not localhost, for device access)
 5. Start Expo:

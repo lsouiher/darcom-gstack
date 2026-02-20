@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactNode } from 'react'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings } from '@/lang/master'
 import * as UserService from '@/services/UserService'
 import * as helper from '@/utils/helper'
@@ -11,7 +11,7 @@ import Unauthorized from '@/components/Unauthorized'
 interface LayoutProps {
   strict?: boolean
   children: ReactNode
-  onLoad?: (user?: movininTypes.User) => void
+  onLoad?: (user?: darywinTypes.User) => void
 }
 
 const Layout = ({

@@ -8,7 +8,7 @@ import {
   LinkedIn,
   Instagram,
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings } from '@/lang/footer'
 import NewsletterForm from '@/components/NewsletterForm'
 import env from '@/config/env.config'
@@ -17,7 +17,7 @@ import Stripe from '@/assets/img/stripe.png'
 import PayPal from '@/assets/img/paypal.png'
 import '@/assets/css/footer.css'
 
-const SecurePayment = env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.Stripe ? Stripe : PayPal
+const SecurePayment = env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.Stripe ? Stripe : PayPal
 
 const Footer = () => {
   const navigate = useNavigate()
@@ -65,14 +65,14 @@ const Footer = () => {
       <section className="payment">
         <div
           className="payment-text"
-          style={{ margin: env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.PayPal ? '0 20px' : '-25px 10px 0 0' }}
+          style={{ margin: env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.PayPal ? '0 20px' : '-25px 10px 0 0' }}
         >
           {strings.SECURE_PAYMENT}
         </div>
         <img
           src={SecurePayment}
           alt=""
-          style={{ height: env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.PayPal ? 64 : 'auto' }}
+          style={{ height: env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.PayPal ? 64 : 'auto' }}
         />
       </section>
       <section className="copyright">

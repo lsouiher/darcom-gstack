@@ -17,8 +17,8 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import Const from '@/config/const'
 import { strings as commonStrings } from '@/lang/common'
@@ -31,9 +31,9 @@ import Progress from '@/components/Progress'
 import '@/assets/css/agency-list.css'
 
 interface AgencyListProps {
-  user?: movininTypes.User
+  user?: darywinTypes.User
   keyword?: string
-  onLoad?: movininTypes.DataEvent<movininTypes.User>
+  onLoad?: darywinTypes.DataEvent<darywinTypes.User>
   onDelete?: (rowCount: number) => void
 }
 
@@ -49,7 +49,7 @@ const AgencyList = ({
   const [init, setInit] = useState(true)
   const [loading, setLoading] = useState(false)
   const [fetch, setFetch] = useState(false)
-  const [rows, setRows] = useState<movininTypes.User[]>([])
+  const [rows, setRows] = useState<darywinTypes.User[]>([])
   const [rowCount, setRowCount] = useState(0)
   const [totalRecords, setTotalRecords] = useState(0)
   const [page, setPage] = useState(1)
@@ -202,7 +202,7 @@ const AgencyList = ({
               <article key={agency._id}>
                 <div className="agency-item">
                   <div className="agency-item-avatar">
-                    <img src={movininHelper.joinURL(env.CDN_USERS, agency.avatar)} alt={agency.fullName} />
+                    <img src={darywinHelper.joinURL(env.CDN_USERS, agency.avatar)} alt={agency.fullName} />
                   </div>
                   <span className="agency-item-title">{agency.fullName}</span>
                 </div>

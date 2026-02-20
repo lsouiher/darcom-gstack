@@ -19,8 +19,8 @@ import {
   AttachMoney as RentalTermIcon,
   PhotoSizeSelectSmall as SizeIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import * as helper from '@/utils/helper'
 import { strings } from '@/lang/properties'
 import { strings as cpStrings } from '@/lang/create-property'
@@ -31,9 +31,9 @@ import env from '@/config/env.config'
 import '@/assets/css/property-info.css'
 
 interface PropertyInfoProps {
-  property: movininTypes.Property
-  user?: movininTypes.User
-  booking?: movininTypes.Booking
+  property: darywinTypes.Property
+  user?: darywinTypes.User
+  booking?: darywinTypes.Booking
   description?: boolean
   className?: string
   language: string
@@ -47,7 +47,7 @@ const PropertyInfo = ({
   className,
   language,
 }: PropertyInfoProps) => {
-  const fr = movininHelper.fr(user)
+  const fr = darywinHelper.fr(user)
   const edit = helper.admin(user) || (user?._id === property.agency._id)
 
   const getExtraIcon = (option: string, extra: number) => {
@@ -65,7 +65,7 @@ const PropertyInfo = ({
         : <InfoIcon className="extra-info" />
   }
 
-  const size = `${movininHelper.formatNumber(property.size as number, language)} ${env.SIZE_UNIT}`
+  const size = `${darywinHelper.formatNumber(property.size as number, language)} ${env.SIZE_UNIT}`
 
   return (
     (property && user

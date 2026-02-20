@@ -1,6 +1,6 @@
 import validator from 'validator'
 import { Schema, model } from 'mongoose'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../config/env.config'
 
 export const USER_EXPIRE_AT_INDEX_NAME = 'expireAt'
@@ -85,8 +85,8 @@ const userSchema = new Schema<env.User>(
     },
     type: {
       type: String,
-      enum: [movininTypes.UserType.Admin, movininTypes.UserType.Agency, movininTypes.UserType.User],
-      default: movininTypes.UserType.User,
+      enum: [darywinTypes.UserType.Admin, darywinTypes.UserType.Agency, darywinTypes.UserType.User],
+      default: darywinTypes.UserType.User,
     },
     blacklisted: {
       type: Boolean,

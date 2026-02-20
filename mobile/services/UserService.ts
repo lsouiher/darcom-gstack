@@ -6,7 +6,7 @@ import * as env from '@/config/env.config'
 import * as AsyncStorage from '@/utils/AsyncStorage'
 import * as axiosHelper from '@/utils/axiosHelper'
 import * as toastHelper from '@/utils/toastHelper'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 axiosHelper.init(axiosInstance)
 
@@ -28,10 +28,10 @@ export const authHeader = async () => {
 /**
  * Sign up.
  *
- * @param {movininTypes.SignUpPayload} data
+ * @param {darywinTypes.SignUpPayload} data
  * @returns {Promise<number>}
  */
-export const signup = (data: movininTypes.SignUpPayload): Promise<number> =>
+export const signup = (data: darywinTypes.SignUpPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/sign-up',
@@ -83,10 +83,10 @@ export const resend = (email: string, reset = false): Promise<number> =>
  * Activate an account.
  *
  * @async
- * @param {movininTypes.ActivatePayload} data
+ * @param {darywinTypes.ActivatePayload} data
  * @returns {Promise<number>}
  */
-export const activate = async (data: movininTypes.ActivatePayload): Promise<number> => {
+export const activate = async (data: darywinTypes.ActivatePayload): Promise<number> => {
   const headers = await authHeader()
   return axiosInstance
     .post(
@@ -100,10 +100,10 @@ export const activate = async (data: movininTypes.ActivatePayload): Promise<numb
 /**
  * Validate an email.
  *
- * @param {movininTypes.ValidateEmailPayload} data
+ * @param {darywinTypes.ValidateEmailPayload} data
  * @returns {Promise<number>}
  */
-export const validateEmail = (data: movininTypes.ValidateEmailPayload): Promise<number> =>
+export const validateEmail = (data: darywinTypes.ValidateEmailPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/validate-email',
@@ -115,10 +115,10 @@ export const validateEmail = (data: movininTypes.ValidateEmailPayload): Promise<
  * Sign in.
  *
  * @async
- * @param {movininTypes.SignInPayload} data
- * @returns {Promise<{ status: number, data: movininTypes.User }>}
+ * @param {darywinTypes.SignInPayload} data
+ * @returns {Promise<{ status: number, data: darywinTypes.User }>}
  */
-export const signin = async (data: movininTypes.SignInPayload): Promise<{ status: number, data: movininTypes.User }> =>
+export const signin = async (data: darywinTypes.SignInPayload): Promise<{ status: number, data: darywinTypes.User }> =>
   axiosInstance
     .post(
       '/api/sign-in/frontend',
@@ -253,10 +253,10 @@ export const confirmEmail = (email: string, token: string): Promise<number> =>
  * Resend validation email.
  *
  * @async
- * @param {movininTypes.ResendLinkPayload} data
+ * @param {darywinTypes.ResendLinkPayload} data
  * @returns {Promise<number>}
  */
-export const resendLink = async (data: movininTypes.ResendLinkPayload): Promise<number> => {
+export const resendLink = async (data: darywinTypes.ResendLinkPayload): Promise<number> => {
   const headers = await authHeader()
   return axiosInstance
     .post(
@@ -274,7 +274,7 @@ export const resendLink = async (data: movininTypes.ResendLinkPayload): Promise<
  * @returns {unknown}
  */
 export const getLanguage = async () => {
-  const user = await AsyncStorage.getObject<movininTypes.User>('mi-user')
+  const user = await AsyncStorage.getObject<darywinTypes.User>('mi-user')
 
   if (user && user.language) {
     return user.language
@@ -299,15 +299,15 @@ export const getDefaultLanguage = () => {
  * Update user's langauge.
  *
  * @async
- * @param {movininTypes.UpdateLanguagePayload} data
+ * @param {darywinTypes.UpdateLanguagePayload} data
  * @returns {Promise<number>}
  */
-export const updateLanguage = async (data: movininTypes.UpdateLanguagePayload) => {
+export const updateLanguage = async (data: darywinTypes.UpdateLanguagePayload) => {
   const headers = await authHeader()
   return axiosInstance
     .post('/api/update-language', data, { headers }).then(async (res) => {
       if (res.status === 200) {
-        const user = await AsyncStorage.getObject<movininTypes.User>('mi-user')
+        const user = await AsyncStorage.getObject<darywinTypes.User>('mi-user')
         if (user) {
           user.language = data.language
           await AsyncStorage.storeObject('mi-user', user)
@@ -334,10 +334,10 @@ export const setLanguage = async (lang: string) => {
  * Get current User.
  *
  * @async
- * @returns {movininTypes.User|null}
+ * @returns {darywinTypes.User|null}
  */
 export const getCurrentUser = async () => {
-  const user = await AsyncStorage.getObject<movininTypes.User>('mi-user')
+  const user = await AsyncStorage.getObject<darywinTypes.User>('mi-user')
   if (user && user.accessToken) {
     return user
   }
@@ -349,9 +349,9 @@ export const getCurrentUser = async () => {
  *
  * @async
  * @param {string} id
- * @returns {Promise<movininTypes.User>}
+ * @returns {Promise<darywinTypes.User>}
  */
-export const getUser = async (id: string): Promise<movininTypes.User> => {
+export const getUser = async (id: string): Promise<darywinTypes.User> => {
   const headers = await authHeader()
   return axiosInstance
     .get(`/api/user/${encodeURIComponent(id)}`, {
@@ -364,10 +364,10 @@ export const getUser = async (id: string): Promise<movininTypes.User> => {
  * Update a User.
  *
  * @async
- * @param {movininTypes.UpdateUserPayload} data
+ * @param {darywinTypes.UpdateUserPayload} data
  * @returns {Promise<number>}
  */
-export const updateUser = async (data: movininTypes.UpdateUserPayload): Promise<number> => {
+export const updateUser = async (data: darywinTypes.UpdateUserPayload): Promise<number> => {
   const headers = await authHeader()
   return axiosInstance
     .post(
@@ -382,10 +382,10 @@ export const updateUser = async (data: movininTypes.UpdateUserPayload): Promise<
  * Update email notifications flag.
  *
  * @async
- * @param {movininTypes.UpdateEmailNotificationsPayload} data
+ * @param {darywinTypes.UpdateEmailNotificationsPayload} data
  * @returns {Promise<number>}
  */
-export const updateEmailNotifications = async (data: movininTypes.UpdateEmailNotificationsPayload): Promise<number> => {
+export const updateEmailNotifications = async (data: darywinTypes.UpdateEmailNotificationsPayload): Promise<number> => {
   const headers = await authHeader()
   return axiosInstance
     .post(
@@ -427,10 +427,10 @@ export const checkPassword = async (id: string, pass: string): Promise<number> =
  * Change password.
  *
  * @async
- * @param {movininTypes.ChangePasswordPayload} data
+ * @param {darywinTypes.ChangePasswordPayload} data
  * @returns {Promise<number>}
  */
-export const changePassword = async (data: movininTypes.ChangePasswordPayload): Promise<number> => {
+export const changePassword = async (data: darywinTypes.ChangePasswordPayload): Promise<number> => {
   const headers = await authHeader()
   return axiosInstance
     .post(
@@ -450,7 +450,7 @@ export const changePassword = async (data: movininTypes.ChangePasswordPayload): 
  * @returns {Promise<number | undefined>}
  */
 export const updateAvatar = async (userId: string, file: BlobInfo): Promise<number> => {
-  const user = await AsyncStorage.getObject<movininTypes.User>('mi-user')
+  const user = await AsyncStorage.getObject<darywinTypes.User>('mi-user')
   const uri = Platform.OS === 'android' ? file.uri : file.uri.replace('file://', '')
   const formData = new FormData()
   formData.append('image', {

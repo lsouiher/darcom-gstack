@@ -1,4 +1,4 @@
-# Movin' In - Developer Onboarding Guide
+# DaryWin - Developer Onboarding Guide
 
 **For developers with C#, JavaScript, and Angular experience**
 
@@ -26,7 +26,7 @@ This document explains how the codebase works, including all flows, dependencies
 
 ## 1. Architecture Overview
 
-Movin' In is a **rental property management platform** built as a TypeScript monorepo with four client applications sharing a common backend:
+DaryWin is a **rental property management platform** built as a TypeScript monorepo with four client applications sharing a common backend:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -141,8 +141,8 @@ movinin/
 │   └── context/            # State management
 │
 └── packages/                # Shared npm packages
-    ├── movinin-types/      # TypeScript interfaces & enums
-    ├── movinin-helper/     # Utility functions
+    ├── darywin-types/      # TypeScript interfaces & enums
+    ├── darywin-helper/     # Utility functions
     ├── currency-converter/ # Currency conversion
     ├── disable-react-devtools/
     └── reactjs-social-login/
@@ -309,7 +309,7 @@ Mongoose schemas define MongoDB document structure:
 // backend/src/models/User.ts
 
 import mongoose from 'mongoose'
-import * as movininTypes from ':movinin-types'
+import * as movininTypes from ':darywin-types'
 
 const userSchema = new mongoose.Schema({
   // Like C# property with [Required] attribute
@@ -790,7 +790,7 @@ function SomeComponent() {
 **`frontend/src/services/UserService.ts`**:
 ```typescript
 import axiosInstance from './axiosInstance'
-import * as movininTypes from ':movinin-types'
+import * as movininTypes from ':darywin-types'
 
 // Like Angular HttpClient service methods
 
@@ -1094,12 +1094,12 @@ export default HomeScreen
 
 ## 8. Shared Packages
 
-### 8.1 movinin-types
+### 8.1 darywin-types
 
 Central TypeScript definitions shared across all apps:
 
 ```typescript
-// packages/movinin-types/index.ts
+// packages/darywin-types/index.ts
 
 // Enums (like C# enums)
 export enum UserType {
@@ -1163,12 +1163,12 @@ export interface CreatePropertyPayload {
 }
 ```
 
-### 8.2 movinin-helper
+### 8.2 darywin-helper
 
 Shared utility functions:
 
 ```typescript
-// packages/movinin-helper/index.ts
+// packages/darywin-helper/index.ts
 
 // Format price with currency
 export const formatPrice = (
@@ -1211,8 +1211,8 @@ All apps import shared packages via TypeScript path aliases:
 
 ```typescript
 // In any app file
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as movininTypes from ':darywin-types'
+import * as movininHelper from ':darywin-helper'
 
 // Use types
 const user: movininTypes.User = { ... }
@@ -1524,10 +1524,10 @@ Frontend/Admin:
 
 ```typescript
 // Shared types (all apps)
-import * as movininTypes from ':movinin-types'
+import * as movininTypes from ':darywin-types'
 
 // Shared helpers (all apps)
-import * as movininHelper from ':movinin-helper'
+import * as movininHelper from ':darywin-helper'
 
 // Internal imports (use @ alias)
 import Header from '@/components/Header'
@@ -1586,14 +1586,14 @@ npx jest __tests__/user.test.ts   # Single file
 ### 13.4 Making Changes
 
 1. **Understand the data flow** - Trace from component → service → controller → model
-2. **Check shared types** - If changing API contracts, update `movinin-types` first
+2. **Check shared types** - If changing API contracts, update `darywin-types` first
 3. **Run pre-commit** - `npm run pre-commit` at root before committing
 4. **Test backend changes** - Run `npm test` in backend folder
 
 ### 13.5 Common Tasks
 
 **Adding a new API endpoint:**
-1. Define types in `packages/movinin-types/index.ts`
+1. Define types in `packages/darywin-types/index.ts`
 2. Add route in `backend/src/routes/<domain>Routes.ts`
 3. Add controller function in `backend/src/controllers/<domain>Controller.ts`
 4. Add service function in `frontend/src/services/<Domain>Service.ts`
@@ -1629,7 +1629,7 @@ npx jest __tests__/user.test.ts   # Single file
 - `frontend/src/context/*.tsx` - State management
 
 ### Key Files to Understand First
-1. `packages/movinin-types/index.ts` - All type definitions
+1. `packages/darywin-types/index.ts` - All type definitions
 2. `backend/src/models/User.ts` - Core user model
 3. `backend/src/middlewares/authJwt.ts` - Authentication
 4. `frontend/src/context/UserContext.tsx` - Frontend auth state
@@ -1644,4 +1644,4 @@ npx jest __tests__/user.test.ts   # Single file
 
 ---
 
-*Document generated for Movin' In v6.7.0*
+*Document generated for DaryWin v6.7.0*

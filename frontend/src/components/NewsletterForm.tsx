@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from '@mui/material'
 import validator from 'validator'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/newsletter-form'
@@ -62,7 +62,7 @@ const NewsletterForm = () => {
         return
       }
 
-      const payload: movininTypes.SendEmailPayload = {
+      const payload: darywinTypes.SendEmailPayload = {
         from: email,
         to: env.CONTACT_EMAIL,
         subject: 'New Newsletter Subscription',

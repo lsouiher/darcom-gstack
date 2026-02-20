@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../src/config/env.config'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as mailHelper from '../src/utils/mailHelper'
@@ -27,7 +27,7 @@ describe('Test User phone validation', () => {
   it('should test User phone validation', async () => {
     await databaseHelper.connect(env.DB_URI, false, false)
     let res = true
-    const USER: movininTypes.User = {
+    const USER: darywinTypes.User = {
       email: testHelper.GetRandomEmail(),
       fullName: 'Renter 1',
       birthDate: new Date(1990, 5, 20),

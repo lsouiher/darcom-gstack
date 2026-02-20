@@ -18,8 +18,8 @@ import {
   Delete as DeleteIcon,
   Bookmarks as BookingsIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import Const from '@/config/const'
 import { strings as commonStrings } from '@/lang/common'
@@ -36,19 +36,19 @@ import '@/assets/css/property-list.css'
 interface PropertyListProps {
   agencies?: string[]
   keyword?: string
-  types?: movininTypes.PropertyType[]
-  rentalTerms?: movininTypes.RentalTerm[]
-  availability?: movininTypes.Availablity[]
+  types?: darywinTypes.PropertyType[]
+  rentalTerms?: darywinTypes.RentalTerm[]
+  availability?: darywinTypes.Availablity[]
   reload?: boolean
-  properties?: movininTypes.Property[]
-  user?: movininTypes.User
-  booking?: movininTypes.Booking
+  properties?: darywinTypes.Property[]
+  user?: darywinTypes.User
+  booking?: darywinTypes.Booking
   className?: string
   loading?: boolean
   hideAgency?: boolean
   hidePrice?: boolean
   language: string
-  onLoad?: movininTypes.DataEvent<movininTypes.Property>
+  onLoad?: darywinTypes.DataEvent<darywinTypes.Property>
   onDelete?: (rowCount: number) => void
 }
 
@@ -72,11 +72,11 @@ const PropertyList = ({
 }: PropertyListProps) => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [init, setInit] = useState(true)
   const [loading, setLoading] = useState(false)
   const [fetch, setFetch] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Property[]>([])
+  const [rows, setRows] = useState<darywinTypes.Property[]>([])
   const [page, setPage] = useState(1)
   const [rowCount, setRowCount] = useState(0)
   const [totalRecords, setTotalRecords] = useState(0)
@@ -106,7 +106,7 @@ const PropertyList = ({
   const fetchData = async (_page: number) => {
     try {
       setLoading(true)
-      const payload: movininTypes.GetPropertiesPayload = {
+      const payload: darywinTypes.GetPropertiesPayload = {
         agencies: agencies ?? [],
         types,
         rentalTerms,
@@ -288,7 +288,7 @@ const PropertyList = ({
 
                   <div className="left-panel">
                     <img
-                      src={movininHelper.joinURL(env.CDN_PROPERTIES, property.image)}
+                      src={darywinHelper.joinURL(env.CDN_PROPERTIES, property.image)}
                       alt={property.name}
                       className="property-img"
                     />

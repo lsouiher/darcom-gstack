@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Layout from '@/components/Layout'
 import { strings } from '@/lang/locations'
 import Search from '@/components/Search'
@@ -20,7 +20,7 @@ const Locations = () => {
     setKeyword(newKeyword)
   }
 
-  const handleLocationListLoad: movininTypes.DataEvent<movininTypes.Location> = (data) => {
+  const handleLocationListLoad: darywinTypes.DataEvent<darywinTypes.Location> = (data) => {
     if (data) {
       setRowCount(data.rowCount)
     }

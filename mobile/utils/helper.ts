@@ -9,8 +9,8 @@ import mime from 'mime'
 import i18n from '@/lang/i18n'
 import * as UserService from '@/services/UserService'
 import * as StripeService from '@/services/StripeService'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import * as toastHelper from './toastHelper'
 
 /**
@@ -155,7 +155,7 @@ export const dateTime = (date: Date, time: Date) => {
  * @returns {Promise<string>}
  */
 export const getCancellation = async (cancellation: number, language: string) => {
-  const fr = movininHelper.isFrench(language)
+  const fr = darywinHelper.isFrench(language)
 
   if (cancellation === -1) {
     return `${i18n.t('CANCELLATION')}${fr ? ' : ' : ': '}${i18n.t('UNAVAILABLE')}`
@@ -163,7 +163,7 @@ export const getCancellation = async (cancellation: number, language: string) =>
     return `${i18n.t('CANCELLATION')}${fr ? ' : ' : ': '}${i18n.t('INCLUDED')}${fr ? 'e' : ''}`
   }
   const _cancellation = await StripeService.convertPrice(cancellation)
-  return `${i18n.t('CANCELLATION')}${fr ? ' : ' : ': '}${movininHelper.formatPrice(_cancellation, await StripeService.getCurrencySymbol(), language)}`
+  return `${i18n.t('CANCELLATION')}${fr ? ' : ' : ': '}${darywinHelper.formatPrice(_cancellation, await StripeService.getCurrencySymbol(), language)}`
 }
 
 /**
@@ -191,7 +191,7 @@ export const getDaysShort = (days: number) => `${days} ${i18n.t('PRICE_DAYS_PART
  * @returns {Promise<string>}
  */
 export const getCancellationOption = async (cancellation: number, language: string, hidePlus?: boolean) => {
-  const fr = movininHelper.isFrench(language)
+  const fr = darywinHelper.isFrench(language)
 
   if (cancellation === -1) {
     return i18n.t('UNAVAILABLE')
@@ -199,37 +199,37 @@ export const getCancellationOption = async (cancellation: number, language: stri
     return `${i18n.t('INCLUDED')}${fr ? 'e' : ''}`
   }
   const _cancellation = await StripeService.convertPrice(cancellation)
-  return `${hidePlus ? '' : '+ '}${movininHelper.formatPrice(_cancellation, await StripeService.getCurrencySymbol(), language)}`
+  return `${hidePlus ? '' : '+ '}${darywinHelper.formatPrice(_cancellation, await StripeService.getCurrencySymbol(), language)}`
 }
 
 /**
  * Get all booking statuses.
  *
- * @returns {movininTypes.StatusFilterItem[]}
+ * @returns {darywinTypes.StatusFilterItem[]}
  */
-export const getBookingStatuses = (): movininTypes.StatusFilterItem[] => [
+export const getBookingStatuses = (): darywinTypes.StatusFilterItem[] => [
   {
-    value: movininTypes.BookingStatus.Void,
+    value: darywinTypes.BookingStatus.Void,
     label: i18n.t('BOOKING_STATUS_VOID')
   },
   {
-    value: movininTypes.BookingStatus.Pending,
+    value: darywinTypes.BookingStatus.Pending,
     label: i18n.t('BOOKING_STATUS_PENDING'),
   },
   {
-    value: movininTypes.BookingStatus.Deposit,
+    value: darywinTypes.BookingStatus.Deposit,
     label: i18n.t('BOOKING_STATUS_DEPOSIT'),
   },
   {
-    value: movininTypes.BookingStatus.Paid,
+    value: darywinTypes.BookingStatus.Paid,
     label: i18n.t('BOOKING_STATUS_PAID')
   },
   {
-    value: movininTypes.BookingStatus.Reserved,
+    value: darywinTypes.BookingStatus.Reserved,
     label: i18n.t('BOOKING_STATUS_RESERVED'),
   },
   {
-    value: movininTypes.BookingStatus.Cancelled,
+    value: darywinTypes.BookingStatus.Cancelled,
     label: i18n.t('BOOKING_STATUS_CANCELLED'),
   },
 ]
@@ -240,24 +240,24 @@ export const getBookingStatuses = (): movininTypes.StatusFilterItem[] => [
  * @param {string} status
  * @returns {string}
  */
-export const getBookingStatus = (status: movininTypes.BookingStatus) => {
+export const getBookingStatus = (status: darywinTypes.BookingStatus) => {
   switch (status) {
-    case movininTypes.BookingStatus.Void:
+    case darywinTypes.BookingStatus.Void:
       return i18n.t('BOOKING_STATUS_VOID')
 
-    case movininTypes.BookingStatus.Pending:
+    case darywinTypes.BookingStatus.Pending:
       return i18n.t('BOOKING_STATUS_PENDING')
 
-    case movininTypes.BookingStatus.Deposit:
+    case darywinTypes.BookingStatus.Deposit:
       return i18n.t('BOOKING_STATUS_DEPOSIT')
 
-    case movininTypes.BookingStatus.Paid:
+    case darywinTypes.BookingStatus.Paid:
       return i18n.t('BOOKING_STATUS_PAID')
 
-    case movininTypes.BookingStatus.Reserved:
+    case darywinTypes.BookingStatus.Reserved:
       return i18n.t('BOOKING_STATUS_RESERVED')
 
-    case movininTypes.BookingStatus.Cancelled:
+    case darywinTypes.BookingStatus.Cancelled:
       return i18n.t('BOOKING_STATUS_CANCELLED')
 
     default:
@@ -277,18 +277,18 @@ export const getBirthDateError = (minimumAge: number) =>
 /**
  * Get rental term label.
  *
- * @param {movininTypes.RentalTerm} term
+ * @param {darywinTypes.RentalTerm} term
  * @returns {string}
  */
-export const rentalTerm = (term: movininTypes.RentalTerm): string => {
+export const rentalTerm = (term: darywinTypes.RentalTerm): string => {
   switch (term) {
-    case movininTypes.RentalTerm.Monthly:
+    case darywinTypes.RentalTerm.Monthly:
       return i18n.t('MONTHLY')
-    case movininTypes.RentalTerm.Weekly:
+    case darywinTypes.RentalTerm.Weekly:
       return i18n.t('WEEKLY')
-    case movininTypes.RentalTerm.Daily:
+    case darywinTypes.RentalTerm.Daily:
       return i18n.t('DAILY')
-    case movininTypes.RentalTerm.Yearly:
+    case darywinTypes.RentalTerm.Yearly:
       return i18n.t('YEARLY')
     default:
       return ''
@@ -298,18 +298,18 @@ export const rentalTerm = (term: movininTypes.RentalTerm): string => {
 /**
  * Get rental term unit.
  *
- * @param {movininTypes.RentalTerm} term
+ * @param {darywinTypes.RentalTerm} term
  * @returns {string}
  */
-export const rentalTermUnit = (term: movininTypes.RentalTerm): string => {
+export const rentalTermUnit = (term: darywinTypes.RentalTerm): string => {
   switch (term) {
-    case movininTypes.RentalTerm.Monthly:
+    case darywinTypes.RentalTerm.Monthly:
       return i18n.t('MONTH')
-    case movininTypes.RentalTerm.Weekly:
+    case darywinTypes.RentalTerm.Weekly:
       return i18n.t('WEEK')
-    case movininTypes.RentalTerm.Daily:
+    case darywinTypes.RentalTerm.Daily:
       return i18n.t('DAY')
-    case movininTypes.RentalTerm.Yearly:
+    case darywinTypes.RentalTerm.Yearly:
       return i18n.t('YEAR')
     default:
       return ''
@@ -319,51 +319,51 @@ export const rentalTermUnit = (term: movininTypes.RentalTerm): string => {
 /**
  * Get price label.
  *
- * @param {movininTypes.Property} property
+ * @param {darywinTypes.Property} property
  * @param {string} language
  * @returns {Promise<string>}
  */
-export const priceLabel = async (property: movininTypes.Property, language: string): Promise<string> => {
+export const priceLabel = async (property: darywinTypes.Property, language: string): Promise<string> => {
   const _price = await StripeService.convertPrice(property.price)
-  return `${movininHelper.formatPrice(_price, await StripeService.getCurrencySymbol(), language)}/${rentalTermUnit(property.rentalTerm)}`
+  return `${darywinHelper.formatPrice(_price, await StripeService.getCurrencySymbol(), language)}/${rentalTermUnit(property.rentalTerm)}`
 }
 /**
  * Check whether property option is available or not.
  *
- * @param {(movininTypes.Property | undefined)} property
+ * @param {(darywinTypes.Property | undefined)} property
  * @param {string} option
  * @returns {boolean}
  */
-export const propertyOptionAvailable = (property: movininTypes.Property | undefined, option: string) =>
+export const propertyOptionAvailable = (property: darywinTypes.Property | undefined, option: string) =>
   property && option in property && (property[option] as number) > -1
 
 /**
  * Get property type label.
  *
- * @param {movininTypes.PropertyType} type
+ * @param {darywinTypes.PropertyType} type
  * @returns {string}
  */
-export const getPropertyType = (type: movininTypes.PropertyType) => {
+export const getPropertyType = (type: darywinTypes.PropertyType) => {
   switch (type) {
-    case movininTypes.PropertyType.Apartment:
+    case darywinTypes.PropertyType.Apartment:
       return i18n.t('APARTMENT')
 
-    case movininTypes.PropertyType.Commercial:
+    case darywinTypes.PropertyType.Commercial:
       return i18n.t('COMMERCIAL')
 
-    case movininTypes.PropertyType.Farm:
+    case darywinTypes.PropertyType.Farm:
       return i18n.t('FARM')
 
-    case movininTypes.PropertyType.House:
+    case darywinTypes.PropertyType.House:
       return i18n.t('HOUSE')
 
-    case movininTypes.PropertyType.Industrial:
+    case darywinTypes.PropertyType.Industrial:
       return i18n.t('INDUSTRIAL')
 
-    case movininTypes.PropertyType.Plot:
+    case darywinTypes.PropertyType.Plot:
       return i18n.t('PLOT')
 
-    case movininTypes.PropertyType.Townhouse:
+    case darywinTypes.PropertyType.Townhouse:
       return i18n.t('TOWN_HOUSE')
     default:
       return ''
@@ -398,7 +398,7 @@ export const navigate = (
         navigation.dispatch((state) => {
           const { routes } = state
           const index = routes.findIndex((r) => r.name === route.name)
-          const _routes = movininHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
+          const _routes = darywinHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
           // _routes.splice(index, 1)
           const now = Date.now()
           _routes[index] = {
@@ -434,7 +434,7 @@ export const navigate = (
         navigation.dispatch((state) => {
           const { routes } = state
           const index = routes.findIndex((r) => r.name === 'Booking')
-          const _routes = movininHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
+          const _routes = darywinHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
           // _routes.splice(index, 1)
           // const now = Date.now()
           // _routes.push({
@@ -476,7 +476,7 @@ export const navigate = (
         navigation.dispatch((state) => {
           const { routes } = state
           const index = routes.findIndex((r) => r.name === 'Properties')
-          const _routes = movininHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
+          const _routes = darywinHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
           // _routes.splice(index, 1)
           // const now = Date.now()
           // _routes.push({
@@ -516,7 +516,7 @@ export const navigate = (
         navigation.dispatch((state) => {
           const { routes } = state
           const index = routes.findIndex((r) => r.name === 'Checkout')
-          const _routes = movininHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
+          const _routes = darywinHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
           // _routes.splice(index, 1)
           // const now = Date.now()
           // _routes.push({

@@ -1,6 +1,6 @@
 # Local Testing Guide
 
-This guide covers how to set up and run tests locally for the Movin' In platform.
+This guide covers how to set up and run tests locally for the DaryWin platform.
 
 ## Overview
 
@@ -39,40 +39,40 @@ Create a `.env` file in the `backend/` directory with these minimum settings:
 
 ```bash
 # Database - use a separate test database to avoid data conflicts
-MI_DB_URI=mongodb://localhost:27017/movinin_test
+DW_DB_URI=mongodb://localhost:27017/movinin_test
 
 # Admin account for test setup
-MI_ADMIN_EMAIL=admin@test.local
+DW_ADMIN_EMAIL=admin@test.local
 
 # Security (use any values for local testing)
-MI_JWT_SECRET=test-jwt-secret-key
-MI_COOKIE_SECRET=test-cookie-secret-key
-MI_JWT_EXPIRE_AT=86400000
-MI_TOKEN_EXPIRE_AT=86400000
+DW_JWT_SECRET=test-jwt-secret-key
+DW_COOKIE_SECRET=test-cookie-secret-key
+DW_JWT_EXPIRE_AT=86400000
+DW_TOKEN_EXPIRE_AT=86400000
 
 # Backend URL
-MI_BACKEND_HOST=http://localhost:4002
+DW_BACKEND_HOST=http://localhost:4002
 
 # CDN paths
-MI_CDN_USERS=./cdn/users
-MI_CDN_TEMP_USERS=./cdn/temp/users
-MI_CDN_PROPERTIES=./cdn/properties
-MI_CDN_TEMP_PROPERTIES=./cdn/temp/properties
-MI_CDN_LOCATIONS=./cdn/locations
-MI_CDN_TEMP_LOCATIONS=./cdn/temp/locations
-MI_CDN_COUNTRIES=./cdn/countries
+DW_CDN_USERS=./cdn/users
+DW_CDN_TEMP_USERS=./cdn/temp/users
+DW_CDN_PROPERTIES=./cdn/properties
+DW_CDN_TEMP_PROPERTIES=./cdn/temp/properties
+DW_CDN_LOCATIONS=./cdn/locations
+DW_CDN_TEMP_LOCATIONS=./cdn/temp/locations
+DW_CDN_COUNTRIES=./cdn/countries
 
 # Optional - for payment tests
-MI_STRIPE_SECRET_KEY=sk_test_xxx
-MI_PAYPAL_SANDBOX=true
-MI_PAYPAL_CLIENT_ID=xxx
-MI_PAYPAL_CLIENT_SECRET=xxx
+DW_STRIPE_SECRET_KEY=sk_test_xxx
+DW_PAYPAL_SANDBOX=true
+DW_PAYPAL_CLIENT_ID=xxx
+DW_PAYPAL_CLIENT_SECRET=xxx
 
 # Optional - for email tests
-MI_SMTP_HOST=smtp.example.com
-MI_SMTP_PORT=587
-MI_SMTP_USER=test@example.com
-MI_SMTP_PASS=password
+DW_SMTP_HOST=smtp.example.com
+DW_SMTP_PORT=587
+DW_SMTP_USER=test@example.com
+DW_SMTP_PASS=password
 ```
 
 ### Using Docker for MongoDB
@@ -186,7 +186,7 @@ await testHelper.close()
 
 ### Common Test Credentials
 
-- **Admin email**: Set via `MI_ADMIN_EMAIL` environment variable
+- **Admin email**: Set via `DW_ADMIN_EMAIL` environment variable
 - **Test password**: `Un1tTest5`
 
 ## Writing New Tests

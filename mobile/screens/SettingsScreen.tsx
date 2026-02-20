@@ -18,8 +18,8 @@ import {
 import * as ImagePicker from 'expo-image-picker'
 import validator from 'validator'
 import { intervalToDuration } from 'date-fns'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import Layout from '@/components/Layout'
 import i18n from '@/lang/i18n'
@@ -36,7 +36,7 @@ const SettingsScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
   const [reload, setReload] = useState(false)
   const [visible, setVisible] = useState(false)
   const [language, setLanguage] = useState(env.DEFAULT_LANGUAGE)
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -74,7 +74,7 @@ const SettingsScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
 
       setUser(_user)
       if (_user.avatar) {
-        setAvatar(movininHelper.joinURL(env.CDN_USERS, _user.avatar))
+        setAvatar(darywinHelper.joinURL(env.CDN_USERS, _user.avatar))
       } else {
         setAvatar(null)
       }
@@ -216,7 +216,7 @@ const SettingsScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
         return
       }
 
-      const data: movininTypes.UpdateUserPayload = {
+      const data: darywinTypes.UpdateUserPayload = {
         _id: user._id,
         fullName,
         birthDate,
@@ -302,7 +302,7 @@ const SettingsScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
                         if (status === 200) {
                           const _user = await UserService.getUser(user._id)
                           setUser(_user)
-                          const _avatar = movininHelper.joinURL(env.CDN_USERS, _user.avatar)
+                          const _avatar = darywinHelper.joinURL(env.CDN_USERS, _user.avatar)
                           setAvatar(_avatar)
                         } else {
                           helper.error()

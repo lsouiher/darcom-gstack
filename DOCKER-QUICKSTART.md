@@ -11,7 +11,7 @@ cp frontend/.env.docker.example frontend/.env.docker && \
 cp admin/.env.docker.example admin/.env.docker
 
 # 2. Set secrets in backend/.env.docker
-#    Replace MI_JWT_SECRET and MI_COOKIE_SECRET with random strings:
+#    Replace DW_JWT_SECRET and DW_COOKIE_SECRET with random strings:
 #    openssl rand -hex 32
 
 # 3. Start everything

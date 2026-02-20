@@ -1,15 +1,15 @@
 import axios from 'axios'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import env from '@/config/env.config'
 
 /**
  * Create a User.
  *
- * @param {movininTypes.CreateUserPayload} data
+ * @param {darywinTypes.CreateUserPayload} data
  * @returns {Promise<number>}
  */
-export const create = (data: movininTypes.CreateUserPayload): Promise<number> =>
+export const create = (data: darywinTypes.CreateUserPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/create-user',
@@ -21,10 +21,10 @@ export const create = (data: movininTypes.CreateUserPayload): Promise<number> =>
 /**
  * Sign up.
  *
- * @param {movininTypes.SignUpPayload} data
+ * @param {darywinTypes.SignUpPayload} data
  * @returns {Promise<number>}
  */
-export const signup = (data: movininTypes.SignUpPayload): Promise<number> =>
+export const signup = (data: darywinTypes.SignUpPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/admin-sign-up',
@@ -65,10 +65,10 @@ export const deleteTokens = (userId: string): Promise<number> =>
  *
  * @param {?string} [email]
  * @param {boolean} [reset=false]
- * @param {string} [appType=movininTypes.AppType.Admin]
+ * @param {string} [appType=darywinTypes.AppType.Admin]
  * @returns {Promise<number>}
  */
-export const resend = (email?: string, reset = false, appType: string = movininTypes.AppType.Admin): Promise<number> =>
+export const resend = (email?: string, reset = false, appType: string = darywinTypes.AppType.Admin): Promise<number> =>
   axiosInstance
     .post(
       `/api/resend/${appType}/${encodeURIComponent(email || '')}/${reset}`
@@ -78,10 +78,10 @@ export const resend = (email?: string, reset = false, appType: string = movininT
 /**
  * Activate an account.
  *
- * @param {movininTypes.ActivatePayload} data
+ * @param {darywinTypes.ActivatePayload} data
  * @returns {Promise<number>}
  */
-export const activate = (data: movininTypes.ActivatePayload): Promise<number> =>
+export const activate = (data: darywinTypes.ActivatePayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/activate',
@@ -93,10 +93,10 @@ export const activate = (data: movininTypes.ActivatePayload): Promise<number> =>
 /**
  * Validate an email.
  *
- * @param {movininTypes.ValidateEmailPayload} data
+ * @param {darywinTypes.ValidateEmailPayload} data
  * @returns {Promise<number>}
  */
-export const validateEmail = (data: movininTypes.ValidateEmailPayload): Promise<number> =>
+export const validateEmail = (data: darywinTypes.ValidateEmailPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/validate-email',
@@ -107,10 +107,10 @@ export const validateEmail = (data: movininTypes.ValidateEmailPayload): Promise<
 /**
  * Sign in.
  *
- * @param {movininTypes.SignInPayload} data
- * @returns {Promise<{ status: number, data: movininTypes.User }>}
+ * @param {darywinTypes.SignInPayload} data
+ * @returns {Promise<{ status: number, data: darywinTypes.User }>}
  */
-export const signin = (data: movininTypes.SignInPayload): Promise<{ status: number, data: movininTypes.User }> =>
+export const signin = (data: darywinTypes.SignInPayload): Promise<{ status: number, data: darywinTypes.User }> =>
   axiosInstance
     .post(
       `/api/sign-in/${env.APP_TYPE}`,
@@ -186,10 +186,10 @@ export const confirmEmail = (email: string, token: string): Promise<number> => (
 /**
  * Resend a validation email.
  *
- * @param {movininTypes.ResendLinkPayload} data
+ * @param {darywinTypes.ResendLinkPayload} data
  * @returns {Promise<number>}
  */
-export const resendLink = (data: movininTypes.ResendLinkPayload): Promise<number> =>
+export const resendLink = (data: darywinTypes.ResendLinkPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/resend-link',
@@ -232,10 +232,10 @@ export const getQueryLanguage = (): string | null => {
 /**
  * Update language.
  *
- * @param {movininTypes.UpdateLanguagePayload} data
+ * @param {darywinTypes.UpdateLanguagePayload} data
  * @returns {Promise<number>}
  */
-export const updateLanguage = (data: movininTypes.UpdateLanguagePayload) =>
+export const updateLanguage = (data: darywinTypes.UpdateLanguagePayload) =>
   axiosInstance
     .post(
       '/api/update-language',
@@ -263,10 +263,10 @@ export const setLanguage = (lang: string) => {
 /**
  * Get current User.
  *
- * @returns {movininTypes.User|null}
+ * @returns {darywinTypes.User|null}
  */
-export const getCurrentUser = (): movininTypes.User | null => {
-  const user = JSON.parse(localStorage.getItem('mi-be-user') ?? 'null') as movininTypes.User | null
+export const getCurrentUser = (): darywinTypes.User | null => {
+  const user = JSON.parse(localStorage.getItem('mi-be-user') ?? 'null') as darywinTypes.User | null
   return user
 }
 
@@ -274,9 +274,9 @@ export const getCurrentUser = (): movininTypes.User | null => {
  * Get User by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.User|null>}
+ * @returns {Promise<darywinTypes.User|null>}
  */
-export const getUser = (id?: string): Promise<movininTypes.User | null> => {
+export const getUser = (id?: string): Promise<darywinTypes.User | null> => {
   if (id) {
     return axiosInstance
       .get(
@@ -296,13 +296,13 @@ export const getUser = (id?: string): Promise<movininTypes.User | null> => {
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.User>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.User>>}
  */
-export const getRenters = (keyword: string, page: number, size: number): Promise<movininTypes.Result<movininTypes.User>> =>
+export const getRenters = (keyword: string, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.User>> =>
   axiosInstance
     .post(
       `/api/users/${page}/${size}/?s=${encodeURIComponent(keyword)}`,
-      { types: [movininTypes.RecordType.User] },
+      { types: [darywinTypes.RecordType.User] },
       { withCredentials: true }
     )
     .then((res) => res.data)
@@ -310,18 +310,18 @@ export const getRenters = (keyword: string, page: number, size: number): Promise
 /**
  * Get Users.
  *
- * @param {movininTypes.GetUsersBody} payload
+ * @param {darywinTypes.GetUsersBody} payload
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.User>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.User>>}
  */
 export const getUsers = (
-  payload: movininTypes.GetUsersBody,
+  payload: darywinTypes.GetUsersBody,
   keyword: string,
   page: number,
   size: number
-): Promise<movininTypes.Result<movininTypes.User>> =>
+): Promise<darywinTypes.Result<darywinTypes.User>> =>
   axiosInstance
     .post(
       `/api/users/${page}/${size}/?s=${encodeURIComponent(keyword)}`,
@@ -333,10 +333,10 @@ export const getUsers = (
 /**
  * Update a User.
  *
- * @param {movininTypes.UpdateUserPayload} data
+ * @param {darywinTypes.UpdateUserPayload} data
  * @returns {Promise<number>}
  */
-export const updateUser = (data: movininTypes.UpdateUserPayload): Promise<number> =>
+export const updateUser = (data: darywinTypes.UpdateUserPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/update-user',
@@ -348,10 +348,10 @@ export const updateUser = (data: movininTypes.UpdateUserPayload): Promise<number
 /**
  * Update email notifications flag.
  *
- * @param {movininTypes.UpdateEmailNotificationsPayload} data
+ * @param {darywinTypes.UpdateEmailNotificationsPayload} data
  * @returns {Promise<number>}
  */
-export const updateEmailNotifications = (data: movininTypes.UpdateEmailNotificationsPayload): Promise<number> =>
+export const updateEmailNotifications = (data: darywinTypes.UpdateEmailNotificationsPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/update-email-notifications',
@@ -463,10 +463,10 @@ export const checkPassword = (id: string, pass: string): Promise<number> =>
 /**
  * Change a password.
  *
- * @param {movininTypes.ChangePasswordPayload} data
+ * @param {darywinTypes.ChangePasswordPayload} data
  * @returns {Promise<number>}
  */
-export const changePassword = (data: movininTypes.ChangePasswordPayload): Promise<number> =>
+export const changePassword = (data: darywinTypes.ChangePasswordPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/change-password',
@@ -521,10 +521,10 @@ export const verifyRecaptcha = (token: string, ip: string): Promise<number> =>
 /**
 * Send an email. reCAPTCHA is mandatory.
 *
-* @param {movininTypes.SendEmailPayload} payload
+* @param {darywinTypes.SendEmailPayload} payload
 * @returns {Promise<number>}
 */
-export const sendEmail = (payload: movininTypes.SendEmailPayload): Promise<number> =>
+export const sendEmail = (payload: darywinTypes.SendEmailPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/send-email',

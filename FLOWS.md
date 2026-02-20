@@ -1,6 +1,6 @@
-# FLOWS.md - Movin' In Application Flows
+# FLOWS.md - DaryWin Application Flows
 
-This document provides comprehensive documentation of all major application flows in the Movin' In rental property management platform.
+This document provides comprehensive documentation of all major application flows in the DaryWin rental property management platform.
 
 ## Table of Contents
 
@@ -480,12 +480,12 @@ Returns locations with latitude/longitude for map displays.
 ### 7.1 SMTP Configuration
 
 **Environment Variables:**
-- `MI_SMTP_HOST` - SMTP server hostname
-- `MI_SMTP_PORT` - SMTP port
-- `MI_SMTP_USER` - Authentication username
-- `MI_SMTP_PASS` - Authentication password
-- `MI_SMTP_FROM` - Sender email address
-- `MI_ADMIN_EMAIL` - Admin notification recipient
+- `DW_SMTP_HOST` - SMTP server hostname
+- `DW_SMTP_PORT` - SMTP port
+- `DW_SMTP_USER` - Authentication username
+- `DW_SMTP_PASS` - Authentication password
+- `DW_SMTP_FROM` - Sender email address
+- `DW_ADMIN_EMAIL` - Admin notification recipient
 
 ### 7.2 Email Types
 
@@ -649,7 +649,7 @@ When `payLater: true`:
 - `frontend/src/pages/Bookings.tsx` - User bookings
 
 ### Shared Types
-- `packages/movinin-types/index.ts` - Enums and interfaces
+- `packages/darywin-types/index.ts` - Enums and interfaces
 
 ---
 

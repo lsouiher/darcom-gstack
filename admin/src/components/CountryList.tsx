@@ -22,7 +22,7 @@ import {
   Delete as DeleteIcon,
   Flag as CountryIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import Const from '@/config/const'
 import { strings as commonStrings } from '@/lang/common'
@@ -36,7 +36,7 @@ import '@/assets/css/country-list.css'
 
 interface CountryListProps {
   keyword?: string
-  onLoad: movininTypes.DataEvent<movininTypes.Country>
+  onLoad: darywinTypes.DataEvent<darywinTypes.Country>
   onDelete: (rowCount: number) => void
 }
 
@@ -51,7 +51,7 @@ const CountryList = ({
   const [init, setInit] = useState(true)
   const [loading, setLoading] = useState(false)
   const [fetch, setFetch] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Country[]>([])
+  const [rows, setRows] = useState<darywinTypes.Country[]>([])
   const [rowCount, setRowCount] = useState(0)
   const [totalRecords, setTotalRecords] = useState(0)
   const [page, setPage] = useState(1)

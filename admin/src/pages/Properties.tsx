@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import * as helper from '@/utils/helper'
 import { strings } from '@/lang/properties'
 import { strings as commonStrings } from '@/lang/common'
@@ -22,19 +22,19 @@ import '@/assets/css/properties.css'
 const Properties = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [admin, setAdmin] = useState(false)
-  const [allAgencies, setAllAgencies] = useState<movininTypes.User[]>([])
+  const [allAgencies, setAllAgencies] = useState<darywinTypes.User[]>([])
   const [agencies, setAgencies] = useState<string[]>()
   const [keyword, setKeyword] = useState('')
   const [rowCount, setRowCount] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [propertyTypes, setPropertyTypes] = useState(movininHelper.getAllPropertyTypes())
-  const [rentalTerms, setRentalTerms] = useState(movininHelper.getAllRentalTerms())
+  const [propertyTypes, setPropertyTypes] = useState(darywinHelper.getAllPropertyTypes())
+  const [rentalTerms, setRentalTerms] = useState(darywinHelper.getAllRentalTerms())
   const [availability, setAvailability] = useState(
     [
-      movininTypes.Availablity.Available,
-      movininTypes.Availablity.Unavailable
+      darywinTypes.Availablity.Available,
+      darywinTypes.Availablity.Unavailable
     ]
   )
 
@@ -42,7 +42,7 @@ const Properties = () => {
     setKeyword(newKeyword)
   }
 
-  const handlePropertyListLoad: movininTypes.DataEvent<movininTypes.Property> = (data) => {
+  const handlePropertyListLoad: darywinTypes.DataEvent<darywinTypes.Property> = (data) => {
     if (data) {
       setRowCount(data.rowCount)
     }
@@ -56,25 +56,25 @@ const Properties = () => {
     setAgencies(newAgencies)
   }
 
-  const handlePropertyTypeFilterChange = (values: movininTypes.PropertyType[]) => {
+  const handlePropertyTypeFilterChange = (values: darywinTypes.PropertyType[]) => {
     setPropertyTypes(values)
   }
 
-  const handleRentalTermFilterChange = (values: movininTypes.RentalTerm[]) => {
+  const handleRentalTermFilterChange = (values: darywinTypes.RentalTerm[]) => {
     setRentalTerms(values)
   }
 
-  const handleAvailabilityFilterChange = (values: movininTypes.Availablity[]) => {
+  const handleAvailabilityFilterChange = (values: darywinTypes.Availablity[]) => {
     setAvailability(values)
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     setUser(_user)
     const _isAdmin = helper.admin(_user)
     setAdmin(_isAdmin)
     if (_isAdmin) {
       const _allAgencies = await AgencyService.getAllAgencies()
-      const _agencies = movininHelper.flattenAgencies(_allAgencies)
+      const _agencies = darywinHelper.flattenAgencies(_allAgencies)
       setAllAgencies(_allAgencies)
       setAgencies(_agencies)
     } else {

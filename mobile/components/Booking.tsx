@@ -7,8 +7,8 @@ import {
 } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Locale, format } from 'date-fns'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import BookingStatus from './BookingStatus'
 import Button from './Button'
@@ -18,7 +18,7 @@ import i18n from '@/lang/i18n'
 import * as StripeService from '@/services/StripeService'
 
 interface BookingProps {
-  booking: movininTypes.Booking
+  booking: darywinTypes.Booking
   locale: Locale
   language: string
   onCancel: () => void
@@ -37,8 +37,8 @@ const Booking = ({
 }: BookingProps) => {
   const from = new Date(booking.from)
   const to = new Date(booking.to)
-  const property = booking.property as movininTypes.Property
-  const agency = booking.agency as movininTypes.User
+  const property = booking.property as darywinTypes.Property
+  const agency = booking.agency as darywinTypes.User
 
   const today = new Date()
   today.setHours(0)
@@ -46,7 +46,7 @@ const Booking = ({
   today.setSeconds(0)
   today.setMilliseconds(0)
 
-  const _fr = movininHelper.isFrench(language)
+  const _fr = darywinHelper.isFrench(language)
   const _format = _fr ? 'eee d LLL yyyy kk:mm' : 'eee, d LLL yyyy, p'
 
   const [currencySymbol, setCurrencySymbol] = useState('')
@@ -57,7 +57,7 @@ const Booking = ({
   useEffect(() => {
     const init = async () => {
       if (booking && language) {
-        const _property = booking.property as movininTypes.Property
+        const _property = booking.property as darywinTypes.Property
         setCurrencySymbol(await StripeService.getCurrencySymbol())
         setPrice(await StripeService.convertPrice(booking.price!))
         setPriceLabel(await helper.priceLabel(_property, language))
@@ -82,13 +82,13 @@ const Booking = ({
 
         <Text style={styles.detailTitle}>{i18n.t('DAYS')}</Text>
         <Text style={styles.detailText}>
-          {`${helper.getDaysShort(movininHelper.days(from, to))} (${movininHelper.capitalize(format(from, _format, { locale }))} - ${movininHelper.capitalize(
+          {`${helper.getDaysShort(darywinHelper.days(from, to))} (${darywinHelper.capitalize(format(from, _format, { locale }))} - ${darywinHelper.capitalize(
             format(to, _format, { locale }),
           )})`}
         </Text>
 
         <Text style={styles.detailTitle}>{i18n.t('LOCATION')}</Text>
-        <Text style={styles.detailText}>{(booking.location as movininTypes.Location).name}</Text>
+        <Text style={styles.detailText}>{(booking.location as darywinTypes.Location).name}</Text>
 
         <Text style={styles.detailTitle}>{i18n.t('PROPERTY')}</Text>
         <Text style={styles.detailText}>{`${property.name} (${priceLabel})`}</Text>
@@ -98,7 +98,7 @@ const Booking = ({
           <Image
             style={styles.agencyImg}
             source={{
-              uri: movininHelper.joinURL(env.CDN_USERS, agency.avatar),
+              uri: darywinHelper.joinURL(env.CDN_USERS, agency.avatar),
             }}
           />
           <Text style={styles.agencyText}>{agency.fullName}</Text>
@@ -120,11 +120,11 @@ const Booking = ({
         )}
 
         <Text style={styles.detailTitle}>{i18n.t('COST')}</Text>
-        <Text style={styles.detailTextBold}>{movininHelper.formatPrice(price, currencySymbol, language)}</Text>
+        <Text style={styles.detailTextBold}>{darywinHelper.formatPrice(price, currencySymbol, language)}</Text>
 
         {booking.cancellation
           && !booking.cancelRequest
-          && booking.status !== movininTypes.BookingStatus.Cancelled
+          && booking.status !== darywinTypes.BookingStatus.Cancelled
           && new Date(booking.from) >= today
           && (
             <Button

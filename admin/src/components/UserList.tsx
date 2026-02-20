@@ -24,8 +24,8 @@ import {
   Delete as DeleteIcon,
   AccountCircle, Check as VerifiedIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/user-list'
@@ -35,12 +35,12 @@ import * as UserService from '@/services/UserService'
 import '@/assets/css/user-list.css'
 
 interface UserListProps {
-  types?: movininTypes.UserType[]
+  types?: darywinTypes.UserType[]
   keyword?: string
-  user?: movininTypes.User
+  user?: darywinTypes.User
   hideDesktopColumns?: boolean
   checkboxSelection?: boolean
-  onLoad?: movininTypes.DataEvent<movininTypes.User>
+  onLoad?: darywinTypes.DataEvent<darywinTypes.User>
 }
 
 const UserList = ({
@@ -53,17 +53,17 @@ const UserList = ({
 }: UserListProps) => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(env.PAGE_SIZE)
-  const [columns, setColumns] = useState<GridColDef<movininTypes.User>[]>([])
-  const [rows, setRows] = useState<movininTypes.User[]>([])
+  const [columns, setColumns] = useState<GridColDef<darywinTypes.User>[]>([])
+  const [rows, setRows] = useState<darywinTypes.User[]>([])
   const [rowCount, setRowCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [selectedId, setSelectedId] = useState('')
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
-  const [types, setTypes] = useState<movininTypes.UserType[]>()
+  const [types, setTypes] = useState<darywinTypes.UserType[]>()
   const [keyword, setKeyword] = useState(userListKeyword)
   const [reloadColumns, setReloadColumns] = useState(false)
   const [paginationModel, setPaginationModel] = useState({
@@ -76,12 +76,12 @@ const UserList = ({
     setPageSize(paginationModel.pageSize)
   }, [paginationModel])
 
-  const fetchData = async (_page: number, _user?: movininTypes.User) => {
+  const fetchData = async (_page: number, _user?: darywinTypes.User) => {
     try {
       if (_user && types) {
         setLoading(true)
 
-        const payload: movininTypes.GetUsersBody = {
+        const payload: darywinTypes.GetUsersBody = {
           user: (_user && _user._id) || '',
           types
         }
@@ -128,28 +128,28 @@ const UserList = ({
       if (page === 0) {
         fetchData(0, user)
       } else {
-        const _paginationModel = movininHelper.clone(paginationModel)
+        const _paginationModel = darywinHelper.clone(paginationModel)
         _paginationModel.page = 0
         setPaginationModel(_paginationModel)
       }
     }
   }, [pageSize]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getColumns = (_user: movininTypes.User): GridColDef<movininTypes.User>[] => {
-    const _columns: GridColDef<movininTypes.User>[] = [
+  const getColumns = (_user: darywinTypes.User): GridColDef<darywinTypes.User>[] => {
+    const _columns: GridColDef<darywinTypes.User>[] = [
       {
         field: 'fullName',
         headerName: commonStrings.USER,
         flex: 1,
-        renderCell: ({ row, value }: GridRenderCellParams<movininTypes.User, string>) => {
+        renderCell: ({ row, value }: GridRenderCellParams<darywinTypes.User, string>) => {
           const __user = row
           let userAvatar
 
           if (__user.avatar) {
-            if (__user.type === movininTypes.RecordType.Agency) {
-              userAvatar = <img src={movininHelper.joinURL(env.CDN_USERS, row.avatar)} alt={row.fullName} />
+            if (__user.type === darywinTypes.RecordType.Agency) {
+              userAvatar = <img src={darywinHelper.joinURL(env.CDN_USERS, row.avatar)} alt={row.fullName} />
             } else {
-              const avatar = <Avatar src={movininHelper.joinURL(env.CDN_USERS, row.avatar)} className="avatar-small" />
+              const avatar = <Avatar src={darywinHelper.joinURL(env.CDN_USERS, row.avatar)} className="avatar-small" />
               if (__user.verified) {
                 userAvatar = (
                   <Badge
@@ -237,7 +237,7 @@ const UserList = ({
         field: 'type',
         headerName: commonStrings.TYPE,
         flex: 1,
-        renderCell: ({ value }: GridRenderCellParams<movininTypes.User, movininTypes.UserType>) => <span className={`bs us-${value?.toLowerCase()}`}>{helper.getUserType(value)}</span>,
+        renderCell: ({ value }: GridRenderCellParams<darywinTypes.User, darywinTypes.UserType>) => <span className={`bs us-${value?.toLowerCase()}`}>{helper.getUserType(value)}</span>,
         valueGetter: (value: string) => value,
       },
       {
@@ -245,7 +245,7 @@ const UserList = ({
         headerName: '',
         sortable: false,
         disableColumnMenu: true,
-        renderCell: ({ row }: GridRenderCellParams<movininTypes.User>) => {
+        renderCell: ({ row }: GridRenderCellParams<darywinTypes.User>) => {
           const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation() // don't select this row after clicking
             setSelectedId(row._id || '')
@@ -253,7 +253,7 @@ const UserList = ({
           }
 
           const __user = row
-          return _user.type === movininTypes.RecordType.Admin || __user.agency === _user._id ? (
+          return _user.type === darywinTypes.RecordType.Admin || __user.agency === _user._id ? (
             <div>
               <Tooltip title={commonStrings.UPDATE}>
                 <IconButton onClick={() => navigate(`/update-user?u=${row._id}`)}>
@@ -305,7 +305,7 @@ const UserList = ({
       if (page === 0) {
         fetchData(0, userListUser)
       } else {
-        const _paginationModel = movininHelper.clone(paginationModel)
+        const _paginationModel = darywinHelper.clone(paginationModel)
         _paginationModel.page = 0
         setPaginationModel(_paginationModel)
       }

@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../src/config/env.config'
 import * as logger from '../src/utils/logger'
 import * as databaseHelper from '../src/utils/databaseHelper'
@@ -19,7 +19,7 @@ export default async function globalSetup() {
           email: env.ADMIN_EMAIL,
           language: 'en',
           password: passwordHash,
-          type: movininTypes.UserType.Admin,
+          type: darywinTypes.UserType.Admin,
         })
         await admin.save()
         logger.info('globalSetup: Admin user created:', admin._id.toString())

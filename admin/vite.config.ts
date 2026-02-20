@@ -21,7 +21,7 @@ export default ({ mode }: { mode: string }) => {
       createHtmlPlugin({
         inject: {
           data: {
-            WEBSITE_NAME: process.env.VITE_MI_WEBSITE_NAME || "Movin' In",
+            WEBSITE_NAME: process.env.VITE_DW_WEBSITE_NAME || "DaryWin",
           },
         },
       }),
@@ -34,8 +34,8 @@ export default ({ mode }: { mode: string }) => {
         'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
 
         '@': path.resolve(__dirname, './src'),
-        ':movinin-types': path.resolve(__dirname, '../packages/movinin-types'),
-        ':movinin-helper': path.resolve(__dirname, '../packages/movinin-helper'),
+        ':darywin-types': path.resolve(__dirname, '../packages/darywin-types'),
+        ':darywin-helper': path.resolve(__dirname, '../packages/darywin-helper'),
         ':disable-react-devtools': path.resolve(__dirname, '../packages/disable-react-devtools'),
         ':currency-converter': path.resolve(__dirname, '../packages/currency-converter'),
       },

@@ -27,8 +27,8 @@ import {
 } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import { PayPalButtons } from '@paypal/react-paypal-js'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as BookingService from '@/services/BookingService'
 import { strings as commonStrings } from '@/lang/common'
@@ -62,16 +62,16 @@ import '@/assets/css/checkout.css'
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 //
-const stripePromise = env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.Stripe ? loadStripe(env.STRIPE_PUBLISHABLE_KEY) : null
+const stripePromise = env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.Stripe ? loadStripe(env.STRIPE_PUBLISHABLE_KEY) : null
 
 const Checkout = () => {
   const reactLocation = useLocation()
   const navigate = useNavigate()
   const { reCaptchaLoaded, generateReCaptchaToken } = useRecaptchaContext() as RecaptchaContextType
 
-  const [user, setUser] = useState<movininTypes.User>()
-  const [property, setProperty] = useState<movininTypes.Property>()
-  const [location, setLocation] = useState<movininTypes.Location>()
+  const [user, setUser] = useState<darywinTypes.User>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
+  const [location, setLocation] = useState<darywinTypes.Location>()
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
   const [visible, setVisible] = useState(false)
@@ -111,8 +111,8 @@ const Checkout = () => {
   const _locale = _fr ? fr : enUS
   const _format = _fr ? 'eee d LLL yyyy kk:mm' : 'eee, d LLL yyyy, p'
   const bookingDetailHeight = env.AGENCY_IMAGE_HEIGHT + 10
-  const days = movininHelper.days(from, to)
-  const daysLabel = from && to && `${helper.getDaysShort(days)} (${movininHelper.capitalize(format(from, _format, { locale: _locale }),)} - ${movininHelper.capitalize(format(to, _format, { locale: _locale }))})`
+  const days = darywinHelper.days(from, to)
+  const daysLabel = from && to && `${helper.getDaysShort(days)} (${darywinHelper.capitalize(format(from, _format, { locale: _locale }),)} - ${darywinHelper.capitalize(format(to, _format, { locale: _locale }))})`
 
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value)
@@ -195,7 +195,7 @@ const Checkout = () => {
   }
 
   const validateBirthDate = (date?: Date) => {
-    if (property && date && movininHelper.isDate(date)) {
+    if (property && date && darywinHelper.isDate(date)) {
       const now = new Date()
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0
       const _birthDateValid = sub >= property.minimumAge
@@ -266,7 +266,7 @@ const Checkout = () => {
       setLoading(true)
       setPaymentFailed(false)
 
-      let renter: movininTypes.User | undefined
+      let renter: darywinTypes.User | undefined
 
       if (!authenticated) {
         renter = {
@@ -278,16 +278,16 @@ const Checkout = () => {
         }
       }
 
-      const basePrice = await movininHelper.convertPrice(price, PaymentService.getCurrency(), env.BASE_CURRENCY)
+      const basePrice = await darywinHelper.convertPrice(price, PaymentService.getCurrency(), env.BASE_CURRENCY)
 
-      const booking: movininTypes.Booking = {
+      const booking: darywinTypes.Booking = {
         agency: property.agency._id as string,
         property: property._id,
         renter: authenticated ? user?._id : undefined,
         location: location._id,
         from,
         to,
-        status: movininTypes.BookingStatus.Pending,
+        status: darywinTypes.BookingStatus.Pending,
         cancellation,
         price: basePrice,
       }
@@ -298,12 +298,12 @@ const Checkout = () => {
       let _customerId: string | undefined
       let _sessionId: string | undefined
       if (!payLater) {
-        if (env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.Stripe) {
-          const name = movininHelper.truncateString(`${env.WEBSITE_NAME} - ${property.name}`, StripeService.ORDER_NAME_MAX_LENGTH)
+        if (env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.Stripe) {
+          const name = darywinHelper.truncateString(`${env.WEBSITE_NAME} - ${property.name}`, StripeService.ORDER_NAME_MAX_LENGTH)
           const _description = `${env.WEBSITE_NAME} - ${property.name} - ${daysLabel} - ${location.name}`
-          const description = movininHelper.truncateString(_description, StripeService.ORDER_DESCRIPTION_MAX_LENGTH)
+          const description = darywinHelper.truncateString(_description, StripeService.ORDER_DESCRIPTION_MAX_LENGTH)
 
-          const payload: movininTypes.CreatePaymentPayload = {
+          const payload: darywinTypes.CreatePaymentPayload = {
             amount: price,
             currency: PaymentService.getCurrency(),
             locale: language,
@@ -321,13 +321,13 @@ const Checkout = () => {
         }
       }
 
-      const payload: movininTypes.CheckoutPayload = {
+      const payload: darywinTypes.CheckoutPayload = {
         renter,
         booking,
         payLater,
         sessionId: _sessionId,
         customerId: _customerId,
-        payPal: env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.PayPal,
+        payPal: env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.PayPal,
       }
 
       const { status, bookingId: _bookingId } = await BookingService.checkout(payload)
@@ -350,7 +350,7 @@ const Checkout = () => {
     }
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     setUser(_user)
     setAuthenticated(_user !== undefined)
     setLanguage(UserService.getLanguage())
@@ -371,8 +371,8 @@ const Checkout = () => {
       return
     }
 
-    let _property: movininTypes.Property | null = null
-    let _location: movininTypes.Location | null = null
+    let _property: darywinTypes.Property | null = null
+    let _location: darywinTypes.Location | null = null
     try {
       _property = await PropertyService.getProperty(propertyId)
       if (!_property) {
@@ -387,7 +387,7 @@ const Checkout = () => {
         return
       }
 
-      const _price = await PaymentService.convertPrice(movininHelper.calculateTotalPrice(_property, _from, _to))
+      const _price = await PaymentService.convertPrice(darywinHelper.calculateTotalPrice(_property, _from, _to))
 
       const included = (val: number) => val === 0
 
@@ -473,7 +473,7 @@ const Checkout = () => {
                           <span className="checkout-detail-title">{commonStrings.AGENCY}</span>
                           <div className="checkout-detail-value">
                             <div className="property-agency">
-                              <img src={movininHelper.joinURL(env.CDN_USERS, property.agency.avatar)} alt={property.agency.fullName} style={{ height: env.AGENCY_IMAGE_HEIGHT }} />
+                              <img src={darywinHelper.joinURL(env.CDN_USERS, property.agency.avatar)} alt={property.agency.fullName} style={{ height: env.AGENCY_IMAGE_HEIGHT }} />
                               <span className="property-agency-name">{property.agency.fullName}</span>
                             </div>
                           </div>
@@ -481,7 +481,7 @@ const Checkout = () => {
                       )}
                       <div className="checkout-detail" style={{ height: bookingDetailHeight }}>
                         <span className="checkout-detail-title">{strings.COST}</span>
-                        <div className="checkout-detail-value checkout-price">{movininHelper.formatPrice(price, commonStrings.CURRENCY, language)}</div>
+                        <div className="checkout-detail-value checkout-price">{darywinHelper.formatPrice(price, commonStrings.CURRENCY, language)}</div>
                       </div>
                     </div>
                   </div>
@@ -613,7 +613,7 @@ const Checkout = () => {
                   )}
 
                   {(!property.agency.payLater || !payLater) && (
-                    env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.Stripe
+                    env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.Stripe
                       ? (clientSecret && (
                         <div className="payment-options-container">
 
@@ -630,9 +630,9 @@ const Checkout = () => {
                         <div className="payment-options-container">
                           <PayPalButtons
                             createOrder={async () => {
-                              const name = movininHelper.truncateString(property.name, PayPalService.ORDER_NAME_MAX_LENGTH)
+                              const name = darywinHelper.truncateString(property.name, PayPalService.ORDER_NAME_MAX_LENGTH)
                               const _description = `${property.name} - ${daysLabel} - ${location.name}`
-                              const description = movininHelper.truncateString(_description, PayPalService.ORDER_DESCRIPTION_MAX_LENGTH)
+                              const description = darywinHelper.truncateString(_description, PayPalService.ORDER_DESCRIPTION_MAX_LENGTH)
                               const orderId = await PayPalService.createOrder(bookingId!, price, PaymentService.getCurrency(), name, description)
                               return orderId
                             }}
@@ -670,8 +670,8 @@ const Checkout = () => {
                   )}
                   <div className="checkout-buttons">
                     {(
-                      (env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.Stripe && !clientSecret)
-                      || (env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.PayPal && !payPalInit)
+                      (env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.Stripe && !clientSecret)
+                      || (env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.PayPal && !payPalInit)
                       || payLater) && (
                         <Button
                           type="submit"

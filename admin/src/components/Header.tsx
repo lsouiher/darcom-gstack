@@ -34,7 +34,7 @@ import {
   CalendarMonth as SchedulerIcon,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings } from '@/lang/header'
 import { strings as commonStrings } from '@/lang/common'
@@ -126,7 +126,7 @@ const Header = ({
       const currentLang = UserService.getLanguage()
       if (isSignedIn && user) {
         // Update user language
-        const data: movininTypes.UpdateLanguagePayload = {
+        const data: darywinTypes.UpdateLanguagePayload = {
           id: user._id as string,
           language: code,
         }

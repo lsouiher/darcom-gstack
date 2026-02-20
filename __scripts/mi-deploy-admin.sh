@@ -1,7 +1,7 @@
 #!/bin/bash
 
 start_time=$(date +%s)
-echo "Deploying Movin' In admin..."
+echo "Deploying DaryWin admin..."
 
 cd /opt/movinin
 git pull
@@ -28,7 +28,7 @@ sudo systemctl status nginx --no-pager
 finish_time=$(date +%s)
 elapsed_time=$((finish_time - start_time))
 ((sec=elapsed_time%60, elapsed_time/=60, min=elapsed_time%60))
-timestamp=$(printf "Movin' In admin deployed in %d minutes and %d seconds." $min $sec)
+timestamp=$(printf "DaryWin admin deployed in %d minutes and %d seconds." $min $sec)
 echo "$timestamp"
 
 #$SHELL

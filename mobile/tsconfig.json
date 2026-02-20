@@ -10,12 +10,12 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./*"],
-      ":movinin-types": ["../packages/movinin-types"],
-      ":movinin-helper": ["../packages/movinin-helper"]
+      ":darywin-types": ["../packages/darywin-types"],
+      ":darywin-helper": ["../packages/darywin-helper"]
     }
   },
   "references": [
-    { "path": "../packages/movinin-types" },
-    { "path": "../packages/movinin-helper" }
+    { "path": "../packages/darywin-types" },
+    { "path": "../packages/darywin-helper" }
   ]  
 }

@@ -19,8 +19,8 @@ import {
   Check as VerifiedIcon,
   LocationOn as LocationIcon,
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import * as helper from '@/utils/helper'
@@ -34,7 +34,7 @@ interface AvatarProps {
   height?: number
   mode?: 'create' | 'update'
   type?: string
-  record?: movininTypes.User | movininTypes.Property | movininTypes.Location | null
+  record?: darywinTypes.User | darywinTypes.Property | darywinTypes.Location | null
   size: 'small' | 'medium' | 'large'
   readonly?: boolean
   color?: 'disabled' | 'action' | 'inherit' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
@@ -66,7 +66,7 @@ const Avatar = ({
   const [error, setError] = useState(false)
   const [open, setOpen] = useState(false)
   const [openTypeDialog, setOpenTypeDialog] = useState(false)
-  const [avatarRecord, setAvatarRecord] = useState<movininTypes.User | movininTypes.Property | movininTypes.Location>()
+  const [avatarRecord, setAvatarRecord] = useState<darywinTypes.User | darywinTypes.Property | darywinTypes.Location>()
   const [avatar, setAvatar] = useState<string | undefined | null>(null)
   const [loading, setIsLoading] = useState(true)
 
@@ -114,9 +114,9 @@ const Avatar = ({
     const file = e.target.files[0]
 
     reader.onloadend = async () => {
-      if (type === movininTypes.RecordType.Admin
-        || type === movininTypes.RecordType.Agency
-        || type === movininTypes.RecordType.User) {
+      if (type === darywinTypes.RecordType.Admin
+        || type === darywinTypes.RecordType.Agency
+        || type === darywinTypes.RecordType.User) {
         if (mode === 'create') {
           const createAvatar = async () => {
             try {
@@ -168,7 +168,7 @@ const Avatar = ({
 
           await validate(file, updateAvatar)
         }
-      } else if (type === movininTypes.RecordType.Location) {
+      } else if (type === darywinTypes.RecordType.Location) {
         if (mode === 'create') {
           const createAvatar = async () => {
             try {
@@ -270,7 +270,7 @@ const Avatar = ({
 
   const handleDelete = async () => {
     try {
-      if (type === movininTypes.RecordType.Admin || type === movininTypes.RecordType.Agency || type === movininTypes.RecordType.User) {
+      if (type === darywinTypes.RecordType.Admin || type === darywinTypes.RecordType.Agency || type === darywinTypes.RecordType.User) {
         if (avatarRecord && mode === 'update') {
           const { _id } = avatarRecord
 
@@ -311,7 +311,7 @@ const Avatar = ({
             helper.error()
           }
         }
-      } else if (type === movininTypes.RecordType.Property) {
+      } else if (type === darywinTypes.RecordType.Property) {
         if (!avatarRecord && mode === 'create') {
           const status = await PropertyService.deleteTempImage(avatar as string)
 
@@ -351,7 +351,7 @@ const Avatar = ({
             helper.error()
           }
         }
-      } else if (type === movininTypes.RecordType.Location) {
+      } else if (type === darywinTypes.RecordType.Location) {
         if (!avatarRecord && mode === 'create') {
           const status = await LocationService.deleteTempImage(avatar as string)
 
@@ -398,11 +398,11 @@ const Avatar = ({
   }
 
   const cdn = () => {
-    if (type === movininTypes.RecordType.Property) {
+    if (type === darywinTypes.RecordType.Property) {
       return mode === 'create' ? env.CDN_TEMP_PROPERTIES : env.CDN_PROPERTIES
     }
 
-    if (type === movininTypes.RecordType.Location) {
+    if (type === darywinTypes.RecordType.Location) {
       return mode === 'create' ? env.CDN_TEMP_LOCATIONS : env.CDN_LOCATIONS
     }
 
@@ -417,12 +417,12 @@ const Avatar = ({
     if (currentUser) {
       if (record) {
         setAvatarRecord(record)
-        if (type === movininTypes.RecordType.Property) {
-          setAvatar((record as movininTypes.Property).image)
-        } else if (type === movininTypes.RecordType.Location) {
-          setAvatar((record as movininTypes.Location).image)
+        if (type === darywinTypes.RecordType.Property) {
+          setAvatar((record as darywinTypes.Property).image)
+        } else if (type === darywinTypes.RecordType.Location) {
+          setAvatar((record as darywinTypes.Location).image)
         } else {
-          setAvatar((record as movininTypes.User).avatar)
+          setAvatar((record as darywinTypes.User).avatar)
         }
         setIsLoading(false)
       } else if (mode === 'create') {
@@ -440,7 +440,7 @@ const Avatar = ({
 
   const locationImageStyle = { maxWidth: '100%', maxHeight: '100%' }
 
-  const userAvatar = avatar ? <MaterialAvatar src={movininHelper.joinURL(cdn(), avatar)} className={size ? `avatar-${size}` : 'avatar'} /> : <></>
+  const userAvatar = avatar ? <MaterialAvatar src={darywinHelper.joinURL(cdn(), avatar)} className={size ? `avatar-${size}` : 'avatar'} /> : <></>
 
   const emptyAvatar = <AccountCircle className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
 
@@ -448,17 +448,17 @@ const Avatar = ({
     <div className={className}>
       {avatar ? (
         readonly ? (
-          type === movininTypes.RecordType.Property ? (
-            <img style={propertyImageStyle} src={movininHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as movininTypes.Property).name} />
+          type === darywinTypes.RecordType.Property ? (
+            <img style={propertyImageStyle} src={darywinHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as darywinTypes.Property).name} />
           )
-            : type === movininTypes.RecordType.Location ? (
-              <img style={locationImageStyle} src={movininHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as movininTypes.Location).name} />
+            : type === darywinTypes.RecordType.Location ? (
+              <img style={locationImageStyle} src={darywinHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as darywinTypes.Location).name} />
             )
-              : type === movininTypes.RecordType.Agency ? (
+              : type === darywinTypes.RecordType.Agency ? (
                 <div className="agency-avatar-readonly">
-                  <img src={movininHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as movininTypes.User).fullName} />
+                  <img src={darywinHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as darywinTypes.User).fullName} />
                 </div>
-              ) : verified && avatarRecord && (avatarRecord as movininTypes.User).verified ? (
+              ) : verified && avatarRecord && (avatarRecord as darywinTypes.User).verified ? (
                 <Badge
                   overlap="circular"
                   anchorOrigin={{
@@ -515,7 +515,7 @@ const Avatar = ({
                 vertical: 'bottom',
                 horizontal: 'right',
               }}
-              className={type === movininTypes.RecordType.Agency ? 'agency-avatar' : ''}
+              className={type === darywinTypes.RecordType.Agency ? 'agency-avatar' : ''}
               badgeContent={(
                 <Tooltip title={commonStrings.UPLOAD_IMAGE}>
                   <Box
@@ -530,35 +530,35 @@ const Avatar = ({
                 </Tooltip>
               )}
             >
-              {type === movininTypes.RecordType.Property ? (
+              {type === darywinTypes.RecordType.Property ? (
                 <div className="property-avatar">
-                  <img src={movininHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as movininTypes.Property).name} />
+                  <img src={darywinHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as darywinTypes.Property).name} />
                 </div>
               )
-                : type === movininTypes.RecordType.Location ? (
+                : type === darywinTypes.RecordType.Location ? (
                   <div className="property-avatar">
-                    <img src={movininHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as movininTypes.Location).name} />
+                    <img src={darywinHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as darywinTypes.Location).name} />
                   </div>
                 )
-                  : type === movininTypes.RecordType.Agency ? (
-                    <img style={agencyImageStyle} src={movininHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as movininTypes.User).fullName} />
+                  : type === darywinTypes.RecordType.Agency ? (
+                    <img style={agencyImageStyle} src={darywinHelper.joinURL(cdn(), avatar)} alt={avatarRecord && (avatarRecord as darywinTypes.User).fullName} />
                   ) : (
-                    <MaterialAvatar src={movininHelper.joinURL(cdn(), avatar)} className={size ? `avatar-${size}` : 'avatar'} />
+                    <MaterialAvatar src={darywinHelper.joinURL(cdn(), avatar)} className={size ? `avatar-${size}` : 'avatar'} />
                   )}
             </Badge>
           </Badge>
         )
       ) // !avatar
         : readonly ? (
-          type === movininTypes.RecordType.Property ? (
+          type === darywinTypes.RecordType.Property ? (
             <PropertyIcon style={propertyImageStyle} color={color || 'inherit'} />
           )
-            : type === movininTypes.RecordType.Location ? (
+            : type === darywinTypes.RecordType.Location ? (
               <LocationIcon style={locationImageStyle} color={color || 'inherit'} />
             )
-              : type === movininTypes.RecordType.Agency ? (
+              : type === darywinTypes.RecordType.Agency ? (
                 <AgencyIcon style={agencyImageStyle} color={color || 'inherit'} />
-              ) : verified && avatarRecord && (avatarRecord as movininTypes.User).verified ? (
+              ) : verified && avatarRecord && (avatarRecord as darywinTypes.User).verified ? (
                 <Badge
                   overlap="circular"
                   anchorOrigin={{
@@ -612,13 +612,13 @@ const Avatar = ({
                 </Tooltip>
               )}
             >
-              {type === movininTypes.RecordType.Property ? (
+              {type === darywinTypes.RecordType.Property ? (
                 <PropertyIcon className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
               )
-                : type === movininTypes.RecordType.Location ? (
+                : type === darywinTypes.RecordType.Location ? (
                   <LocationIcon className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
                 )
-                  : type === movininTypes.RecordType.Agency ? (
+                  : type === darywinTypes.RecordType.Agency ? (
                     <AgencyIcon className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />
                   ) : (
                     <AccountCircle className={size ? `avatar-${size}` : 'avatar'} color={color || 'inherit'} />

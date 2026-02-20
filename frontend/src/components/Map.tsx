@@ -3,7 +3,7 @@ import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaf
 import L, { LatLngExpression } from 'leaflet'
 import icon from 'leaflet/dist/images/marker-icon.png'
 import iconShadow from 'leaflet/dist/images/marker-shadow.png'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 // import * as UserService from '@/services/UserService'
 import { strings } from '@/lang/map'
 import * as LocationService from '@/services/LocationService'
@@ -68,7 +68,7 @@ interface MapProps {
   title?: string
   position?: LatLngExpression
   initialZoom?: number,
-  locations?: movininTypes.Location[]
+  locations?: darywinTypes.Location[]
   className?: string,
   children?: ReactNode
   onSelelectLocation?: (locationId: string) => void

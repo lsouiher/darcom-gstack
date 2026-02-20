@@ -1,4 +1,4 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import env from '@/config/env.config'
 
@@ -6,9 +6,9 @@ import env from '@/config/env.config'
  * Get NotificationCounter by UserID.
  *
  * @param {string} userId
- * @returns {Promise<movininTypes.NotificationCounter>}
+ * @returns {Promise<darywinTypes.NotificationCounter>}
  */
-export const getNotificationCounter = (userId: string): Promise<movininTypes.NotificationCounter> => (
+export const getNotificationCounter = (userId: string): Promise<darywinTypes.NotificationCounter> => (
   axiosInstance
     .get(
       `/api/notification-counter/${encodeURIComponent(userId)}`,
@@ -73,9 +73,9 @@ export const deleteNotifications = (userId: string, ids: string[]): Promise<numb
  *
  * @param {string} userId
  * @param {number} page
- * @returns {Promise<movininTypes.Result<movininTypes.Notification>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Notification>>}
  */
-export const getNotifications = (userId: string, page: number): Promise<movininTypes.Result<movininTypes.Notification>> => (
+export const getNotifications = (userId: string, page: number): Promise<darywinTypes.Result<darywinTypes.Notification>> => (
   axiosInstance
     .get(
       `/api/notifications/${encodeURIComponent(userId)}/${page}/${env.PAGE_SIZE}`,

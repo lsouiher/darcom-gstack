@@ -6,7 +6,7 @@ import {
   LoginSocialApple,
   LoginSocialGoogle,
 } from ':reactjs-social-login'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings as commonStrings } from '@/lang/common'
 import env from '@/config/env.config'
 import * as UserService from '@/services/UserService'
@@ -46,8 +46,8 @@ const SocialLogin = ({
 
   const { setUser, setUserLoaded } = useUserContext() as UserContextType
 
-  const loginSuccess = async (socialSignInType: movininTypes.SocialSignInType, accessToken: string, email: string, fullName: string, avatar?: string) => {
-    const data: movininTypes.SignInPayload = {
+  const loginSuccess = async (socialSignInType: darywinTypes.SocialSignInType, accessToken: string, email: string, fullName: string, avatar?: string) => {
+    const data: darywinTypes.SignInPayload = {
       socialSignInType,
       accessToken,
       email,
@@ -108,7 +108,7 @@ const SocialLogin = ({
             appId={env.FB_APP_ID}
             redirect_uri={REDIRECT_URI}
             onResolve={({ data }: IResolveParams) => {
-              loginSuccess(movininTypes.SocialSignInType.Facebook, data?.signedRequest, data?.email, data?.name, data?.picture?.data?.url)
+              loginSuccess(darywinTypes.SocialSignInType.Facebook, data?.signedRequest, data?.email, data?.name, data?.picture?.data?.url)
             }}
             onReject={(err: any) => {
               loginError(err)
@@ -126,7 +126,7 @@ const SocialLogin = ({
             redirect_uri={REDIRECT_URI}
             onResolve={({ data }: IResolveParams) => {
               const email = data?.user?.email || getEmail(String(data?.id_token))
-              loginSuccess(movininTypes.SocialSignInType.Apple, data?.id_token, email, data?.user ? `${data?.user?.firstName} ${data?.user?.lastName}` : email)
+              loginSuccess(darywinTypes.SocialSignInType.Apple, data?.id_token, email, data?.user ? `${data?.user?.firstName} ${data?.user?.lastName}` : email)
             }}
             onReject={(err: any) => {
               loginError(err)
@@ -144,7 +144,7 @@ const SocialLogin = ({
             scope="openid profile email"
             discoveryDocs="claims_supported"
             onResolve={({ data }: IResolveParams) => {
-              loginSuccess(movininTypes.SocialSignInType.Google, data?.access_token, data?.email, data?.name || data?.email, data?.picture)
+              loginSuccess(darywinTypes.SocialSignInType.Google, data?.access_token, data?.email, data?.name || data?.email, data?.picture)
             }}
             onReject={(err: any) => {
               loginError(err)

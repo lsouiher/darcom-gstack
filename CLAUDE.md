@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Movin' In is a Rental Property Management Platform built as a TypeScript monorepo with four main applications and shared packages. It supports single-agency and multi-agency modes with Stripe and PayPal payment gateways.
+DaryWin is a Rental Property Management Platform built as a TypeScript monorepo with four main applications and shared packages. It supports single-agency and multi-agency modes with Stripe and PayPal payment gateways.
 
 ## Repository Structure
 
@@ -14,8 +14,8 @@ Movin' In is a Rental Property Management Platform built as a TypeScript monorep
 ├── admin/            # React admin panel for agencies (Vite)
 ├── mobile/           # React Native Expo mobile app
 └── packages/
-    ├── movinin-types/           # Shared TypeScript interfaces and enums
-    ├── movinin-helper/          # Shared utility functions
+    ├── darywin-types/           # Shared TypeScript interfaces and enums
+    ├── darywin-helper/          # Shared utility functions
     ├── currency-converter/      # Currency conversion utilities
     ├── disable-react-devtools/  # Production DevTools disabler
     └── reactjs-social-login/    # OAuth social login components
@@ -80,7 +80,7 @@ npm run build && npx jest __tests__/user.test.ts
 - Route paths are defined separately in `src/config/*Routes.config.ts`, handlers in `src/routes/`, business logic in `src/controllers/`
 - Models in `src/models/` (User, Booking, Property, Location, Country, Notification)
 - Auth middleware in `src/middlewares/authJwt.ts`
-- Uses path alias `:movinin-types` to import shared types (configured in tsconfig.json `paths` and resolved by Babel)
+- Uses path alias `:darywin-types` to import shared types (configured in tsconfig.json `paths` and resolved by Babel)
 
 ### Frontend/Admin
 - **React 19** with Vite bundler
@@ -96,7 +96,7 @@ npm run build && npx jest __tests__/user.test.ts
 - Screens in `screens/`, components in `components/`
 
 ### Shared Types
-`packages/movinin-types/` exports enums and interfaces used across all apps:
+`packages/darywin-types/` exports enums and interfaces used across all apps:
 - `UserType`, `PropertyType`, `BookingStatus`, `RentalTerm`, `PaymentGateway`
 - Payload interfaces for API contracts (e.g., `CreatePropertyPayload`, `BookingPayload`)
 - Changes here affect all consuming apps -- rebuild and test accordingly
@@ -114,7 +114,7 @@ npm run build && npx jest __tests__/user.test.ts
 - Each app manages its own dependencies and build process
 - Shared code goes in `packages/` as separate npm packages
 - i18n via lang files in each app's `lang/` directory (English and French)
-- Environment config in `config/env.config.ts` per app; backend env vars are prefixed with `MI_`
+- Environment config in `config/env.config.ts` per app; backend env vars are prefixed with `DW_`
 - Backend uses ESM (`"type": "module"`) with Babel transpilation for the build step
 
 ## Docker Development

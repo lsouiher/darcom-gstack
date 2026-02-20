@@ -1,14 +1,14 @@
-# Code of Conduct for Movin' In
+# Code of Conduct for DaryWin
 
 ## Our Commitment
 
-We are committed to fostering an open, welcoming, and harassment-free community around Movin' In. All participants are expected to treat each other with respect and kindness, regardless of background.
+We are committed to fostering an open, welcoming, and harassment-free community around DaryWin. All participants are expected to treat each other with respect and kindness, regardless of background.
 
 We expect all contributors, maintainers, users, and participants to uphold this commitment to foster a safe, friendly, and inclusive environment.
 
 ## Expected Behavior
 
-To help make Movin' In a welcoming space for everyone, please:
+To help make DaryWin a welcoming space for everyone, please:
 
 - Be respectful, courteous, and considerate in all interactions.
 - Use inclusive and welcoming language.
@@ -21,7 +21,7 @@ To help make Movin' In a welcoming space for everyone, please:
 
 ## Unacceptable Behavior
 
-The following behaviors are not tolerated in any Movin' In spaces or related online/offline channels:
+The following behaviors are not tolerated in any DaryWin spaces or related online/offline channels:
 
 - Harassment, intimidation, or discrimination in any form.
 - Offensive comments or slurs related to expression, disability, physical appearance, body size, race, age, or other protected characteristics.
@@ -33,12 +33,12 @@ The following behaviors are not tolerated in any Movin' In spaces or related onl
 
 ## Scope
 
-This Code of Conduct applies to all Movin' In spaces, including but not limited to:
+This Code of Conduct applies to all DaryWin spaces, including but not limited to:
 
 - GitHub issues, pull requests, and discussions.
-- Official Movin' In communication channels (e.g., forums, chat rooms, mailing lists).
-- Social media groups and pages affiliated with Movin' In.
-- Any in-person events or conferences related to Movin' In.
+- Official DaryWin communication channels (e.g., forums, chat rooms, mailing lists).
+- Social media groups and pages affiliated with DaryWin.
+- Any in-person events or conferences related to DaryWin.
 
 ## Reporting Guidelines
 
@@ -48,17 +48,17 @@ Reports will be handled with confidentiality and respect. We commit to reviewing
 
 ## Enforcement
 
-Maintainers and moderators of Movin' In reserve the right to take any action deemed necessary to enforce this Code of Conduct, including but not limited to:
+Maintainers and moderators of DaryWin reserve the right to take any action deemed necessary to enforce this Code of Conduct, including but not limited to:
 
 - Warning the offending party.
-- Temporary or permanent removal from Movin' In spaces.
+- Temporary or permanent removal from DaryWin spaces.
 - Reporting to platform moderators or law enforcement if necessary.
 
 Our goal is to maintain a safe and welcoming environment for everyone.
 
 ---
 
-Thank you for helping us build a positive community around Movin' In!
+Thank you for helping us build a positive community around DaryWin!
 
 ---
 

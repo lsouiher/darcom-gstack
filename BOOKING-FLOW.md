@@ -1,6 +1,6 @@
 # Booking Request Flow
 
-This document explains the complete booking flow in Movin' In, from property selection to payment confirmation and notifications.
+This document explains the complete booking flow in DaryWin, from property selection to payment confirmation and notifications.
 
 ---
 
@@ -149,7 +149,7 @@ const onLoad = async (_user?: movininTypes.User) => {
 }
 ```
 
-### Price Calculation: `packages/movinin-helper/index.ts`
+### Price Calculation: `packages/darywin-helper/index.ts`
 
 The price is calculated based on the property's rental term:
 
@@ -1095,4 +1095,4 @@ export const cancelBooking = async (req: Request, res: Response) => {
 
 ---
 
-*Document generated for Movin' In v6.7.0*
+*Document generated for DaryWin v6.7.0*

@@ -2,7 +2,7 @@ import request from 'supertest'
 import cookieParser from 'cookie-parser'
 import { nanoid } from 'nanoid'
 import mongoose from 'mongoose'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import app from '../src/app'
 import * as env from '../src/config/env.config'
 import User from '../src/models/User'
@@ -44,7 +44,7 @@ export const initialize = async () => {
     email: ADMIN_EMAIL,
     language: LANGUAGE,
     password: passwordHash,
-    type: movininTypes.UserType.Admin,
+    type: darywinTypes.UserType.Admin,
   })
   await admin.save()
   expect(admin._id.toString()).toBeDefined()
@@ -56,7 +56,7 @@ export const initialize = async () => {
     email: USER_EMAIL,
     language: LANGUAGE,
     password: passwordHash,
-    type: movininTypes.UserType.User,
+    type: darywinTypes.UserType.User,
   })
   await user.save()
   expect(user._id.toString()).toBeDefined()
@@ -92,8 +92,8 @@ export const getToken = (cookie: string) => {
   return token
 }
 
-const signin = async (appType: movininTypes.AppType, email: string) => {
-  const payload: movininTypes.SignInPayload = {
+const signin = async (appType: darywinTypes.AppType, email: string) => {
+  const payload: darywinTypes.SignInPayload = {
     email,
     password: PASSWORD,
   }
@@ -110,9 +110,9 @@ const signin = async (appType: movininTypes.AppType, email: string) => {
   return token
 }
 
-export const signinAsAdmin = () => signin(movininTypes.AppType.Admin, ADMIN_EMAIL)
+export const signinAsAdmin = () => signin(darywinTypes.AppType.Admin, ADMIN_EMAIL)
 
-export const signinAsUser = () => signin(movininTypes.AppType.Frontend, USER_EMAIL)
+export const signinAsUser = () => signin(darywinTypes.AppType.Frontend, USER_EMAIL)
 
 export const signout = async (token: string) => {
   const res = await request(app)
@@ -132,7 +132,7 @@ export const createAgency = async (email: string, fullName: string) => {
     fullName,
     language: LANGUAGE,
     password: passwordHash,
-    type: movininTypes.UserType.Agency,
+    type: darywinTypes.UserType.Agency,
     avatar: 'avatar.jpg',
     blacklisted: false,
   }

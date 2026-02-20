@@ -23,8 +23,8 @@ import {
 import { format } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
 import { useNavigate } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/notifications'
 import * as NotificationService from '@/services/NotificationService'
@@ -36,7 +36,7 @@ import { useNotificationContext, NotificationContextType } from '@/context/Notif
 import '@/assets/css/notification-list.css'
 
 interface NotificationListProps {
-  user?: movininTypes.User
+  user?: darywinTypes.User
 }
 
 const NotificationList = ({ user }: NotificationListProps) => {
@@ -45,11 +45,11 @@ const NotificationList = ({ user }: NotificationListProps) => {
 
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
-  const [rows, setRows] = useState<movininTypes.Notification[]>([])
+  const [rows, setRows] = useState<darywinTypes.Notification[]>([])
   const [rowCount, setRowCount] = useState(-1)
   const [totalRecords, setTotalRecords] = useState(-1)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
-  const [selectedRows, setSelectedRows] = useState<movininTypes.Notification[]>([])
+  const [selectedRows, setSelectedRows] = useState<darywinTypes.Notification[]>([])
   const notificationsListRef = useRef<HTMLDivElement>(null)
 
   const _fr = user && user.language === 'fr'
@@ -121,7 +121,7 @@ const NotificationList = ({ user }: NotificationListProps) => {
                           row.checked = event.target.checked
                         })
                       }
-                      setRows(movininHelper.clone(rows))
+                      setRows(darywinHelper.clone(rows))
                     }}
                   />
                 </div>
@@ -144,7 +144,7 @@ const NotificationList = ({ user }: NotificationListProps) => {
                                 _rows.forEach((row) => {
                                   row.isRead = true
                                 })
-                                setRows(movininHelper.clone(rows))
+                                setRows(darywinHelper.clone(rows))
                                 setNotificationCount((prev) => prev - _rows.length)
                               } else {
                                 helper.error()
@@ -175,7 +175,7 @@ const NotificationList = ({ user }: NotificationListProps) => {
                                 _rows.forEach((row) => {
                                   row.isRead = false
                                 })
-                                setRows(movininHelper.clone(rows))
+                                setRows(darywinHelper.clone(rows))
                                 setNotificationCount((prev) => prev + _rows.length)
                               } else {
                                 helper.error()
@@ -211,13 +211,13 @@ const NotificationList = ({ user }: NotificationListProps) => {
                       checked={row.checked}
                       onChange={(event) => {
                         row.checked = event.target.checked
-                        setRows(movininHelper.clone(rows))
+                        setRows(darywinHelper.clone(rows))
                       }}
                     />
                   </div>
                   <div className={`notification${!row.isRead ? ' unread' : ''}`}>
                     <div className="date">
-                      {row.createdAt && movininHelper.capitalize(
+                      {row.createdAt && darywinHelper.capitalize(
                         format(new Date(row.createdAt), _format, {
                           locale: _locale,
                         }),
@@ -244,7 +244,7 @@ const NotificationList = ({ user }: NotificationListProps) => {
                                     const status = await NotificationService.markAsRead(user._id, [row._id])
 
                                     if (status === 200) {
-                                      const _rows = movininHelper.cloneArray(rows) as movininTypes.Notification[]
+                                      const _rows = darywinHelper.cloneArray(rows) as darywinTypes.Notification[]
                                       _rows[index].isRead = true
                                       setRows(_rows)
                                       setNotificationCount((prev) => prev - 1)
@@ -277,7 +277,7 @@ const NotificationList = ({ user }: NotificationListProps) => {
                                   const status = await NotificationService.markAsRead(user._id, [row._id])
 
                                   if (status === 200) {
-                                    const _rows = movininHelper.cloneArray(rows) as movininTypes.Notification[]
+                                    const _rows = darywinHelper.cloneArray(rows) as darywinTypes.Notification[]
                                     _rows[index].isRead = true
                                     setRows(_rows)
                                     setNotificationCount((prev) => prev - 1)
@@ -305,7 +305,7 @@ const NotificationList = ({ user }: NotificationListProps) => {
                                   const status = await NotificationService.markAsUnread(user._id, [row._id])
 
                                   if (status === 200) {
-                                    const _rows = movininHelper.cloneArray(rows) as movininTypes.Notification[]
+                                    const _rows = darywinHelper.cloneArray(rows) as darywinTypes.Notification[]
                                     _rows[index].isRead = false
                                     setRows(_rows)
                                     setNotificationCount((prev) => prev + 1)
@@ -400,7 +400,7 @@ const NotificationList = ({ user }: NotificationListProps) => {
                             fetch()
                           }
                         } else {
-                          const _rows = movininHelper.clone(rows) as movininTypes.Notification[]
+                          const _rows = darywinHelper.clone(rows) as darywinTypes.Notification[]
                           setRows(_rows.filter((row) => !ids.includes(row._id)))
                           setRowCount(rowCount - selectedRows.length)
                           setTotalRecords(totalRecords - selectedRows.length)

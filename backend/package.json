@@ -1,6 +1,6 @@
 {
-  "name": "movinin-backend",
-  "description": "Backend server for Movin' In",
+  "name": "darywin-backend",
+  "description": "Backend server for DaryWin",
   "version": "6.7.0",
   "main": "index.js",
   "type": "module",

@@ -4,7 +4,7 @@ import {
   Paper,
   Button
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/change-password'
@@ -18,7 +18,7 @@ import '@/assets/css/change-password.css'
 const ChangePassword = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [newPasswordError, setNewPasswordError] = useState(false)
@@ -74,7 +74,7 @@ const ChangePassword = () => {
         setConfirmPasswordError(false)
         setNewPasswordError(false)
 
-        const data: movininTypes.ChangePasswordPayload = {
+        const data: darywinTypes.ChangePasswordPayload = {
           _id: user._id as string,
           password: currentPassword,
           newPassword,
@@ -126,7 +126,7 @@ const ChangePassword = () => {
     }
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     setUser(_user)
 
     const status = await UserService.hasPassword(_user!._id!)

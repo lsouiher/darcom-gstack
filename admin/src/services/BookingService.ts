@@ -1,14 +1,14 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
 /**
  * Create a Booking.
  *
- * @param {movininTypes.Booking} data
- * @returns {Promise<movininTypes.Booking>}
+ * @param {darywinTypes.Booking} data
+ * @returns {Promise<darywinTypes.Booking>}
  */
-export const create = (data: movininTypes.Booking): Promise<movininTypes.Booking> =>
+export const create = (data: darywinTypes.Booking): Promise<darywinTypes.Booking> =>
   axiosInstance
     .post(
       '/api/create-booking',
@@ -20,10 +20,10 @@ export const create = (data: movininTypes.Booking): Promise<movininTypes.Booking
 /**
  * Update a Booking.
  *
- * @param {movininTypes.Booking} data
+ * @param {darywinTypes.Booking} data
  * @returns {Promise<number>}
  */
-export const update = (data: movininTypes.Booking): Promise<number> =>
+export const update = (data: darywinTypes.Booking): Promise<number> =>
   axiosInstance
     .put(
       '/api/update-booking',
@@ -35,10 +35,10 @@ export const update = (data: movininTypes.Booking): Promise<number> =>
 /**
  * Update a Booking status.
  *
- * @param {movininTypes.UpdateStatusPayload} data
+ * @param {darywinTypes.UpdateStatusPayload} data
  * @returns {Promise<number>}
  */
-export const updateStatus = (data: movininTypes.UpdateStatusPayload): Promise<number> =>
+export const updateStatus = (data: darywinTypes.UpdateStatusPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/update-booking-status',
@@ -66,9 +66,9 @@ export const deleteBookings = (ids: string[]): Promise<number> =>
  * Get a Booking by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.Booking>}
+ * @returns {Promise<darywinTypes.Booking>}
  */
-export const getBooking = (id: string): Promise<movininTypes.Booking> =>
+export const getBooking = (id: string): Promise<darywinTypes.Booking> =>
   axiosInstance
     .get(
       `/api/booking/${encodeURIComponent(id)}/${UserService.getLanguage()}`,
@@ -79,12 +79,12 @@ export const getBooking = (id: string): Promise<movininTypes.Booking> =>
 /**
  * Get Bookings.
  *
- * @param {movininTypes.GetBookingsPayload} payload
+ * @param {darywinTypes.GetBookingsPayload} payload
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Booking>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Booking>>}
  */
-export const getBookings = (payload: movininTypes.GetBookingsPayload, page: number, size: number): Promise<movininTypes.Result<movininTypes.Booking>> =>
+export const getBookings = (payload: darywinTypes.GetBookingsPayload, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Booking>> =>
   axiosInstance
     .post(
       `/api/bookings/${page}/${size}/${UserService.getLanguage()}`,

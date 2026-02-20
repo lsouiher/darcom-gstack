@@ -6,7 +6,7 @@ import url from 'url'
 import path from 'path'
 import asyncFs from 'node:fs/promises'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import app from '../src/app'
 import * as env from '../src/config/env.config'
@@ -99,10 +99,10 @@ describe('POST /api/create-property', () => {
     if (!(await helper.pathExists(additionalImage2))) {
       await asyncFs.copyFile(ADDITIONAL_IMAGE1_2_PATH, additionalImage2)
     }
-    const payload: movininTypes.CreatePropertyPayload = {
+    const payload: darywinTypes.CreatePropertyPayload = {
       name: 'Beautiful House in Detroit',
       agency: AGENCY1_ID,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: MAIN_IMAGE1,
       images: [ADDITIONAL_IMAGE1_1, ADDITIONAL_IMAGE1_2],
@@ -121,7 +121,7 @@ describe('POST /api/create-property', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     }
     let res = await request(app)
       .post('/api/create-property')
@@ -204,11 +204,11 @@ describe('PUT /api/update-property', () => {
       await asyncFs.copyFile(ADDITIONAL_IMAGE2_2_PATH, additionalImage2)
     }
 
-    const payload: movininTypes.UpdatePropertyPayload = {
+    const payload: darywinTypes.UpdatePropertyPayload = {
       _id: PROPERTY_ID,
       name: 'Beautiful Townhouse in Detroit',
       agency: AGENCY2_ID,
-      type: movininTypes.PropertyType.Townhouse,
+      type: darywinTypes.PropertyType.Townhouse,
       description: '<p>Perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: MAIN_IMAGE2,
       images: [ADDITIONAL_IMAGE2_1, ADDITIONAL_IMAGE2_2],
@@ -227,7 +227,7 @@ describe('PUT /api/update-property', () => {
       hidden: false,
       cancellation: 50,
       available: true,
-      rentalTerm: movininTypes.RentalTerm.Weekly,
+      rentalTerm: darywinTypes.RentalTerm.Weekly,
       blockOnPay: false,
     }
     let res = await request(app)
@@ -238,7 +238,7 @@ describe('PUT /api/update-property', () => {
     let property = res.body
     expect(property.name).toBe('Beautiful Townhouse in Detroit')
     expect(property.agency).toBe(AGENCY2_ID)
-    expect(property.type).toBe(movininTypes.PropertyType.Townhouse)
+    expect(property.type).toBe(darywinTypes.PropertyType.Townhouse)
     expect(property.description).toBe('<p>Perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>')
     expect(property.image).toBeDefined()
     expect(property.images.length).toBe(2)
@@ -257,7 +257,7 @@ describe('PUT /api/update-property', () => {
     expect(property.hidden).toBeFalsy()
     expect(property.cancellation).toBe(50)
     expect(property.available).toBeTruthy()
-    expect(property.rentalTerm).toBe(movininTypes.RentalTerm.Weekly)
+    expect(property.rentalTerm).toBe(darywinTypes.RentalTerm.Weekly)
     expect(property.blockOnPay).toBe(false)
 
     payload.image = ''
@@ -487,11 +487,11 @@ describe('POST /api/properties/:page/:size', () => {
   it('should return properties', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.GetPropertiesPayload = {
+    const payload: darywinTypes.GetPropertiesPayload = {
       agencies: [AGENCY2_ID],
-      types: [movininTypes.PropertyType.Townhouse],
-      rentalTerms: [movininTypes.RentalTerm.Weekly],
-      availability: [movininTypes.Availablity.Available, movininTypes.Availablity.Unavailable],
+      types: [darywinTypes.PropertyType.Townhouse],
+      rentalTerms: [darywinTypes.RentalTerm.Weekly],
+      availability: [darywinTypes.Availablity.Available, darywinTypes.Availablity.Unavailable],
       language: testHelper.LANGUAGE,
     }
 
@@ -507,7 +507,7 @@ describe('POST /api/properties/:page/:size', () => {
       .set(env.X_ACCESS_TOKEN, token)
     expect(res.statusCode).toBe(400)
 
-    payload.availability = [movininTypes.Availablity.Available]
+    payload.availability = [darywinTypes.Availablity.Available]
     res = await request(app)
       .post(`/api/properties/${testHelper.PAGE}/${testHelper.SIZE}`)
       .set(env.X_ACCESS_TOKEN, token)
@@ -515,7 +515,7 @@ describe('POST /api/properties/:page/:size', () => {
     expect(res.statusCode).toBe(200)
     expect(res.body[0].resultData.length).toBeGreaterThan(0)
 
-    payload.availability = [movininTypes.Availablity.Unavailable]
+    payload.availability = [darywinTypes.Availablity.Unavailable]
     res = await request(app)
       .post(`/api/properties/${testHelper.PAGE}/${testHelper.SIZE}`)
       .set(env.X_ACCESS_TOKEN, token)
@@ -550,7 +550,7 @@ describe('POST /api/booking-properties/:page/:size', () => {
   it('should return booking properties', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.GetBookingPropertiesPayload = {
+    const payload: darywinTypes.GetBookingPropertiesPayload = {
       agency: AGENCY2_ID,
       location: LOCATION2_ID,
     }
@@ -573,10 +573,10 @@ describe('POST /api/booking-properties/:page/:size', () => {
 
 describe('POST /api/frontend-properties/:page/:size', () => {
   it('should return frontend properties', async () => {
-    const payload: movininTypes.GetPropertiesPayload = {
+    const payload: darywinTypes.GetPropertiesPayload = {
       agencies: [AGENCY2_ID],
-      types: [movininTypes.PropertyType.Townhouse],
-      rentalTerms: [movininTypes.RentalTerm.Weekly],
+      types: [darywinTypes.PropertyType.Townhouse],
+      rentalTerms: [darywinTypes.RentalTerm.Weekly],
       location: LOCATION2_ID,
       from: new Date(2024, 0, 1),
       to: new Date(2024, 1, 1),
@@ -695,7 +695,7 @@ describe('GET /api/check-property/:id', () => {
       location: LOCATION1_ID,
       from: new Date(2024, 2, 1),
       to: new Date(1990, 2, 4),
-      status: movininTypes.BookingStatus.Pending,
+      status: darywinTypes.BookingStatus.Pending,
       cancellation: true,
       price: 4000,
     })
@@ -732,7 +732,7 @@ describe('DELETE /api/delete-property/:id', () => {
     let property = new Property({
       name: 'Beautiful House in Detroit',
       agency: AGENCY1_ID,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: null,
       images: null,
@@ -751,7 +751,7 @@ describe('DELETE /api/delete-property/:id', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Daily,
+      rentalTerm: darywinTypes.RentalTerm.Daily,
     })
     await property.save()
     res = await request(app)
@@ -762,7 +762,7 @@ describe('DELETE /api/delete-property/:id', () => {
     property = new Property({
       name: 'Beautiful House in Detroit',
       agency: AGENCY1_ID,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: `${nanoid()}.jpg`,
       images: [`${nanoid()}.jpg`],
@@ -781,7 +781,7 @@ describe('DELETE /api/delete-property/:id', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Daily,
+      rentalTerm: darywinTypes.RentalTerm.Daily,
     })
     await property.save()
     res = await request(app)

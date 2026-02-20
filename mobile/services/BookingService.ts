@@ -1,17 +1,17 @@
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 import * as axiosHelper from '@/utils/axiosHelper'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 axiosHelper.init(axiosInstance)
 
 /**
  * Complete the checkout process and create the booking.
  *
- * @param {movininTypes.CheckoutPayload} data
+ * @param {darywinTypes.CheckoutPayload} data
  * @returns {Promise<number>}
  */
-export const checkout = (data: movininTypes.CheckoutPayload): Promise<number> =>
+export const checkout = (data: darywinTypes.CheckoutPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/checkout',
@@ -23,12 +23,12 @@ export const checkout = (data: movininTypes.CheckoutPayload): Promise<number> =>
  * Get bookings.
  *
  * @async
- * @param {movininTypes.GetBookingsPayload} payload
+ * @param {darywinTypes.GetBookingsPayload} payload
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Booking>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Booking>>}
  */
-export const getBookings = async (payload: movininTypes.GetBookingsPayload, page: number, size: number): Promise<movininTypes.Result<movininTypes.Booking>> => {
+export const getBookings = async (payload: darywinTypes.GetBookingsPayload, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Booking>> => {
   const headers = await UserService.authHeader()
   const language = await UserService.getLanguage()
   return axiosInstance
@@ -45,9 +45,9 @@ export const getBookings = async (payload: movininTypes.GetBookingsPayload, page
  *
  * @async
  * @param {string} id
- * @returns {Promise<movininTypes.Booking>}
+ * @returns {Promise<darywinTypes.Booking>}
  */
-export const getBooking = async (id: string): Promise<movininTypes.Booking> => {
+export const getBooking = async (id: string): Promise<darywinTypes.Booking> => {
   const headers = await UserService.authHeader()
   const language = await UserService.getLanguage()
   return axiosInstance

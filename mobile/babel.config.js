@@ -19,8 +19,8 @@ module.exports = function (api) {
         {
           "root": ['./'],
           "alias": {
-            ":movinin-types": "../packages/movinin-types",
-            ":movinin-helper": "../packages/movinin-helper",
+            ":darywin-types": "../packages/darywin-types",
+            ":darywin-helper": "../packages/darywin-helper",
             ":currency-converter": "../packages/currency-converter"
           }
         }

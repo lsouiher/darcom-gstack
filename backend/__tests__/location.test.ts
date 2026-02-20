@@ -4,7 +4,7 @@ import url from 'url'
 import path from 'path'
 import asyncFs from 'node:fs/promises'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import app from '../src/app'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as testHelper from './testHelper'
@@ -29,7 +29,7 @@ const IMAGE2_PATH = path.resolve(__dirname, `./img/${IMAGE2}`)
 let LOCATION_ID: string
 let PARENT_LOCATION_ID: string
 
-let LOCATION_NAMES: movininTypes.LocationName[] = [
+let LOCATION_NAMES: darywinTypes.LocationName[] = [
   {
     language: 'en',
     name: nanoid(),
@@ -92,7 +92,7 @@ describe('POST /api/validate-location', () => {
     await locationValue.save()
     const location = new Location({ country: countryId, values: [locationValue._id.toString()] })
     await location.save()
-    const payload: movininTypes.ValidateLocationPayload = {
+    const payload: darywinTypes.ValidateLocationPayload = {
       language,
       name,
     }
@@ -135,7 +135,7 @@ describe('POST /api/create-location', () => {
     const token = await testHelper.signinAsAdmin()
 
     // test failure (image not found)
-    const payload: movininTypes.UpsertLocationPayload = {
+    const payload: darywinTypes.UpsertLocationPayload = {
       country: countryId,
       names: LOCATION_NAMES,
       latitude: 28.0268755,
@@ -214,7 +214,7 @@ describe('PUT /api/update-location/:id', () => {
       },
     ]
 
-    const payload: movininTypes.UpsertLocationPayload = {
+    const payload: darywinTypes.UpsertLocationPayload = {
       country: countryId,
       names: LOCATION_NAMES,
       latitude: 29.0268755,
@@ -495,7 +495,7 @@ describe('GET /api/check-location/:id', () => {
     const property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: 'main1.jpg',
       images: [],
@@ -514,7 +514,7 @@ describe('GET /api/check-location/:id', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
 

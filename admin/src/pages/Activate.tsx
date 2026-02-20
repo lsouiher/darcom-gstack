@@ -4,7 +4,7 @@ import {
   Button,
   Paper,
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as UserService from '@/services/UserService'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
@@ -67,7 +67,7 @@ const Activate = () => {
       setConfirmPasswordError(false)
       setPasswordError(false)
 
-      const data: movininTypes.ActivatePayload = { userId, token, password }
+      const data: darywinTypes.ActivatePayload = { userId, token, password }
 
       const status = await UserService.activate(data)
       if (status === 200) {
@@ -117,7 +117,7 @@ const Activate = () => {
     }
   }
 
-  const onLoad = async (user?: movininTypes.User) => {
+  const onLoad = async (user?: darywinTypes.User) => {
     if (user) {
       setNoMatch(true)
     } else {

@@ -12,8 +12,8 @@ import {
 } from '@mui/material'
 import { Info as InfoIcon } from '@mui/icons-material'
 import validator from 'validator'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
@@ -31,8 +31,8 @@ import '@/assets/css/update-agency.css'
 const UpdateAgency = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
-  const [agency, setAgency] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
+  const [agency, setAgency] = useState<darywinTypes.User>()
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
   const [location, setLocation] = useState('')
@@ -131,11 +131,11 @@ const UpdateAgency = () => {
 
   const onAvatarChange = (_avatar: string) => {
     if (agency && user) {
-      const _agency = movininHelper.clone(agency)
+      const _agency = darywinHelper.clone(agency)
       _agency.avatar = _avatar
 
       if (user._id === agency._id) {
-        const _user = movininHelper.clone(user)
+        const _user = darywinHelper.clone(user)
         _user.avatar = _avatar
         setUser(_user)
       }
@@ -167,7 +167,7 @@ const UpdateAgency = () => {
     }
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     if (_user && _user.verified) {
       setLoading(true)
       setUser(_user)
@@ -237,7 +237,7 @@ const UpdateAgency = () => {
         return
       }
 
-      const data: movininTypes.UpdateAgencyPayload = {
+      const data: darywinTypes.UpdateAgencyPayload = {
         _id: agency._id as string,
         fullName,
         phone,
@@ -250,7 +250,7 @@ const UpdateAgency = () => {
       const status = await AgencyService.update(data)
 
       if (status === 200) {
-        const _agency = movininHelper.clone(agency) as movininTypes.User
+        const _agency = darywinHelper.clone(agency) as darywinTypes.User
         _agency.fullName = fullName
         setAgency(_agency)
         helper.info(commonStrings.UPDATED)
@@ -271,7 +271,7 @@ const UpdateAgency = () => {
           <Paper className="agency-form-update agency-form-wrapper" elevation={10}>
             <form onSubmit={handleSubmit}>
               <Avatar
-                type={movininTypes.RecordType.Agency}
+                type={darywinTypes.RecordType.Agency}
                 mode="update"
                 record={agency}
                 size="large"

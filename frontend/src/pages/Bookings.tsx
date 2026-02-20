@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import * as helper from '@/utils/helper'
@@ -13,31 +13,31 @@ import * as AgencyService from '@/services/AgencyService'
 import '@/assets/css/bookings.css'
 
 const Bookings = () => {
-  const [user, setUser] = useState<movininTypes.User>()
-  const [allAgencies, setAllAgencies] = useState<movininTypes.User[]>([])
+  const [user, setUser] = useState<darywinTypes.User>()
+  const [allAgencies, setAllAgencies] = useState<darywinTypes.User[]>([])
   const [agencies, setAgencies] = useState<string[]>()
   const [statuses, setStatuses] = useState(helper.getBookingStatuses().map((status) => status.value))
-  const [filter, setFilter] = useState<movininTypes.Filter | null>()
+  const [filter, setFilter] = useState<darywinTypes.Filter | null>()
   const [loadingAgencies, setLoadingAgencies] = useState(true)
 
   const handleAgencyFilterChange = (_agencies: string[]) => {
     setAgencies(_agencies)
   }
 
-  const handleStatusFilterChange = (_statuses: movininTypes.BookingStatus[]) => {
+  const handleStatusFilterChange = (_statuses: darywinTypes.BookingStatus[]) => {
     setStatuses(_statuses)
   }
 
-  const handleBookingFilterSubmit = (_filter: movininTypes.Filter | null) => {
+  const handleBookingFilterSubmit = (_filter: darywinTypes.Filter | null) => {
     setFilter(_filter)
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     setUser(_user)
     setLoadingAgencies(true)
 
     const _allAgencies = await AgencyService.getAllAgencies()
-    const _agencies = movininHelper.flattenAgencies(_allAgencies)
+    const _agencies = darywinHelper.flattenAgencies(_allAgencies)
     setAllAgencies(_allAgencies)
     setAgencies(_agencies)
     setLoadingAgencies(false)

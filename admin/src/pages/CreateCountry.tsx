@@ -8,8 +8,8 @@ import {
   Button,
   Paper
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/create-country'
@@ -23,7 +23,7 @@ const CreateCountry = () => {
   const navigate = useNavigate()
 
   const [visible, setVisible] = useState(false)
-  const [names, setNames] = useState<movininTypes.CountryName[]>([])
+  const [names, setNames] = useState<darywinTypes.CountryName[]>([])
   const [nameErrors, setNameErrors] = useState<boolean[]>([])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,7 +32,7 @@ const CreateCountry = () => {
     try {
       let isValid = true
 
-      const _nameErrors = movininHelper.clone(nameErrors) as boolean[]
+      const _nameErrors = darywinHelper.clone(nameErrors) as boolean[]
       for (let i = 0; i < nameErrors.length; i += 1) {
         _nameErrors[i] = false
       }
@@ -52,7 +52,7 @@ const CreateCountry = () => {
         const status = await CountryService.create(names)
 
         if (status === 200) {
-          const _names = movininHelper.clone(names) as movininTypes.CountryName[]
+          const _names = darywinHelper.clone(names) as darywinTypes.CountryName[]
           for (let i = 0; i < names.length; i += 1) {
             _names[i].name = ''
           }
@@ -90,14 +90,14 @@ const CreateCountry = () => {
                   error={nameErrors[index]}
                   required
                   onChange={(e) => {
-                    const _names = movininHelper.clone(names) as movininTypes.CountryName[]
+                    const _names = darywinHelper.clone(names) as darywinTypes.CountryName[]
                     _names[index] = {
                       language: language.code,
                       name: e.target.value,
                     }
                     setNames(_names)
 
-                    const _nameErrors = movininHelper.clone(nameErrors) as boolean[]
+                    const _nameErrors = darywinHelper.clone(nameErrors) as boolean[]
                     _nameErrors[index] = false
                     setNameErrors(_nameErrors)
                   }}

@@ -1,4 +1,4 @@
-import * as movininHelper from ':movinin-helper'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 
 /**
@@ -7,7 +7,7 @@ import env from '@/config/env.config'
 * @param {string} currency
 */
 export const setCurrency = (currency: string) => {
-  if (currency && movininHelper.checkCurrency(currency.toUpperCase())) {
+  if (currency && darywinHelper.checkCurrency(currency.toUpperCase())) {
     localStorage.setItem('bc-fe-currency', currency.toUpperCase())
   }
 }
@@ -19,7 +19,7 @@ export const setCurrency = (currency: string) => {
  */
 export const getCurrency = () => {
   const currency = localStorage.getItem('bc-fe-currency')
-  if (currency && movininHelper.checkCurrency(currency.toUpperCase())) {
+  if (currency && darywinHelper.checkCurrency(currency.toUpperCase())) {
     return currency.toUpperCase()
   }
   return env.BASE_CURRENCY
@@ -45,7 +45,7 @@ export const convertPrice = async (amount: number) => {
   const to = getCurrency()
 
   if (to !== env.BASE_CURRENCY) {
-    const res = await movininHelper.convertPrice(amount, env.BASE_CURRENCY, to)
+    const res = await darywinHelper.convertPrice(amount, env.BASE_CURRENCY, to)
     return res
   }
 
@@ -59,6 +59,6 @@ export const convertPrice = async (amount: number) => {
  */
 export const currencyRTL = () => {
   const currencySymbol = getCurrencySymbol()
-  const isRTL = movininHelper.currencyRTL(currencySymbol)
+  const isRTL = darywinHelper.currencyRTL(currencySymbol)
   return isRTL
 }

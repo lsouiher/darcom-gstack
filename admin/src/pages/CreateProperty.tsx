@@ -15,8 +15,8 @@ import { Editor } from 'react-draft-wysiwyg'
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
@@ -37,7 +37,7 @@ import '@/assets/css/create-property.css'
 
 const CreateProperty = () => {
   const navigate = useNavigate()
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [isAgency, setIsAgency] = useState(false)
   const [visible, setVisible] = useState(false)
 
@@ -47,7 +47,7 @@ const CreateProperty = () => {
 
   const [name, setName] = useState('')
   const [agency, setAgency] = useState('')
-  const [location, setLocation] = useState<movininTypes.Option>()
+  const [location, setLocation] = useState<darywinTypes.Option>()
   const [address, setAddress] = useState('')
   const [type, setType] = useState('')
   const [price, setPrice] = useState('')
@@ -98,11 +98,11 @@ const CreateProperty = () => {
     setName(e.target.value)
   }
 
-  const handleAgencyChange = (values: movininTypes.Option[]) => {
+  const handleAgencyChange = (values: darywinTypes.Option[]) => {
     setAgency(values.length > 0 ? values[0]._id : '')
   }
 
-  const handleLocationChange = (locations: movininTypes.Option[]) => {
+  const handleLocationChange = (locations: darywinTypes.Option[]) => {
     setLocation(locations[0])
   }
 
@@ -156,7 +156,7 @@ const CreateProperty = () => {
   const handleEditorStateChange = (state: EditorState) => {
     setEditorState(state)
     const content = draftToHtml(convertToRaw(state.getCurrentContent()))
-    const desc = movininHelper.trimCarriageReturn(content).trim() === '<p></p>' ? '' : content
+    const desc = darywinHelper.trimCarriageReturn(content).trim() === '<p></p>' ? '' : content
     setDescription(desc)
     if (desc) {
       setDescriptionError(false)
@@ -256,7 +256,7 @@ const CreateProperty = () => {
         longitude: longitude ? Number(longitude) : undefined,
         price: Number(price),
         hidden,
-        cancellation: movininHelper.extraToNumber(cancellation),
+        cancellation: darywinHelper.extraToNumber(cancellation),
         available,
         rentalTerm,
         blockOnPay,
@@ -276,12 +276,12 @@ const CreateProperty = () => {
     }
   }
 
-  const onLoad = (_user?: movininTypes.User) => {
+  const onLoad = (_user?: darywinTypes.User) => {
     if (_user && _user.verified) {
       setUser(_user)
       setVisible(true)
 
-      if (_user.type === movininTypes.RecordType.Agency) {
+      if (_user.type === darywinTypes.RecordType.Agency) {
         setAgency(_user._id as string)
         setIsAgency(true)
       }
@@ -405,7 +405,7 @@ const CreateProperty = () => {
 
             <FormControl fullWidth margin="dense">
               <TextField
-                label={`${strings.PRICE} ${rentalTerm ? `(${commonStrings.CURRENCY}/${helper.rentalTermUnit(rentalTerm as movininTypes.RentalTerm)})` : ''}`}
+                label={`${strings.PRICE} ${rentalTerm ? `(${commonStrings.CURRENCY}/${helper.rentalTermUnit(rentalTerm as darywinTypes.RentalTerm)})` : ''}`}
                 slotProps={{
                   htmlInput: { inputMode: 'numeric', pattern: '^\\d+(\\.\\d+)?$' }
                 }}

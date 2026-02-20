@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { FormControl, Button } from '@mui/material'
 import { DateTimeValidationError } from '@mui/x-date-pickers'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import * as UserService from '@/services/UserService'
@@ -14,10 +14,10 @@ import Accordion from './Accordion'
 interface PropertyFilterProps {
   from: Date
   to: Date
-  location: movininTypes.Location
+  location: darywinTypes.Location
   className?: string
   collapse?: boolean
-  onSubmit: movininTypes.PropertyFilterSubmitEvent
+  onSubmit: darywinTypes.PropertyFilterSubmitEvent
 }
 
 const PropertyFilter = ({
@@ -34,7 +34,7 @@ const PropertyFilter = ({
   const [from, setFrom] = useState<Date | undefined>(filterFrom)
   const [to, setTo] = useState<Date | undefined>(filterTo)
   const [minDate, setMinDate] = useState<Date>()
-  const [location, setLocation] = useState<movininTypes.Location | null | undefined>(filterLocation)
+  const [location, setLocation] = useState<darywinTypes.Location | null | undefined>(filterLocation)
   const [fromError, setFromError] = useState(false)
   const [toError, setToError] = useState(false)
 
@@ -46,7 +46,7 @@ const PropertyFilter = ({
     }
   }, [filterFrom])
 
-  const handleLocationChange = (values: movininTypes.Option[]) => {
+  const handleLocationChange = (values: darywinTypes.Option[]) => {
     const _location = (values.length > 0 && values[0]) || null
 
     setLocation(_location)
@@ -60,7 +60,7 @@ const PropertyFilter = ({
     }
 
     if (onSubmit) {
-      const filter: movininTypes.PropertyFilter = { location, from, to }
+      const filter: darywinTypes.PropertyFilter = { location, from, to }
       onSubmit(filter)
     }
   }
@@ -80,7 +80,7 @@ const PropertyFilter = ({
             init={!env.isMobile}
             required
             variant="standard"
-            value={location as movininTypes.Location}
+            value={location as darywinTypes.Location}
             onChange={handleLocationChange}
           />
         </FormControl>

@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as rtStrings } from '@/lang/rental-term'
 import { strings } from '@/lang/properties'
@@ -50,25 +50,25 @@ export const error = (err?: unknown, message?: string) => {
  */
 export const getPropertyType = (type: string) => {
   switch (type) {
-    case movininTypes.PropertyType.Apartment:
+    case darywinTypes.PropertyType.Apartment:
       return strings.APARTMENT
 
-    case movininTypes.PropertyType.Commercial:
+    case darywinTypes.PropertyType.Commercial:
       return strings.COMMERCIAL
 
-    case movininTypes.PropertyType.Farm:
+    case darywinTypes.PropertyType.Farm:
       return strings.FARM
 
-    case movininTypes.PropertyType.House:
+    case darywinTypes.PropertyType.House:
       return strings.HOUSE
 
-    case movininTypes.PropertyType.Industrial:
+    case darywinTypes.PropertyType.Industrial:
       return strings.INDUSTRIAL
 
-    case movininTypes.PropertyType.Plot:
+    case darywinTypes.PropertyType.Plot:
       return strings.PLOT
 
-    case movininTypes.PropertyType.Townhouse:
+    case darywinTypes.PropertyType.Townhouse:
       return strings.TOWN_HOUSE
     default:
       return ''
@@ -81,24 +81,24 @@ export const getPropertyType = (type: string) => {
  * @param {string} status
  * @returns {string}
  */
-export const getBookingStatus = (status?: movininTypes.BookingStatus) => {
+export const getBookingStatus = (status?: darywinTypes.BookingStatus) => {
   switch (status) {
-    case movininTypes.BookingStatus.Void:
+    case darywinTypes.BookingStatus.Void:
       return commonStrings.BOOKING_STATUS_VOID
 
-    case movininTypes.BookingStatus.Pending:
+    case darywinTypes.BookingStatus.Pending:
       return commonStrings.BOOKING_STATUS_PENDING
 
-    case movininTypes.BookingStatus.Deposit:
+    case darywinTypes.BookingStatus.Deposit:
       return commonStrings.BOOKING_STATUS_DEPOSIT
 
-    case movininTypes.BookingStatus.Paid:
+    case darywinTypes.BookingStatus.Paid:
       return commonStrings.BOOKING_STATUS_PAID
 
-    case movininTypes.BookingStatus.Reserved:
+    case darywinTypes.BookingStatus.Reserved:
       return commonStrings.BOOKING_STATUS_RESERVED
 
-    case movininTypes.BookingStatus.Cancelled:
+    case darywinTypes.BookingStatus.Cancelled:
       return commonStrings.BOOKING_STATUS_CANCELLED
 
     default:
@@ -109,31 +109,31 @@ export const getBookingStatus = (status?: movininTypes.BookingStatus) => {
 /**
  * Get all booking statuses.
  *
- * @returns {movininTypes.StatusFilterItem[]}
+ * @returns {darywinTypes.StatusFilterItem[]}
  */
-export const getBookingStatuses = (): movininTypes.StatusFilterItem[] => [
+export const getBookingStatuses = (): darywinTypes.StatusFilterItem[] => [
   {
-    value: movininTypes.BookingStatus.Void,
+    value: darywinTypes.BookingStatus.Void,
     label: commonStrings.BOOKING_STATUS_VOID,
   },
   {
-    value: movininTypes.BookingStatus.Pending,
+    value: darywinTypes.BookingStatus.Pending,
     label: commonStrings.BOOKING_STATUS_PENDING,
   },
   {
-    value: movininTypes.BookingStatus.Deposit,
+    value: darywinTypes.BookingStatus.Deposit,
     label: commonStrings.BOOKING_STATUS_DEPOSIT,
   },
   {
-    value: movininTypes.BookingStatus.Paid,
+    value: darywinTypes.BookingStatus.Paid,
     label: commonStrings.BOOKING_STATUS_PAID,
   },
   {
-    value: movininTypes.BookingStatus.Reserved,
+    value: darywinTypes.BookingStatus.Reserved,
     label: commonStrings.BOOKING_STATUS_RESERVED,
   },
   {
-    value: movininTypes.BookingStatus.Cancelled,
+    value: darywinTypes.BookingStatus.Cancelled,
     label: commonStrings.BOOKING_STATUS_CANCELLED,
   },
 ]
@@ -207,7 +207,7 @@ export const getDaysShort = (days: number) => `${days} ${strings.PRICE_DAYS_PART
  * @returns {string}
  */
 export const getCancellation = async (cancellation: number, language: string) => {
-  const fr = movininHelper.isFrench(language)
+  const fr = darywinHelper.isFrench(language)
 
   if (cancellation === -1) {
     return `${strings.CANCELLATION}${fr ? ' : ' : ': '}${strings.UNAVAILABLE}`
@@ -215,7 +215,7 @@ export const getCancellation = async (cancellation: number, language: string) =>
     return `${strings.CANCELLATION}${fr ? ' : ' : ': '}${strings.INCLUDED}${fr ? 'e' : ''}`
   }
   const _cancellation = await PaymentService.convertPrice(cancellation)
-  return `${strings.CANCELLATION}${fr ? ' : ' : ': '}${movininHelper.formatPrice(_cancellation, commonStrings.CURRENCY, language)}`
+  return `${strings.CANCELLATION}${fr ? ' : ' : ': '}${darywinHelper.formatPrice(_cancellation, commonStrings.CURRENCY, language)}`
 }
 
 /**
@@ -227,7 +227,7 @@ export const getCancellation = async (cancellation: number, language: string) =>
  * @returns {string}
  */
 export const getCancellationOption = async (cancellation: number, language: string, hidePlus?: boolean) => {
-  const fr = movininHelper.isFrench(language)
+  const fr = darywinHelper.isFrench(language)
 
   if (cancellation === -1) {
     return strings.UNAVAILABLE
@@ -235,7 +235,7 @@ export const getCancellationOption = async (cancellation: number, language: stri
     return `${strings.INCLUDED}${fr ? 'e' : ''}`
   }
   const _cancellation = await PaymentService.convertPrice(cancellation)
-  return `${hidePlus ? '' : '+ '}${movininHelper.formatPrice(_cancellation, commonStrings.CURRENCY, language)}`
+  return `${hidePlus ? '' : '+ '}${darywinHelper.formatPrice(_cancellation, commonStrings.CURRENCY, language)}`
 }
 
 /**
@@ -250,57 +250,57 @@ export const getBirthDateError = (minimumAge: number) =>
 /**
  * Check whether a property option is available or not.
  *
- * @param {(movininTypes.Property | undefined)} property
+ * @param {(darywinTypes.Property | undefined)} property
  * @param {string} option
  * @returns {boolean}
  */
-export const propertyOptionAvailable = (property: movininTypes.Property | undefined, option: string) =>
+export const propertyOptionAvailable = (property: darywinTypes.Property | undefined, option: string) =>
   property && option in property && (property[option] as number) > -1
 
 /**
  * Get all property types.
  *
- * @returns {movininTypes.PropertyType[]}
+ * @returns {darywinTypes.PropertyType[]}
  */
 export const getAllPropertyTypes = () =>
   [
-    movininTypes.PropertyType.Apartment,
-    movininTypes.PropertyType.Commercial,
-    movininTypes.PropertyType.Farm,
-    movininTypes.PropertyType.House,
-    movininTypes.PropertyType.Industrial,
-    movininTypes.PropertyType.Plot,
-    movininTypes.PropertyType.Townhouse
+    darywinTypes.PropertyType.Apartment,
+    darywinTypes.PropertyType.Commercial,
+    darywinTypes.PropertyType.Farm,
+    darywinTypes.PropertyType.House,
+    darywinTypes.PropertyType.Industrial,
+    darywinTypes.PropertyType.Plot,
+    darywinTypes.PropertyType.Townhouse
   ]
 
 /**
  * Get all rental terms.
  *
- * @returns {movininTypes.RentalTerm[]}
+ * @returns {darywinTypes.RentalTerm[]}
  */
 export const getAllRentalTerms = () =>
   [
-    movininTypes.RentalTerm.Monthly,
-    movininTypes.RentalTerm.Weekly,
-    movininTypes.RentalTerm.Daily,
-    movininTypes.RentalTerm.Yearly,
+    darywinTypes.RentalTerm.Monthly,
+    darywinTypes.RentalTerm.Weekly,
+    darywinTypes.RentalTerm.Daily,
+    darywinTypes.RentalTerm.Yearly,
   ]
 
 /**
  * Get rental term label.
  *
- * @param {movininTypes.RentalTerm} term
+ * @param {darywinTypes.RentalTerm} term
  * @returns {string}
  */
-export const rentalTerm = (term: movininTypes.RentalTerm): string => {
+export const rentalTerm = (term: darywinTypes.RentalTerm): string => {
   switch (term) {
-    case movininTypes.RentalTerm.Monthly:
+    case darywinTypes.RentalTerm.Monthly:
       return rtStrings.MONTHLY
-    case movininTypes.RentalTerm.Weekly:
+    case darywinTypes.RentalTerm.Weekly:
       return rtStrings.WEEKLY
-    case movininTypes.RentalTerm.Daily:
+    case darywinTypes.RentalTerm.Daily:
       return rtStrings.DAILY
-    case movininTypes.RentalTerm.Yearly:
+    case darywinTypes.RentalTerm.Yearly:
       return rtStrings.YEARLY
     default:
       return ''
@@ -310,18 +310,18 @@ export const rentalTerm = (term: movininTypes.RentalTerm): string => {
 /**
  * Get rental term unit.
  *
- * @param {movininTypes.RentalTerm} term
+ * @param {darywinTypes.RentalTerm} term
  * @returns {string}
  */
-export const rentalTermUnit = (term: movininTypes.RentalTerm): string => {
+export const rentalTermUnit = (term: darywinTypes.RentalTerm): string => {
   switch (term) {
-    case movininTypes.RentalTerm.Monthly:
+    case darywinTypes.RentalTerm.Monthly:
       return rtStrings.MONTH
-    case movininTypes.RentalTerm.Weekly:
+    case darywinTypes.RentalTerm.Weekly:
       return rtStrings.WEEK
-    case movininTypes.RentalTerm.Daily:
+    case darywinTypes.RentalTerm.Daily:
       return rtStrings.DAY
-    case movininTypes.RentalTerm.Yearly:
+    case darywinTypes.RentalTerm.Yearly:
       return rtStrings.YEAR
     default:
       return ''
@@ -331,13 +331,13 @@ export const rentalTermUnit = (term: movininTypes.RentalTerm): string => {
 /**
  * Get price label.
  *
- * @param {movininTypes.Property} property
+ * @param {darywinTypes.Property} property
  * @param {string} language
  * @returns {string}
  */
-export const priceLabel = async (property: movininTypes.Property, language: string): Promise<string> => {
+export const priceLabel = async (property: darywinTypes.Property, language: string): Promise<string> => {
   const _price = await PaymentService.convertPrice(property.price)
-  return `${movininHelper.formatPrice(_price, commonStrings.CURRENCY, language)}/${rentalTermUnit(property.rentalTerm)}`
+  return `${darywinHelper.formatPrice(_price, commonStrings.CURRENCY, language)}/${rentalTermUnit(property.rentalTerm)}`
 }
 
 /**

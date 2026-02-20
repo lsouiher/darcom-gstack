@@ -1,16 +1,16 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
 /**
  * Get properties.
  *
- * @param {movininTypes.GetPropertiesPayload} data
+ * @param {darywinTypes.GetPropertiesPayload} data
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Property>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Property>>}
  */
-export const getProperties = (data: movininTypes.GetPropertiesPayload, page: number, size: number): Promise<movininTypes.Result<movininTypes.Property>> =>
+export const getProperties = (data: darywinTypes.GetPropertiesPayload, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Property>> =>
   axiosInstance
     .post(
       `/api/frontend-properties/${page}/${size}`,
@@ -21,9 +21,9 @@ export const getProperties = (data: movininTypes.GetPropertiesPayload, page: num
  * Get a Property by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.Property>}
+ * @returns {Promise<darywinTypes.Property>}
  */
-export const getProperty = (id: string): Promise<movininTypes.Property> =>
+export const getProperty = (id: string): Promise<darywinTypes.Property> =>
   axiosInstance
     .get(
       `/api/property/${encodeURIComponent(id)}/${UserService.getLanguage()}`
@@ -34,12 +34,12 @@ export const getProperty = (id: string): Promise<movininTypes.Property> =>
  * Get properties by agency and location.
  *
  * @param {string} keyword
- * @param {movininTypes.GetBookingPropertiesPayload} data
+ * @param {darywinTypes.GetBookingPropertiesPayload} data
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Property[]>}
+ * @returns {Promise<darywinTypes.Property[]>}
  */
-export const getBookingProperties = (keyword: string, data: movininTypes.GetBookingPropertiesPayload, page: number, size: number): Promise<movininTypes.Property[]> =>
+export const getBookingProperties = (keyword: string, data: darywinTypes.GetBookingPropertiesPayload, page: number, size: number): Promise<darywinTypes.Property[]> =>
   axiosInstance
     .post(
       `/api/booking-properties/${page}/${size}/?s=${encodeURIComponent(keyword)}`,

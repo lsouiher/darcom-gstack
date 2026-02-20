@@ -14,8 +14,8 @@ import {
   Delete as DeleteIcon,
   Bookmarks as BookingsIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Backdrop from '@/components/SimpleBackdrop'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
@@ -32,10 +32,10 @@ import '@/assets/css/property.css'
 
 const Property = () => {
   const navigate = useNavigate()
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [loading, setLoading] = useState(false)
   const [noMatch, setNoMatch] = useState(false)
-  const [property, setProperty] = useState<movininTypes.Property>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
   const [image, setImage] = useState('')
   const [images, setImages] = useState<string[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -47,7 +47,7 @@ const Property = () => {
   const edit = helper.admin(user) || (user?._id === property?.agency._id)
 
   useEffect(() => {
-    const src = (img: string) => movininHelper.joinURL(env.CDN_PROPERTIES, img)
+    const src = (img: string) => darywinHelper.joinURL(env.CDN_PROPERTIES, img)
 
     if (property) {
       const _image = src(property.image)
@@ -66,7 +66,7 @@ const Property = () => {
     }
   }, [openImageDialog])
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     if (_user && _user.verified) {
       setLoading(true)
       setUser(_user)

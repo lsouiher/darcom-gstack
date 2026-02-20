@@ -36,7 +36,7 @@ import {
 } from '@mui/icons-material'
 import { toast } from 'react-toastify'
 import { CircleFlag } from 'react-circle-flags'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as suStrings } from '@/lang/sign-up'
@@ -67,7 +67,7 @@ const Header = ({
   const { user } = useUserContext() as UserContextType
   const { notificationCount } = useNotificationContext() as NotificationContextType
 
-  const [currentUser, setCurrentUser] = useState<movininTypes.User>()
+  const [currentUser, setCurrentUser] = useState<darywinTypes.User>()
 
   const [lang, setLang] = useState(helper.getLanguage(env.DEFAULT_LANGUAGE))
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -160,7 +160,7 @@ const Header = ({
       const currentLang = UserService.getLanguage()
       if (isSignedIn && user) {
         // Update user language
-        const data: movininTypes.UpdateLanguagePayload = {
+        const data: darywinTypes.UpdateLanguagePayload = {
           id: user._id as string,
           language: code,
         }

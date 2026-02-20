@@ -8,8 +8,8 @@ import {
   Image,
   useWindowDimensions
 } from 'react-native'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import AutoHeightWebView from './AutoHeightWebView'
 import Button from './Button'
 import * as helper from '@/utils/helper'
@@ -20,7 +20,7 @@ import * as StripeService from '@/services/StripeService'
 interface PropertyProps {
   navigation: NativeStackNavigationProp<StackParams, keyof StackParams>
   language: string
-  property: movininTypes.Property
+  property: darywinTypes.Property
   from?: Date
   to?: Date
   location?: string
@@ -54,8 +54,8 @@ const Property = ({
     const init = async () => {
       if (property && from && to && language) {
         setCurrencySymbol(await StripeService.getCurrencySymbol())
-        setDays(movininHelper.days(from, to))
-        setTotalPrice(await StripeService.convertPrice(movininHelper.calculateTotalPrice(property, from as Date, to as Date)))
+        setDays(darywinHelper.days(from, to))
+        setTotalPrice(await StripeService.convertPrice(darywinHelper.calculateTotalPrice(property, from as Date, to as Date)))
         setCancellation(await helper.getCancellation(property.cancellation, language))
         setLoading(false)
       }
@@ -197,7 +197,7 @@ const Property = ({
         <Text style={styles.name}>{property.name}</Text>
 
         <View style={styles.imgView}>
-          <Image style={styles.img} source={{ uri: movininHelper.joinURL(env.CDN_PROPERTIES, property.image) }} />
+          <Image style={styles.img} source={{ uri: darywinHelper.joinURL(env.CDN_PROPERTIES, property.image) }} />
         </View>
 
         <View style={styles.infos}>
@@ -253,7 +253,7 @@ const Property = ({
             && (
               <View style={styles.extra}>
                 <MaterialIcons name="photo-size-select-small" size={iconSize} style={styles.infoIcon} />
-                <Text style={styles.text}>{`${movininHelper.formatNumber(property.size, language)} ${env.SIZE_UNIT}`}</Text>
+                <Text style={styles.text}>{`${darywinHelper.formatNumber(property.size, language)} ${env.SIZE_UNIT}`}</Text>
               </View>
             )
           }
@@ -282,7 +282,7 @@ const Property = ({
             <Image
               style={styles.agencyImg}
               source={{
-                uri: movininHelper.joinURL(env.CDN_USERS, property.agency.avatar),
+                uri: darywinHelper.joinURL(env.CDN_USERS, property.agency.avatar),
               }}
             />
             <Text style={styles.agencyText} numberOfLines={2} ellipsizeMode="tail">{property.agency.fullName}</Text>
@@ -291,8 +291,8 @@ const Property = ({
           {!hidePrice && (
             <View style={styles.price}>
               <Text style={styles.priceSecondary}>{helper.getDays(days)}</Text>
-              <Text style={styles.pricePrimary}>{`${movininHelper.formatPrice(totalPrice, currencySymbol, language)}`}</Text>
-              <Text style={styles.priceSecondary}>{`${i18n.t('PRICE_PER_DAY')} ${movininHelper.formatPrice(totalPrice / days, currencySymbol, language)}`}</Text>
+              <Text style={styles.pricePrimary}>{`${darywinHelper.formatPrice(totalPrice, currencySymbol, language)}`}</Text>
+              <Text style={styles.priceSecondary}>{`${i18n.t('PRICE_PER_DAY')} ${darywinHelper.formatPrice(totalPrice / days, currencySymbol, language)}`}</Text>
             </View>
           )}
         </View>

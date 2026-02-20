@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, TextInput as ReactTextInput } from 'react-native'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 import i18n from '@/lang/i18n'
 import Accordion from './Accordion'
@@ -14,7 +14,7 @@ interface BookingFilterProps {
   style?: object
   backgroundColor?: string
   language?: string
-  onSubmit: (filter: movininTypes.Filter) => void
+  onSubmit: (filter: darywinTypes.Filter) => void
 }
 
 const BookingFilter = ({
@@ -59,7 +59,7 @@ const BookingFilter = ({
   }
 
   const onPressSearch = () => {
-    const filter: movininTypes.Filter = {
+    const filter: darywinTypes.Filter = {
       from,
       to,
       location,

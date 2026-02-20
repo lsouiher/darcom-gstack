@@ -5,7 +5,7 @@ import {
   MenuItem,
   SelectChangeEvent
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings } from '@/lang/rental-term'
 
 interface RentalTermListProps {
@@ -48,10 +48,10 @@ const RentalTermList = ({
         required={required}
         fullWidth
       >
-        <MenuItem value={movininTypes.RentalTerm.Monthly}>{strings.MONTHLY}</MenuItem>
-        <MenuItem value={movininTypes.RentalTerm.Weekly}>{strings.WEEKLY}</MenuItem>
-        <MenuItem value={movininTypes.RentalTerm.Daily}>{strings.DAILY}</MenuItem>
-        <MenuItem value={movininTypes.RentalTerm.Yearly}>{strings.YEARLY}</MenuItem>
+        <MenuItem value={darywinTypes.RentalTerm.Monthly}>{strings.MONTHLY}</MenuItem>
+        <MenuItem value={darywinTypes.RentalTerm.Weekly}>{strings.WEEKLY}</MenuItem>
+        <MenuItem value={darywinTypes.RentalTerm.Daily}>{strings.DAILY}</MenuItem>
+        <MenuItem value={darywinTypes.RentalTerm.Yearly}>{strings.YEARLY}</MenuItem>
       </Select>
     </div>
   )

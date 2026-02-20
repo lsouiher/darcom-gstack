@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid'
 import escapeStringRegexp from 'escape-string-regexp'
 import mongoose from 'mongoose'
 import { Request, Response } from 'express'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as helper from '../utils/helper'
 import * as env from '../config/env.config'
 import i18n from '../lang/i18n'
@@ -23,7 +23,7 @@ import * as logger from '../utils/logger'
  * @returns {unknown}
  */
 export const validate = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.ValidateLocationPayload } = req
+  const { body }: { body: darywinTypes.ValidateLocationPayload } = req
   const { language, name } = body
 
   try {
@@ -79,7 +79,7 @@ export const validate = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const create = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.UpsertLocationPayload } = req
+  const { body }: { body: darywinTypes.UpsertLocationPayload } = req
   const {
     country,
     longitude,
@@ -161,7 +161,7 @@ export const update = async (req: Request, res: Response) => {
         latitude,
         names,
         parentLocation,
-      }: movininTypes.UpsertLocationPayload = req.body
+      }: darywinTypes.UpsertLocationPayload = req.body
 
       location.country = new mongoose.Types.ObjectId(country)
       location.longitude = longitude

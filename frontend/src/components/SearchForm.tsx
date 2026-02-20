@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FormControl, Button, } from '@mui/material'
 import { DateTimeValidationError } from '@mui/x-date-pickers'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import * as UserService from '@/services/UserService'
@@ -29,7 +29,7 @@ const SearchForm = (
   _minDate.setDate(_minDate.getDate() + 1)
 
   const [location, setLocation] = useState('')
-  const [selectedLocation, setSelectedLocation] = useState<movininTypes.Location | undefined>(undefined)
+  const [selectedLocation, setSelectedLocation] = useState<darywinTypes.Location | undefined>(undefined)
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
   const [minDate, setMinDate] = useState<Date>(_minDate)
@@ -47,7 +47,7 @@ const SearchForm = (
     init()
   }, [__location])
 
-  const handleLocationChange = async (values: movininTypes.Option[]) => {
+  const handleLocationChange = async (values: darywinTypes.Option[]) => {
     const locationId = (values.length > 0 && values[0]._id) || ''
     setLocation(locationId)
     if (locationId) {

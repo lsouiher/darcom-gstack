@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { jest } from '@jest/globals'
 import request from 'supertest'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as testHelper from './testHelper'
 import * as env from '../src/config/env.config'
@@ -52,7 +52,7 @@ describe('POST /api/create-paypal-order', () => {
     )
 
     // test success (create paypal order whith non existant user)
-    const payload: movininTypes.CreatePayPalOrderPayload = {
+    const payload: darywinTypes.CreatePayPalOrderPayload = {
       amount: 234,
       currency: 'USD',
       name: 'BMW X1',
@@ -100,14 +100,14 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
       fullName: 'renter',
       email: testHelper.GetRandomEmail(),
       language: testHelper.LANGUAGE,
-      type: movininTypes.UserType.User,
+      type: darywinTypes.UserType.User,
     })
     await renter.save()
 
     const property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: 'image.png',
       images: ['image.png'],
@@ -126,7 +126,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
 
@@ -139,7 +139,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
       location: locationId,
       from: new Date(2024, 2, 1),
       to: new Date(2024, 2, 4),
-      status: movininTypes.BookingStatus.Void,
+      status: darywinTypes.BookingStatus.Void,
       expireAt,
       cancellation: true,
       amendments: true,
@@ -183,7 +183,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Deposit,
+        status: darywinTypes.BookingStatus.Deposit,
         expireAt,
         cancellation: true,
         amendments: true,
@@ -208,7 +208,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         expireAt,
         cancellation: true,
         amendments: true,
@@ -249,7 +249,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         expireAt,
         cancellation: true,
         amendments: true,
@@ -288,7 +288,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         expireAt,
         cancellation: true,
         amendments: true,
@@ -324,7 +324,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         expireAt,
         cancellation: true,
         amendments: true,
@@ -347,7 +347,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         expireAt,
         cancellation: true,
         amendments: true,
@@ -370,7 +370,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
         location: testHelper.GetRandromObjectId(),
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         expireAt,
         cancellation: true,
         amendments: true,

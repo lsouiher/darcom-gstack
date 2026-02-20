@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { jest } from '@jest/globals'
 import { SignJWT } from 'jose'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as authHelper from '../src/utils/authHelper'
 import * as env from '../src/config/env.config'
 
@@ -26,17 +26,17 @@ describe('Test validateAccessToken', () => {
     const email = 'unknow@unknown.com'
 
     // test failure
-    expect(await authHelper.validateAccessToken('unknown' as movininTypes.SocialSignInType, 'token', email)).toBeFalsy()
+    expect(await authHelper.validateAccessToken('unknown' as darywinTypes.SocialSignInType, 'token', email)).toBeFalsy()
 
     // test success (facebook)
     let payload = {}
     let token = await encryptJWT(payload)
-    expect(await authHelper.validateAccessToken(movininTypes.SocialSignInType.Facebook, token, email)).toBeTruthy()
+    expect(await authHelper.validateAccessToken(darywinTypes.SocialSignInType.Facebook, token, email)).toBeTruthy()
 
     // test success (apple)
     payload = { email }
     token = await encryptJWT(payload)
-    expect(await authHelper.validateAccessToken(movininTypes.SocialSignInType.Apple, token, email)).toBeTruthy()
+    expect(await authHelper.validateAccessToken(darywinTypes.SocialSignInType.Apple, token, email)).toBeTruthy()
 
     await jest.isolateModulesAsync(async () => {
       // Mock axios with unstable_mockModule
@@ -52,7 +52,7 @@ describe('Test validateAccessToken', () => {
 
       payload = { data: { email } }
       token = await encryptJWT(payload)
-      expect(await authHelper.validateAccessToken(movininTypes.SocialSignInType.Google, token, email)).toBeTruthy()
+      expect(await authHelper.validateAccessToken(darywinTypes.SocialSignInType.Google, token, email)).toBeTruthy()
     })
   })
 })

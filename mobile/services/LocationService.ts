@@ -1,7 +1,7 @@
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 import * as axiosHelper from '@/utils/axiosHelper'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 axiosHelper.init(axiosInstance)
 
@@ -12,9 +12,9 @@ axiosHelper.init(axiosInstance)
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Location>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Location>>}
  */
-export const getLocations = async (keyword: string, page: number, size: number): Promise<movininTypes.Result<movininTypes.Location>> => {
+export const getLocations = async (keyword: string, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Location>> => {
   const language = await UserService.getLanguage()
   return axiosInstance
     .get(
@@ -28,9 +28,9 @@ export const getLocations = async (keyword: string, page: number, size: number):
  *
  * @async
  * @param {string} id
- * @returns {Promise<movininTypes.Location>}
+ * @returns {Promise<darywinTypes.Location>}
  */
-export const getLocation = async (id: string): Promise<movininTypes.Location> => {
+export const getLocation = async (id: string): Promise<darywinTypes.Location> => {
   const language = await UserService.getLanguage()
   return axiosInstance
     .get(

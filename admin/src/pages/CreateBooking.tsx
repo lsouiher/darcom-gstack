@@ -11,8 +11,8 @@ import {
   Info as InfoIcon
 } from '@mui/icons-material'
 import { DateTimeValidationError } from '@mui/x-date-pickers'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as blStrings } from '@/lang/booking-list'
@@ -38,31 +38,31 @@ const CreateBooking = () => {
   const [isAgency, setIsAgency] = useState(false)
   const [visible, setVisible] = useState(false)
   const [agency, setAgency] = useState('')
-  const [property, setProperty] = useState<movininTypes.Property>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
   const [renter, setRenter] = useState('')
   const [location, setLocation] = useState('')
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
   const [minDate, setMinDate] = useState<Date>()
-  const [status, setStatus] = useState<movininTypes.BookingStatus>()
+  const [status, setStatus] = useState<darywinTypes.BookingStatus>()
   const [cancellation, setCancellation] = useState(false)
   const [loading, setLoading] = useState(false)
   const [fromError, setFromError] = useState(false)
   const [toError, setToError] = useState(false)
 
-  const handleAgencyChange = (values: movininTypes.Option[]) => {
+  const handleAgencyChange = (values: darywinTypes.Option[]) => {
     setAgency(values.length > 0 ? values[0]._id : '')
   }
 
-  const handleRenterChange = (values: movininTypes.Option[]) => {
+  const handleRenterChange = (values: darywinTypes.Option[]) => {
     setRenter(values.length > 0 ? values[0]._id : '')
   }
 
-  const handleLocationChange = (values: movininTypes.Option[]) => {
+  const handleLocationChange = (values: darywinTypes.Option[]) => {
     setLocation(values.length > 0 ? values[0]._id : '-1')
   }
 
-  const handlePropertySelectListChange = useCallback((values: movininTypes.Property[]) => {
+  const handlePropertySelectListChange = useCallback((values: darywinTypes.Property[]) => {
     if (Array.isArray(values) && values.length > 0) {
       const _property = values[0]
       if (_property) {
@@ -73,7 +73,7 @@ const CreateBooking = () => {
     }
   }, [])
 
-  const handleStatusChange = (value: movininTypes.BookingStatus) => {
+  const handleStatusChange = (value: darywinTypes.BookingStatus) => {
     setStatus(value)
   }
 
@@ -95,7 +95,7 @@ const CreateBooking = () => {
 
     setLoading(true)
 
-    const booking: movininTypes.Booking = {
+    const booking: darywinTypes.Booking = {
       agency,
       property: property._id,
       renter,
@@ -106,12 +106,12 @@ const CreateBooking = () => {
       cancellation
     }
 
-    const options: movininTypes.PropertyOptions = {
+    const options: darywinTypes.PropertyOptions = {
       cancellation
     }
 
     try {
-      const price = await movininHelper.calculateTotalPrice(property, from, to, options)
+      const price = await darywinHelper.calculateTotalPrice(property, from, to, options)
       booking.price = price
 
       const _booking = await BookingService.create(booking)
@@ -127,11 +127,11 @@ const CreateBooking = () => {
     }
   }
 
-  const onLoad = (user?: movininTypes.User) => {
+  const onLoad = (user?: darywinTypes.User) => {
     if (user) {
       setVisible(true)
 
-      if (user.type === movininTypes.RecordType.Agency) {
+      if (user.type === darywinTypes.RecordType.Agency) {
         setAgency(user._id as string)
         setIsAgency(true)
       }

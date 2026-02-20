@@ -6,7 +6,7 @@ import {
   SelectChangeEvent,
   TextFieldVariants
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings as commonStrings } from '@/lang/common'
 import * as helper from '@/utils/helper'
 
@@ -19,7 +19,7 @@ interface StatusListProps {
   variant?: TextFieldVariants
   disabled?: boolean
   style?: CSSProperties
-  onChange?: (value: movininTypes.BookingStatus) => void
+  onChange?: (value: darywinTypes.BookingStatus) => void
 }
 
 const StatusList = ({
@@ -43,7 +43,7 @@ const StatusList = ({
     setValue(e.target.value)
 
     if (onChange) {
-      onChange(e.target.value as movininTypes.BookingStatus)
+      onChange(e.target.value as darywinTypes.BookingStatus)
     }
   }
 
@@ -51,7 +51,7 @@ const StatusList = ({
     <div style={style || {}}>
       {disabled ? (
         <span className={`bs-s-sv bs-s-${value.toLowerCase()}`} style={{ marginTop: 5 }}>
-          {helper.getBookingStatus(value as movininTypes.BookingStatus)}
+          {helper.getBookingStatus(value as darywinTypes.BookingStatus)}
         </span>
       ) : (
         <>
@@ -65,26 +65,26 @@ const StatusList = ({
             fullWidth
             renderValue={(_value) => (
               <span className={`bs-s-sv bs-s-${_value.toLowerCase()}`}>
-                {helper.getBookingStatus(_value as movininTypes.BookingStatus)}
+                {helper.getBookingStatus(_value as darywinTypes.BookingStatus)}
               </span>
             )}
           >
-            <MenuItem value={movininTypes.BookingStatus.Void} className="bs-s bs-s-void">
+            <MenuItem value={darywinTypes.BookingStatus.Void} className="bs-s bs-s-void">
               {commonStrings.BOOKING_STATUS_VOID}
             </MenuItem>
-            <MenuItem value={movininTypes.BookingStatus.Pending} className="bs-s bs-s-pending">
+            <MenuItem value={darywinTypes.BookingStatus.Pending} className="bs-s bs-s-pending">
               {commonStrings.BOOKING_STATUS_PENDING}
             </MenuItem>
-            <MenuItem value={movininTypes.BookingStatus.Deposit} className="bs-s bs-s-deposit">
+            <MenuItem value={darywinTypes.BookingStatus.Deposit} className="bs-s bs-s-deposit">
               {commonStrings.BOOKING_STATUS_DEPOSIT}
             </MenuItem>
-            <MenuItem value={movininTypes.BookingStatus.Paid} className="bs-s bs-s-paid">
+            <MenuItem value={darywinTypes.BookingStatus.Paid} className="bs-s bs-s-paid">
               {commonStrings.BOOKING_STATUS_PAID}
             </MenuItem>
-            <MenuItem value={movininTypes.BookingStatus.Reserved} className="bs-s bs-s-reserved">
+            <MenuItem value={darywinTypes.BookingStatus.Reserved} className="bs-s bs-s-reserved">
               {commonStrings.BOOKING_STATUS_RESERVED}
             </MenuItem>
-            <MenuItem value={movininTypes.BookingStatus.Cancelled} className="bs-s bs-s-cancelled">
+            <MenuItem value={darywinTypes.BookingStatus.Cancelled} className="bs-s bs-s-cancelled">
               {commonStrings.BOOKING_STATUS_CANCELLED}
             </MenuItem>
           </Select>

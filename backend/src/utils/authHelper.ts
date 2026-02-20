@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import axios from 'axios'
 import * as helper from './helper'
 import * as env from '../config/env.config'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 const jwtSecret = new TextEncoder().encode(env.JWT_SECRET)
 const jwtAlg = 'HS256'
@@ -112,8 +112,8 @@ export const parseJwt = (token: string) => JSON.parse(Buffer.from(token.split('.
  * @param {string} token
  * @returns {boolean}
  */
-export const validateAccessToken = async (socialSignInType: movininTypes.SocialSignInType, token: string, email: string) => {
-  if (socialSignInType === movininTypes.SocialSignInType.Facebook) {
+export const validateAccessToken = async (socialSignInType: darywinTypes.SocialSignInType, token: string, email: string) => {
+  if (socialSignInType === darywinTypes.SocialSignInType.Facebook) {
     try {
       parseJwt(token)
       return true
@@ -122,7 +122,7 @@ export const validateAccessToken = async (socialSignInType: movininTypes.SocialS
     }
   }
 
-  if (socialSignInType === movininTypes.SocialSignInType.Apple) {
+  if (socialSignInType === darywinTypes.SocialSignInType.Apple) {
     try {
       const res = parseJwt(token)
       return res.email === email
@@ -131,7 +131,7 @@ export const validateAccessToken = async (socialSignInType: movininTypes.SocialS
     }
   }
 
-  if (socialSignInType === movininTypes.SocialSignInType.Google) {
+  if (socialSignInType === darywinTypes.SocialSignInType.Google) {
     try {
       const res = await axios.get(
         'https://www.googleapis.com/oauth2/v3/tokeninfo',
