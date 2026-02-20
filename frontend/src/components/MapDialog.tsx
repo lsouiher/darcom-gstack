@@ -47,7 +47,7 @@ const MapDialog = ({
           },
           '& .MuiDialogTitle-root': {
             padding: 0,
-            backgroundColor: '#1a1a1a',
+            backgroundColor: '#F58220',
           },
           '& .MuiDialogContent-root': {
             padding: 0,

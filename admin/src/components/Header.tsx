@@ -270,7 +270,7 @@ const Header = ({
 
   return (
     <div style={hidden ? { display: 'none' } : classes.grow} className="header">
-      <AppBar position="fixed" sx={{ bgcolor: '#121212' }}>
+      <AppBar position="fixed" sx={{ bgcolor: '#F58220' }}>
         <Toolbar className="toolbar">
           {isLoaded && isSignedIn && (
             <IconButton edge="start" sx={classes.menuButton} color="inherit" aria-label="open drawer" onClick={handleSideMenuOpen}>

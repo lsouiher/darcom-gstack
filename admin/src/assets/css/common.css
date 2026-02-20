@@ -5,7 +5,7 @@
 }
 
 #nprogress .bar {
-  background: #1a1a1a !important;
+  background: #F58220 !important;
 }
 
 .grecaptcha-badge {
@@ -18,7 +18,7 @@
 }
 
 .btn-primary {
-  background-color: #121212 !important;
+  background-color: #F58220 !important;
   color: #fff !important;
   opacity: 0.9;
 }

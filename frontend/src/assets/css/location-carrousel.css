@@ -3,8 +3,7 @@ div.location-caroussel .slick-dots {
 }
 
 div.location-caroussel .slick-dots li.slick-active button::before {
-  /* color: #1976D2; */
-  color: #1a1a1a;
+  color: #F58220;
 }
 
 div.location-caroussel .btn-slider {

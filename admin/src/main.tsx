@@ -72,9 +72,9 @@ const theme = createTheme(
   {
     palette: {
       primary: {
-        main: '#1a1a1a',
-        // contrastText: '#003B95',
-        // dark: '#003B95',
+        main: '#F58220',
+        dark: '#D97315',
+        contrastText: '#fff',
       },
     },
     typography: {
