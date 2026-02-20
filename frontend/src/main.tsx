@@ -161,8 +161,8 @@ const theme = createTheme(
   {
     palette: {
       primary: {
-        main: '#F58220',
-        dark: '#D97315',
+        main: '#D32F2F',
+        dark: '#B71C1C',
         contrastText: '#fff',
       },
     },
@@ -201,11 +201,11 @@ const theme = createTheme(
         styleOverrides: {
           root: {
             '& .Mui-checked': {
-              color: '#F58220 !important',
+              color: '#D32F2F !important',
             },
             '& .Mui-checked+.MuiSwitch-track': {
               opacity: 0.7,
-              backgroundColor: '#F58220 !important',
+              backgroundColor: '#D32F2F !important',
             },
           },
         },
