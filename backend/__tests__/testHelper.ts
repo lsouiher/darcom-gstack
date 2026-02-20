@@ -20,8 +20,8 @@ export const getName = (prefix: string) => {
 
 export const getAgencyName = () => getName('agency')
 
-export const ADMIN_EMAIL = `${getName('admin')}@test.movinin.io`
-export const USER_EMAIL = `${getName('user')}@test.movinin.io`
+export const ADMIN_EMAIL = `${getName('admin')}@test.darywin.com`
+export const USER_EMAIL = `${getName('user')}@test.darywin.com`
 export const USER_FULL_NAME = 'user'
 export const PASSWORD = 'Un1tTest5'
 export const LANGUAGE = 'en'
@@ -161,7 +161,7 @@ export const deleteLocation = async (id: string) => {
   expect(res.deletedCount).toBe(1)
 }
 
-export const GetRandomEmail = () => `${getName('random')}@test.movinin.io`
+export const GetRandomEmail = () => `${getName('random')}@test.darywin.com`
 
 export const GetRandromObjectId = () => new mongoose.Types.ObjectId()
 

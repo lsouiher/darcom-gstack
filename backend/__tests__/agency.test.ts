@@ -35,8 +35,8 @@ beforeAll(async () => {
   // create two agencies
   AGENCY1_NAME = testHelper.getAgencyName()
   const agencyName2 = testHelper.getAgencyName()
-  AGENCY1_ID = await testHelper.createAgency(`${AGENCY1_NAME}@test.movinin.io`, AGENCY1_NAME)
-  AGENCY2_ID = await testHelper.createAgency(`${agencyName2}@test.movinin.io`, agencyName2)
+  AGENCY1_ID = await testHelper.createAgency(`${AGENCY1_NAME}@test.darywin.com`, AGENCY1_NAME)
+  AGENCY2_ID = await testHelper.createAgency(`${agencyName2}@test.darywin.com`, agencyName2)
 })
 
 //
@@ -250,7 +250,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     const token = await testHelper.signinAsAdmin()
 
     let agencyName = testHelper.getAgencyName()
-    let agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    let agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     let agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     let avatarName = 'avatar1.jpg'
@@ -320,7 +320,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     expect(res.statusCode).toBe(400)
 
     agencyName = testHelper.getAgencyName()
-    agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     await agency?.save()
@@ -332,7 +332,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     expect(agency).toBeNull()
 
     agencyName = testHelper.getAgencyName()
-    agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     agency!.avatar = `${nanoid()}.jpg`
@@ -372,7 +372,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     await testHelper.deleteLocation(locationId)
 
     agencyName = testHelper.getAgencyName()
-    agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     avatarName = 'avatar1.jpg'

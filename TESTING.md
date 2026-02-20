@@ -39,7 +39,7 @@ Create a `.env` file in the `backend/` directory with these minimum settings:
 
 ```bash
 # Database - use a separate test database to avoid data conflicts
-DW_DB_URI=mongodb://localhost:27017/movinin_test
+DW_DB_URI=mongodb://localhost:27017/darywin_test
 
 # Admin account for test setup
 DW_ADMIN_EMAIL=admin@test.local
@@ -81,7 +81,7 @@ If you don't have MongoDB installed locally:
 
 ```bash
 # Start MongoDB only
-docker run -d -p 27017:27017 --name movinin-mongo mongo:latest
+docker run -d -p 27017:27017 --name darywin-mongo mongo:latest
 
 # Or use docker-compose
 docker-compose -f docker-compose.dev.yml up -d mongo

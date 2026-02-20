@@ -37,7 +37,7 @@ beforeAll(async () => {
 
   // create a agency
   const agencyName = testHelper.getAgencyName()
-  AGENCY_ID = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+  AGENCY_ID = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
 
   // create renter 1
   const renter1 = new User({

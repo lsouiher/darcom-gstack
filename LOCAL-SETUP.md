@@ -17,7 +17,7 @@ Copy the example environment files. **Run all commands from the project root dir
 
 ```bash
 # Make sure you're in the project root
-cd /path/to/movinin
+cd /path/to/darywin
 
 # Copy all three environment files (run these from the project root)
 cp backend/.env.docker.example backend/.env.docker
@@ -65,11 +65,11 @@ First run will take a few minutes to download images and build containers.
 Once services are running, seed the database:
 
 ```bash
-docker-compose -f docker-compose.dev.yml exec mi-dev-backend npm run setup
+docker-compose -f docker-compose.dev.yml exec dw-dev-backend npm run setup
 ```
 
 This creates a default admin account:
-- **Email:** admin@movinin.io
+- **Email:** admin@darywin.com
 - **Password:** M00vinin
 
 ### 5. Access the Applications
@@ -89,9 +89,9 @@ Docker Compose starts 5 services:
 |---------|-------------|------|
 | mongo | MongoDB database | 27018 |
 | mongo-express | Database admin UI | 8084 |
-| mi-dev-backend | Node.js/Express API | 4004 |
-| mi-dev-admin | React admin panel | 3003 |
-| mi-dev-frontend | React customer app | 8081 |
+| dw-dev-backend | Node.js/Express API | 4004 |
+| dw-dev-admin | React admin panel | 3003 |
+| dw-dev-frontend | React customer app | 8081 |
 
 ## Common Commands
 
@@ -102,7 +102,7 @@ Docker Compose starts 5 services:
 docker-compose -f docker-compose.dev.yml logs -f
 
 # Specific service
-docker-compose -f docker-compose.dev.yml logs -f mi-dev-backend
+docker-compose -f docker-compose.dev.yml logs -f dw-dev-backend
 ```
 
 ### Stop services
@@ -120,7 +120,7 @@ docker-compose -f docker-compose.dev.yml down -v
 ### Restart a specific service
 
 ```bash
-docker-compose -f docker-compose.dev.yml restart mi-dev-backend
+docker-compose -f docker-compose.dev.yml restart dw-dev-backend
 ```
 
 ### Rebuild containers (after Dockerfile changes)
@@ -137,7 +137,7 @@ Key settings already configured for Docker:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| DW_DB_URI | `mongodb://admin:admin@mongo:27017/movinin` | MongoDB connection |
+| DW_DB_URI | `mongodb://admin:admin@mongo:27017/darywin` | MongoDB connection |
 | DW_PORT | 4004 | API port |
 | DW_ADMIN_HOST | `http://localhost:3003/` | Admin panel URL |
 | DW_FRONTEND_HOST | `http://localhost:8081/` | Frontend URL |
@@ -186,7 +186,7 @@ Open http://localhost:8084 in your browser:
 
 ### Via MongoDB Client
 
-Connect to `mongodb://admin:admin@127.0.0.1:27018/movinin`
+Connect to `mongodb://admin:admin@127.0.0.1:27018/darywin`
 
 ## Running the Mobile App
 
@@ -237,7 +237,7 @@ docker-compose -f docker-compose.dev.yml logs mongo
 
 The backend waits for MongoDB but may start before it's fully ready. Restart it:
 ```bash
-docker-compose -f docker-compose.dev.yml restart mi-dev-backend
+docker-compose -f docker-compose.dev.yml restart dw-dev-backend
 ```
 
 ### Changes not reflecting
@@ -257,7 +257,7 @@ sudo chown -R $USER:$USER .
 
 Check logs for the failing container:
 ```bash
-docker-compose -f docker-compose.dev.yml logs mi-dev-backend
+docker-compose -f docker-compose.dev.yml logs dw-dev-backend
 ```
 
 Common causes:

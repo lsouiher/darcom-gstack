@@ -38,7 +38,7 @@ jobs:
           git pull --rebase origin $DEFAULT_BRANCH
 
           # Generate the JSON file after pull
-          echo "{\"latestApkUrl\": \"https://github.com/aelassas/movinin/releases/download/${TAG_NAME}/movinin-${VERSION}.apk\"}" > .github/latest-release.json
+          echo "{\"latestApkUrl\": \"https://github.com/aelassas/movinin/releases/download/${TAG_NAME}/darywin-${VERSION}.apk\"}" > .github/latest-release.json
 
           git add .github/latest-release.json
           git diff --cached --quiet || git commit -m "chore: update latest-release.json for ${TAG_NAME}"

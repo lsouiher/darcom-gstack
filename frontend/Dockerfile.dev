@@ -1,7 +1,7 @@
 FROM node:lts-alpine AS packages
-WORKDIR /movinin/packages
+WORKDIR /darywin/packages
 
-COPY ./packages /movinin/packages
+COPY ./packages /darywin/packages
 
 # Install dependencies for all internal packages
 RUN set -e && \
@@ -15,7 +15,7 @@ RUN set -e && \
 
 
 FROM node:lts-alpine AS frontend
-WORKDIR /movinin/frontend
+WORKDIR /darywin/frontend
 
 COPY ./frontend/package*.json ./
 RUN npm install --force && npm cache clean --force
@@ -24,7 +24,7 @@ COPY ./frontend ./
 COPY ./frontend/.env.docker .env
 
 # Copy preinstalled internal packages
-COPY --from=packages /movinin/packages /movinin/packages
+COPY --from=packages /darywin/packages /darywin/packages
 
 EXPOSE 8081
 CMD ["npm", "run", "dev:docker"]

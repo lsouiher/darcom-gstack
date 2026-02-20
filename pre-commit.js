@@ -21,17 +21,17 @@ const config = {
   projects: {
     backend: {
       folder: 'backend',
-      container: 'mi-dev-backend',
+      container: 'dw-dev-backend',
       checks: [checkTypes.lint, checkTypes.typeCheck, checkTypes.sizeCheck],
     },
     admin: {
       folder: 'admin',
-      container: 'mi-dev-admin',
+      container: 'dw-dev-admin',
       checks: [checkTypes.lint, checkTypes.typeCheck, checkTypes.sizeCheck],
     },
     frontend: {
       folder: 'frontend',
-      container: 'mi-dev-frontend',
+      container: 'dw-dev-frontend',
       checks: [checkTypes.lint, checkTypes.typeCheck, checkTypes.sizeCheck],
     },
     mobile: {

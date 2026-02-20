@@ -3,26 +3,26 @@
 start_time=$(date +%s)
 echo "Deploying DaryWin frontend..."
 
-cd /opt/movinin
+cd /opt/darywin
 git pull
-sudo chmod +x -R /opt/movinin/__scripts
+sudo chmod +x -R /opt/darywin/__scripts
 
-/bin/bash /opt/movinin/__scripts/free-mem.sh
+/bin/bash /opt/darywin/__scripts/free-mem.sh
 
-cd /opt/movinin/frontend
+cd /opt/darywin/frontend
 
 npm install --force
 npm run build
 
-sudo rm -rf /var/www/movinin/frontend
-sudo mkdir -p /var/www/movinin/frontend
-sudo cp -rf build/* /var/www/movinin/frontend
+sudo rm -rf /var/www/darywin/frontend
+sudo mkdir -p /var/www/darywin/frontend
+sudo cp -rf build/* /var/www/darywin/frontend
 
 sudo rm -rf /var/cache/nginx
 sudo systemctl restart nginx
 sudo systemctl status nginx --no-pager
 
-/bin/bash /opt/movinin/__scripts/free-mem.sh
+/bin/bash /opt/darywin/__scripts/free-mem.sh
 
 finish_time=$(date +%s)
 elapsed_time=$((finish_time - start_time))

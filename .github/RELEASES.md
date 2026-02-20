@@ -7,8 +7,8 @@
 * chore(deps): update dependencies
 
 ### Assets
-- [movinin-6.6.apk](https://github.com/aelassas/movinin/releases/download/v6.6/movinin-6.6.apk) (99.86 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.6/movinin-db.zip) (4.74 MB)
+- [darywin-6.6.apk](https://github.com/aelassas/movinin/releases/download/v6.6/darywin-6.6.apk) (99.86 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.6/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v6.6)
@@ -20,8 +20,8 @@
 * chore(mobile): update dependencies
 
 ### Assets
-- [movinin-6.5.apk](https://github.com/aelassas/movinin/releases/download/v6.5/movinin-6.5.apk) (99.86 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.5/movinin-db.zip) (4.74 MB)
+- [darywin-6.5.apk](https://github.com/aelassas/movinin/releases/download/v6.5/darywin-6.5.apk) (99.86 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.5/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v6.5)
@@ -37,8 +37,8 @@
 * fix(mobile): drawer navigator bottom inset for devices with home indicator
 
 ### Assets
-- [movinin-6.4.apk](https://github.com/aelassas/movinin/releases/download/v6.4/movinin-6.4.apk) (99.86 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.4/movinin-db.zip) (4.74 MB)
+- [darywin-6.4.apk](https://github.com/aelassas/movinin/releases/download/v6.4/darywin-6.4.apk) (99.86 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.4/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v6.4)
@@ -54,8 +54,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v6.2...v6.3
 
 ### Assets
-- [movinin-6.3.apk](https://github.com/aelassas/movinin/releases/download/v6.3/movinin-6.3.apk) (92.47 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.3/movinin-db.zip) (4.74 MB)
+- [darywin-6.3.apk](https://github.com/aelassas/movinin/releases/download/v6.3/darywin-6.3.apk) (92.47 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.3/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v6.3)
@@ -84,8 +84,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v6.1...v6.2
 
 ### Assets
-- [movinin-6.2.apk](https://github.com/aelassas/movinin/releases/download/v6.2/movinin-6.2.apk) (92.46 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.2/movinin-db.zip) (4.74 MB)
+- [darywin-6.2.apk](https://github.com/aelassas/movinin/releases/download/v6.2/darywin-6.2.apk) (92.46 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.2/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v6.2)
@@ -109,8 +109,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v6.0...v6.1
 
 ### Assets
-- [movinin-6.1.apk](https://github.com/aelassas/movinin/releases/download/v6.1/movinin-6.1.apk) (92.46 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.1/movinin-db.zip) (4.74 MB)
+- [darywin-6.1.apk](https://github.com/aelassas/movinin/releases/download/v6.1/darywin-6.1.apk) (92.46 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.1/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v6.1)
@@ -129,8 +129,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.9...v6.0
 
 ### Assets
-- [movinin-6.0.apk](https://github.com/aelassas/movinin/releases/download/v6.0/movinin-6.0.apk) (92.46 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.0/movinin-db.zip) (4.74 MB)
+- [darywin-6.0.apk](https://github.com/aelassas/movinin/releases/download/v6.0/darywin-6.0.apk) (92.46 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v6.0/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v6.0)
@@ -146,15 +146,15 @@
 * fix(backend): ensure globalAgent.maxSockets is set for HTTP server
 * fix(admin): update title in index.html to reflect Admin Panel
 * fix(backend): update Docker npm install command to include all dependencies
-* fix(docker-compose): update mi-frontend port mapping from 8080 to 8081
+* fix(docker-compose): update dw-frontend port mapping from 8080 to 8081
 * chore: clarify project identities with consistent package.json names and descriptions
 * chore: update dependencies
 
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.8...v5.9
 
 ### Assets
-- [movinin-5.9.apk](https://github.com/aelassas/movinin/releases/download/v5.9/movinin-5.9.apk) (92.46 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.9/movinin-db.zip) (4.74 MB)
+- [darywin-5.9.apk](https://github.com/aelassas/movinin/releases/download/v5.9/darywin-5.9.apk) (92.46 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.9/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.9)
@@ -182,8 +182,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.7...v5.8
 
 ### Assets
-- [movinin-5.8.apk](https://github.com/aelassas/movinin/releases/download/v5.8/movinin-5.8.apk) (92.47 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.8/movinin-db.zip) (4.74 MB)
+- [darywin-5.8.apk](https://github.com/aelassas/movinin/releases/download/v5.8/darywin-5.8.apk) (92.47 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.8/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.8)
@@ -204,8 +204,8 @@
 * fix(mobile): add custom resolver for axios in Metro configuration
 
 ### Assets
-- [movinin-5.7.apk](https://github.com/aelassas/movinin/releases/download/v5.7/movinin-5.7.apk) (92.45 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.7/movinin-db.zip) (4.74 MB)
+- [darywin-5.7.apk](https://github.com/aelassas/movinin/releases/download/v5.7/darywin-5.7.apk) (92.45 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.7/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.7)
@@ -223,8 +223,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.5...v5.6
 
 ### Assets
-- [movinin-5.6.apk](https://github.com/aelassas/movinin/releases/download/v5.6/movinin-5.6.apk) (78.97 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.6/movinin-db.zip) (4.74 MB)
+- [darywin-5.6.apk](https://github.com/aelassas/movinin/releases/download/v5.6/darywin-5.6.apk) (78.97 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.6/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.6)
@@ -245,8 +245,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.4...v5.5
 
 ### Assets
-- [movinin-5.5.apk](https://github.com/aelassas/movinin/releases/download/v5.5/movinin-5.5.apk) (78.97 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.5/movinin-db.zip) (4.74 MB)
+- [darywin-5.5.apk](https://github.com/aelassas/movinin/releases/download/v5.5/darywin-5.5.apk) (78.97 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.5/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.5)
@@ -268,8 +268,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.3...v5.4
 
 ### Assets
-- [movinin-5.4.apk](https://github.com/aelassas/movinin/releases/download/v5.4/movinin-5.4.apk) (78.97 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.4/movinin-db.zip) (4.74 MB)
+- [darywin-5.4.apk](https://github.com/aelassas/movinin/releases/download/v5.4/darywin-5.4.apk) (78.97 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.4/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.4)
@@ -293,8 +293,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.2...v5.3
 
 ### Assets
-- [movinin-5.3.apk](https://github.com/aelassas/movinin/releases/download/v5.3/movinin-5.3.apk) (78.97 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.3/movinin-db.zip) (4.74 MB)
+- [darywin-5.3.apk](https://github.com/aelassas/movinin/releases/download/v5.3/darywin-5.3.apk) (78.97 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.3/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.3)
@@ -309,8 +309,8 @@
 * Updated dependencies
 
 ### Assets
-- [movinin-5.2.apk](https://github.com/aelassas/movinin/releases/download/v5.2/movinin-5.2.apk) (78.64 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.2/movinin-db.zip) (4.74 MB)
+- [darywin-5.2.apk](https://github.com/aelassas/movinin/releases/download/v5.2/darywin-5.2.apk) (78.64 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.2/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.2)
@@ -325,8 +325,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v5.0...v5.1
 
 ### Assets
-- [movinin-5.1.apk](https://github.com/aelassas/movinin/releases/download/v5.1/movinin-5.1.apk) (78.63 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.1/movinin-db.zip) (4.74 MB)
+- [darywin-5.1.apk](https://github.com/aelassas/movinin/releases/download/v5.1/darywin-5.1.apk) (78.63 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.1/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.1)
@@ -343,8 +343,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.9...v5.0
 
 ### Assets
-- [movinin-5.0.apk](https://github.com/aelassas/movinin/releases/download/v5.0/movinin-5.0.apk) (78.63 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.0/movinin-db.zip) (4.74 MB)
+- [darywin-5.0.apk](https://github.com/aelassas/movinin/releases/download/v5.0/darywin-5.0.apk) (78.63 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v5.0/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v5.0)
@@ -363,8 +363,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.8...v4.9
 
 ### Assets
-- [movinin-4.9.apk](https://github.com/aelassas/movinin/releases/download/v4.9/movinin-4.9.apk) (78.63 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.9/movinin-db.zip) (4.74 MB)
+- [darywin-4.9.apk](https://github.com/aelassas/movinin/releases/download/v4.9/darywin-4.9.apk) (78.63 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.9/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.9)
@@ -380,8 +380,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.7...v4.8
 
 ### Assets
-- [movinin-4.8.apk](https://github.com/aelassas/movinin/releases/download/v4.8/movinin-4.8.apk) (78.63 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.8/movinin-db.zip) (4.74 MB)
+- [darywin-4.8.apk](https://github.com/aelassas/movinin/releases/download/v4.8/darywin-4.8.apk) (78.63 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.8/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.8)
@@ -400,8 +400,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.6...v4.7
 
 ### Assets
-- [movinin-4.7.apk](https://github.com/aelassas/movinin/releases/download/v4.7/movinin-4.7.apk) (78.63 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.7/movinin-db.zip) (4.74 MB)
+- [darywin-4.7.apk](https://github.com/aelassas/movinin/releases/download/v4.7/darywin-4.7.apk) (78.63 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.7/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.7)
@@ -421,8 +421,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.5...v4.6
 
 ### Assets
-- [movinin-4.6.apk](https://github.com/aelassas/movinin/releases/download/v4.6/movinin-4.6.apk) (78.63 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.6/movinin-db.zip) (4.74 MB)
+- [darywin-4.6.apk](https://github.com/aelassas/movinin/releases/download/v4.6/darywin-4.6.apk) (78.63 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.6/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.6)
@@ -441,8 +441,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.4...v4.5
 
 ### Assets
-- [movinin-4.5.apk](https://github.com/aelassas/movinin/releases/download/v4.5/movinin-4.5.apk) (78.72 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.5/movinin-db.zip) (4.74 MB)
+- [darywin-4.5.apk](https://github.com/aelassas/movinin/releases/download/v4.5/darywin-4.5.apk) (78.72 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.5/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.5)
@@ -463,8 +463,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.3...v4.4
 
 ### Assets
-- [movinin-4.4.apk](https://github.com/aelassas/movinin/releases/download/v4.4/movinin-4.4.apk) (77.82 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.4/movinin-db.zip) (4.74 MB)
+- [darywin-4.4.apk](https://github.com/aelassas/movinin/releases/download/v4.4/darywin-4.4.apk) (77.82 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.4/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.4)
@@ -489,8 +489,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.2...v4.3
 
 ### Assets
-- [movinin-4.3.apk](https://github.com/aelassas/movinin/releases/download/v4.3/movinin-4.3.apk) (77.82 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.3/movinin-db.zip) (4.74 MB)
+- [darywin-4.3.apk](https://github.com/aelassas/movinin/releases/download/v4.3/darywin-4.3.apk) (77.82 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.3/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.3)
@@ -511,8 +511,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.1...v4.2
 
 ### Assets
-- [movinin-4.2.apk](https://github.com/aelassas/movinin/releases/download/v4.2/movinin-4.2.apk) (77.82 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.2/movinin-db.zip) (4.74 MB)
+- [darywin-4.2.apk](https://github.com/aelassas/movinin/releases/download/v4.2/darywin-4.2.apk) (77.82 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.2/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.2)
@@ -530,8 +530,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v4.0...v4.1
 
 ### Assets
-- [movinin-4.1.apk](https://github.com/aelassas/movinin/releases/download/v4.1/movinin-4.1.apk) (77.82 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.1/movinin-db.zip) (4.74 MB)
+- [darywin-4.1.apk](https://github.com/aelassas/movinin/releases/download/v4.1/darywin-4.1.apk) (77.82 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.1/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.1)
@@ -551,8 +551,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.9...v4.0
 
 ### Assets
-- [movinin-4.0.apk](https://github.com/aelassas/movinin/releases/download/v4.0/movinin-4.0.apk) (77.82 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.0/movinin-db.zip) (4.74 MB)
+- [darywin-4.0.apk](https://github.com/aelassas/movinin/releases/download/v4.0/darywin-4.0.apk) (77.82 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v4.0/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v4.0)
@@ -574,8 +574,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.8...v3.9
 
 ### Assets
-- [movinin-3.9.apk](https://github.com/aelassas/movinin/releases/download/v3.9/movinin-3.9.apk) (77.82 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.9/movinin-db.zip) (4.74 MB)
+- [darywin-3.9.apk](https://github.com/aelassas/movinin/releases/download/v3.9/darywin-3.9.apk) (77.82 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.9/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.9)
@@ -602,8 +602,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.7...v3.8
 
 ### Assets
-- [movinin-3.8.apk](https://github.com/aelassas/movinin/releases/download/v3.8/movinin-3.8.apk) (77.79 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.8/movinin-db.zip) (4.74 MB)
+- [darywin-3.8.apk](https://github.com/aelassas/movinin/releases/download/v3.8/darywin-3.8.apk) (77.79 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.8/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.8)
@@ -628,8 +628,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.6...v3.7
 
 ### Assets
-- [movinin-3.7.apk](https://github.com/aelassas/movinin/releases/download/v3.7/movinin-3.7.apk) (80.36 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.7/movinin-db.zip) (4.74 MB)
+- [darywin-3.7.apk](https://github.com/aelassas/movinin/releases/download/v3.7/darywin-3.7.apk) (80.36 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.7/darywin-db.zip) (4.74 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.7)
@@ -651,8 +651,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.5...v3.6
 
 ### Assets
-- [movinin-3.6.apk](https://github.com/aelassas/movinin/releases/download/v3.6/movinin-3.6.apk) (80.26 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.6/movinin-db.zip) (4.02 MB)
+- [darywin-3.6.apk](https://github.com/aelassas/movinin/releases/download/v3.6/darywin-3.6.apk) (80.26 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.6/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.6)
@@ -720,8 +720,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.4...v3.5
 
 ### Assets
-- [movinin-3.5.apk](https://github.com/aelassas/movinin/releases/download/v3.5/movinin-3.5.apk) (80.25 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.5/movinin-db.zip) (4.02 MB)
+- [darywin-3.5.apk](https://github.com/aelassas/movinin/releases/download/v3.5/darywin-3.5.apk) (80.25 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.5/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.5)
@@ -771,8 +771,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.3...v3.4
 
 ### Assets
-- [movinin-3.4.apk](https://github.com/aelassas/movinin/releases/download/v3.4/movinin-3.4.apk) (80.20 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.4/movinin-db.zip) (4.02 MB)
+- [darywin-3.4.apk](https://github.com/aelassas/movinin/releases/download/v3.4/darywin-3.4.apk) (80.20 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.4/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.4)
@@ -817,8 +817,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.2...v3.3
 
 ### Assets
-- [movinin-3.3.apk](https://github.com/aelassas/movinin/releases/download/v3.3/movinin-3.3.apk) (80.19 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.3/movinin-db.zip) (4.02 MB)
+- [darywin-3.3.apk](https://github.com/aelassas/movinin/releases/download/v3.3/darywin-3.3.apk) (80.19 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.3/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.3)
@@ -868,8 +868,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.1...v3.2
 
 ### Assets
-- [movinin-3.2.apk](https://github.com/aelassas/movinin/releases/download/v3.2/movinin-3.2.apk) (80.30 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.2/movinin-db.zip) (4.02 MB)
+- [darywin-3.2.apk](https://github.com/aelassas/movinin/releases/download/v3.2/darywin-3.2.apk) (80.30 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.2/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.2)
@@ -891,8 +891,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v3.0...v3.1
 
 ### Assets
-- [movinin-3.1.apk](https://github.com/aelassas/movinin/releases/download/v3.1/movinin-3.1.apk) (78.50 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.1/movinin-db.zip) (4.02 MB)
+- [darywin-3.1.apk](https://github.com/aelassas/movinin/releases/download/v3.1/darywin-3.1.apk) (78.50 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.1/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.1)
@@ -928,8 +928,8 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.9...v3.0
 
 ### Assets
-- [movinin-3.0.apk](https://github.com/aelassas/movinin/releases/download/v3.0/movinin-3.0.apk) (78.50 MB)
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.0/movinin-db.zip) (4.02 MB)
+- [darywin-3.0.apk](https://github.com/aelassas/movinin/releases/download/v3.0/darywin-3.0.apk) (78.50 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v3.0/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v3.0)
@@ -954,7 +954,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.8...v2.9
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.9/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.9/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.9)
@@ -982,7 +982,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.7...v2.8
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.8/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.8/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.8)
@@ -1006,7 +1006,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.6...v2.7
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.7/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.7/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.7)
@@ -1041,7 +1041,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.5...v2.6
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.6/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.6/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.6)
@@ -1075,7 +1075,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.4...v2.5
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.5/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.5/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.5)
@@ -1132,7 +1132,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.3...v2.4
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.4/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.4/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.4)
@@ -1185,7 +1185,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.2...v2.3
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.3/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.3/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.3)
@@ -1251,7 +1251,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.1...v2.2
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.2/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.2/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.2)
@@ -1313,7 +1313,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v2.0...v2.1
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.1/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.1/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.1)
@@ -1365,7 +1365,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.9...v2.0
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.0/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v2.0/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v2.0)
@@ -1406,7 +1406,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.8...v1.9
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.9/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.9/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.9)
@@ -1456,7 +1456,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.7...v1.8
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.8/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.8/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.8)
@@ -1519,7 +1519,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.6...v1.7
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.7/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.7/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.7)
@@ -1587,7 +1587,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.5...v1.6
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.6/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.6/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.6)
@@ -1626,7 +1626,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.4...v1.5
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.5/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.5/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.5)
@@ -1655,7 +1655,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.3...v1.4
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.4/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.4/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.4)
@@ -1684,7 +1684,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.2...v1.3
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.3/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.3/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.3)
@@ -1725,7 +1725,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.1...v1.2
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.2/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.2/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.2)
@@ -1775,7 +1775,7 @@
 **Full Changelog**: https://github.com/aelassas/movinin/compare/v1.0...v1.1
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.1/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.1/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.1)
@@ -1786,7 +1786,7 @@
 Initial release
 
 ### Assets
-- [movinin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.0/movinin-db.zip) (4.02 MB)
+- [darywin-db.zip](https://github.com/aelassas/movinin/releases/download/v1.0/darywin-db.zip) (4.02 MB)
 
 ### Source Code
 - [Source code (zip)](https://api.github.com/repos/aelassas/movinin/zipball/v1.0)

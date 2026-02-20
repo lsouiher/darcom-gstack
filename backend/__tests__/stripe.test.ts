@@ -78,7 +78,7 @@ describe('POST /api/create-checkout-session', () => {
       customerName: 'John Doe',
       locale: 'en',
       name: 'BMW X1',
-      description: 'movinin Testing Service',
+      description: 'darywin Testing Service',
     }
     let res = await request(app)
       .post('/api/create-checkout-session')
@@ -215,7 +215,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
     to.setDate(to.getDate() + 3)
 
     const agencyName = nanoid()
-    const agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.ma`, agencyName)
+    const agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.ma`, agencyName)
     const renter = new User({
       fullName: 'renter',
       email: testHelper.GetRandomEmail(),
@@ -623,7 +623,7 @@ describe('POST /api/create-payment-intent', () => {
       receiptEmail,
       customerName: 'John Doe',
       locale: 'en',
-      name: 'movinin Testing Service',
+      name: 'darywin Testing Service',
       description: '',
     }
     let res = await request(app)

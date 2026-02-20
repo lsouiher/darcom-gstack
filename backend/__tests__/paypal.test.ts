@@ -95,7 +95,7 @@ describe('POST /api/check-paypal-order/:bookingId/:orderId', () => {
     to.setDate(to.getDate() + 3)
 
     const agencyName = nanoid()
-    const agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.ma`, agencyName)
+    const agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.ma`, agencyName)
     const renter = new User({
       fullName: 'renter',
       email: testHelper.GetRandomEmail(),

@@ -124,6 +124,6 @@ docker-compose -f docker-compose.dev.yml up -d    # Start all services
 docker-compose -f docker-compose.dev.yml down     # Stop services
 ```
 
-Services: MongoDB, mongo-express, mi-backend, mi-admin, mi-frontend
+Services: MongoDB, mongo-express, dw-backend, dw-admin, dw-frontend
 
 The pre-commit hook auto-detects running Docker containers and runs checks inside them when available, otherwise runs locally.

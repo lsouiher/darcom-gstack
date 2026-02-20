@@ -96,11 +96,11 @@ export const PRIVATE_KEY = __env__('DW_PRIVATE_KEY', HTTPS)
 export const CERTIFICATE = __env__('DW_CERTIFICATE', HTTPS)
 
 /**
- * MongoDB database URI. Default is: mongodb://127.0.0.1:27017/movinin?authSource=admin&appName=movinin
+ * MongoDB database URI. Default is: mongodb://127.0.0.1:27017/darywin?authSource=admin&appName=darywin
  *
  * @type {string}
  */
-export const DB_URI = __env__('DW_DB_URI', false, 'mongodb://127.0.0.1:27017/movinin?authSource=admin&appName=movinin')
+export const DB_URI = __env__('DW_DB_URI', false, 'mongodb://127.0.0.1:27017/darywin?authSource=admin&appName=darywin')
 
 /**
  * Indicate whether MongoDB SSL is enabled or not.
@@ -142,7 +142,7 @@ export const DB_SERVER_SIDE_JAVASCRIPT = helper.StringToBoolean(__env__('DW_DB_S
  *
  * @type {string}
  */
-export const COOKIE_SECRET = __env__('DW_COOKIE_SECRET', false, 'Movinin')
+export const COOKIE_SECRET = __env__('DW_COOKIE_SECRET', false, 'Darywin')
 
 /**
  * Authentication cookie domain.
@@ -191,7 +191,7 @@ export const X_ACCESS_TOKEN = 'x-access-token'
  *
  * @type {string}
  */
-export const JWT_SECRET = __env__('DW_JWT_SECRET', false, 'Movinin')
+export const JWT_SECRET = __env__('DW_JWT_SECRET', false, 'Darywin')
 
 /**
  * JWT expiration in seconds. Default is 86400 seconds.

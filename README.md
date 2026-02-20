@@ -3,13 +3,13 @@
 [![coveralls](https://coveralls.io/repos/github/aelassas/movinin/badge.svg?branch=main)](https://coveralls.io/github/aelassas/movinin?branch=main)
 [![containerize](https://github.com/aelassas/movinin/actions/workflows/containerize.yml/badge.svg)](https://github.com/aelassas/movinin/actions/workflows/containerize.yml) 
 [![loc](https://raw.githubusercontent.com/aelassas/movinin/refs/heads/loc/badge.svg)](https://github.com/aelassas/movinin/actions/workflows/loc.yml)
-[![live demo](https://img.shields.io/badge/live-demo-brightgreen)](https://movinin.dynv6.net:3004/)
+[![live demo](https://img.shields.io/badge/live-demo-brightgreen)](https://darywin.dynv6.net:3004/)
 [![docs](https://img.shields.io/badge/docs-wiki-brightgreen)](https://github.com/aelassas/movinin/wiki)
 
 <!--
 [![tested with jest](https://img.shields.io/badge/tested_with-jest-brightgreen?logo=jest)](https://github.com/jestjs/jest)
 [![docs](https://img.shields.io/badge/docs-wiki-brightgreen)](https://github.com/aelassas/movinin/wiki)
-[![live demo](https://img.shields.io/badge/live-demo-brightgreen)](https://movinin.dynv6.net:3004/)
+[![live demo](https://img.shields.io/badge/live-demo-brightgreen)](https://darywin.dynv6.net:3004/)
 [![loc](https://raw.githubusercontent.com/aelassas/movinin/refs/heads/loc/badge.svg)](https://github.com/aelassas/movinin/actions/workflows/loc.yml)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/aelassas/movinin/pulls)
 [![codecov](https://codecov.io/gh/aelassas/movinin/graph/badge.svg?token=TXD8SM1QHB)](https://codecov.io/gh/aelassas/movinin)
@@ -23,7 +23,7 @@
 https://github.com/user-attachments/assets/806cbe2d-9f49-413e-9359-2546306f9653
 -->
 
-[![](https://movin-in.github.io/content/cover-1.png)](https://movinin.dynv6.net:3004/)
+[![](https://movin-in.github.io/content/cover-1.png)](https://darywin.dynv6.net:3004/)
 
 ## DaryWin
 
@@ -112,14 +112,14 @@ If you want to customize DaryWin while keeping your fork up to date with the lat
 
 ### Frontend
 
-* URL: https://movinin.dynv6.net:3004/
-* Login: jdoe@movinin.io
+* URL: https://darywin.dynv6.net:3004/
+* Login: jdoe@darywin.com
 * Password: M00vinin
 
 ### Admin Panel
 
-* URL: https://movinin.dynv6.net:3003/
-* Login: admin@movinin.io
+* URL: https://darywin.dynv6.net:3003/
+* Login: admin@darywin.com
 * Password: M00vinin
 
 ### Mobile App
@@ -142,8 +142,8 @@ Open the Camera app and point it at this code. Then tap the notification that ap
 
 You can also install the Android App by downloading the APK and installing it on any Android device.
 
-* [Download APK](https://github.com/aelassas/movinin/releases/download/v6.6/movinin-6.6.apk)
-* Login: jdoe@movinin.io
+* [Download APK](https://github.com/aelassas/movinin/releases/download/v6.6/darywin-6.6.apk)
+* Login: jdoe@darywin.com
 * Password: M00vinin
 <!--
 ## Website Source Code (movin-in.github.io)

@@ -24,7 +24,7 @@ We appreciate your interest in contributing to DaryWin. This guide will help you
 - **Fork the repository** to your own GitHub account.  
 - **Clone your fork** locally:
   ```bash
-  git clone https://github.com/your-username/movinin.git
+  git clone https://github.com/your-username/darywin.git
   ```
 - **Install dependencies**:
   ```bash

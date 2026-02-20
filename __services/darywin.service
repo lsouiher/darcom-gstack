@@ -5,11 +5,11 @@ After=mongod.service
 
 [Service]
 ExecStart=/usr/bin/npm start
-WorkingDirectory=/opt/movinin/backend
+WorkingDirectory=/opt/darywin/backend
 Type=simple
 Restart=always
-StandardOutput=append:/var/log/movinin.log
-StandardError=append:/var/log/movinin.log
+StandardOutput=append:/var/log/darywin.log
+StandardError=append:/var/log/darywin.log
 
 [Install]
 WantedBy=multi-user.target

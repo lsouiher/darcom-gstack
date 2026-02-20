@@ -103,7 +103,7 @@ DaryWin is a **rental property management platform** built as a TypeScript monor
 ## 3. Repository Structure
 
 ```
-movinin/
+darywin/
 ├── backend/                 # Node.js REST API
 │   ├── src/
 │   │   ├── index.ts        # Entry point (like Program.cs)
@@ -309,7 +309,7 @@ Mongoose schemas define MongoDB document structure:
 // backend/src/models/User.ts
 
 import mongoose from 'mongoose'
-import * as movininTypes from ':darywin-types'
+import * as darywinTypes from ':darywin-types'
 
 const userSchema = new mongoose.Schema({
   // Like C# property with [Required] attribute
@@ -332,11 +332,11 @@ const userSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: [
-      movininTypes.UserType.Admin,
-      movininTypes.UserType.Agency,
-      movininTypes.UserType.User
+      darywinTypes.UserType.Admin,
+      darywinTypes.UserType.Agency,
+      darywinTypes.UserType.User
     ],
-    default: movininTypes.UserType.User
+    default: darywinTypes.UserType.User
   },
   // Foreign key reference (like EF navigation property)
   agency: {
@@ -790,16 +790,16 @@ function SomeComponent() {
 **`frontend/src/services/UserService.ts`**:
 ```typescript
 import axiosInstance from './axiosInstance'
-import * as movininTypes from ':darywin-types'
+import * as darywinTypes from ':darywin-types'
 
 // Like Angular HttpClient service methods
 
-export const signup = (data: movininTypes.SignUpPayload): Promise<number> =>
+export const signup = (data: darywinTypes.SignUpPayload): Promise<number> =>
   axiosInstance
     .post('/api/sign-up', data)
     .then(res => res.status)
 
-export const signin = (data: movininTypes.SignInPayload): Promise<{ status: number; data: movininTypes.User }> =>
+export const signin = (data: darywinTypes.SignInPayload): Promise<{ status: number; data: darywinTypes.User }> =>
   axiosInstance
     .post('/api/sign-in/frontend', data, { withCredentials: true })
     .then(res => ({ status: res.status, data: res.data }))
@@ -809,7 +809,7 @@ export const signout = (): Promise<number> =>
     .post('/api/sign-out', null, { withCredentials: true })
     .then(res => res.status)
 
-export const getUser = (id: string): Promise<movininTypes.User> =>
+export const getUser = (id: string): Promise<darywinTypes.User> =>
   axiosInstance
     .get(`/api/user/${id}`, { withCredentials: true })
     .then(res => res.data)
@@ -1211,15 +1211,15 @@ All apps import shared packages via TypeScript path aliases:
 
 ```typescript
 // In any app file
-import * as movininTypes from ':darywin-types'
-import * as movininHelper from ':darywin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 // Use types
-const user: movininTypes.User = { ... }
-const status: movininTypes.BookingStatus = movininTypes.BookingStatus.Paid
+const user: darywinTypes.User = { ... }
+const status: darywinTypes.BookingStatus = darywinTypes.BookingStatus.Paid
 
 // Use helpers
-const price = movininHelper.formatPrice(100, 'USD', 'en')
+const price = darywinHelper.formatPrice(100, 'USD', 'en')
 ```
 
 ---
@@ -1452,7 +1452,7 @@ export const createCheckoutSession = async (req, res) => {
 
   // Calculate price
   const property = await Property.findById(propertyId)
-  const price = movininHelper.calculateTotalPrice(property, from, to)
+  const price = darywinHelper.calculateTotalPrice(property, from, to)
 
   // Create Stripe session
   const session = await stripe.checkout.sessions.create({
@@ -1524,10 +1524,10 @@ Frontend/Admin:
 
 ```typescript
 // Shared types (all apps)
-import * as movininTypes from ':darywin-types'
+import * as darywinTypes from ':darywin-types'
 
 // Shared helpers (all apps)
-import * as movininHelper from ':darywin-helper'
+import * as darywinHelper from ':darywin-helper'
 
 // Internal imports (use @ alias)
 import Header from '@/components/Header'

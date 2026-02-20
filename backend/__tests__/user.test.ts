@@ -30,10 +30,10 @@ let USER1_ID: string
 let USER2_ID: string
 let ADMIN_ID: string
 
-const USER1_EMAIL = `${testHelper.getName('user1')}@test.movinin.io`
+const USER1_EMAIL = `${testHelper.getName('user1')}@test.darywin.com`
 const USER1_PASSWORD = testHelper.PASSWORD
-const USER2_EMAIL = `${testHelper.getName('user2')}@test.movinin.io`
-const ADMIN_EMAIL = `${testHelper.getName('admin')}@test.movinin.io`
+const USER2_EMAIL = `${testHelper.getName('user2')}@test.darywin.com`
+const ADMIN_EMAIL = `${testHelper.getName('admin')}@test.darywin.com`
 
 //
 // Connecting and initializing the database before running the test suite
@@ -1427,7 +1427,7 @@ describe('POST /api/delete-users', () => {
     expect(res.statusCode).toBe(200)
 
     const agencyName = testHelper.getAgencyName()
-    const agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    const agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     const locationId = await testHelper.createLocation('Location 1 EN', 'Location 1 FR')
     const mainImageName = 'main1.jpg'
     const mainImagePath = path.resolve(__dirname, `./img/${mainImageName}`)
@@ -1619,7 +1619,7 @@ describe('POST /api/send-email', () => {
   it('should send an email', async () => {
     // test success (contact form)
     const payload: darywinTypes.SendEmailPayload = {
-      from: 'no-reply@movinin.ma',
+      from: 'no-reply@darywin.ma',
       to: 'test@test.com',
       subject: 'test',
       message: 'test message',

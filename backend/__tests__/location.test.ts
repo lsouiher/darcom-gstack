@@ -491,7 +491,7 @@ describe('GET /api/check-location/:id', () => {
     const token = await testHelper.signinAsAdmin()
 
     const agencyName = testHelper.getAgencyName()
-    const agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    const agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     const property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,

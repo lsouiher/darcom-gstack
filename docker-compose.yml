@@ -40,7 +40,7 @@ services:
   # ===========================================================================
   # Backend API Server (Node.js/Express) - PRODUCTION BUILD
   # ===========================================================================
-  mi-backend:
+  dw-backend:
     build:
       context: .                                     # Build from project root
       dockerfile: ./backend/Dockerfile               # Production Dockerfile (optimized, no dev tools)
@@ -51,19 +51,19 @@ services:
     depends_on:
       - mongo
     volumes:
-      - cdn:/var/www/cdn/movinin                     # Shared CDN for uploaded files
-      - backend_logs:/movinin/backend/logs           # Persist logs
+      - cdn:/var/www/cdn/darywin                     # Shared CDN for uploaded files
+      - backend_logs:/darywin/backend/logs           # Persist logs
       # NOTE: No source code mount - production uses built code inside container
 
   # ===========================================================================
   # Admin Panel (React) - PRODUCTION BUILD
   # ===========================================================================
-  mi-admin:
+  dw-admin:
     build:
       context: .
       dockerfile: ./admin/Dockerfile                 # Production Dockerfile (nginx serving built static files)
     depends_on:
-      - mi-backend
+      - dw-backend
     ports:
       - 3003:3003                                    # Admin panel URL
       # NOTE: No volume mounts - production serves pre-built static files
@@ -71,17 +71,17 @@ services:
   # ===========================================================================
   # Frontend Customer App (React) - PRODUCTION BUILD
   # ===========================================================================
-  mi-frontend:
+  dw-frontend:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile              # Production Dockerfile (nginx serving built static files)
     depends_on:
-      - mi-backend
+      - dw-backend
     ports:
       - 8081:80                                      # HTTP (nginx default port 80 mapped to 8081)
       - 8443:443                                     # HTTPS
     volumes:
-      - cdn:/var/www/cdn/movinin                     # Access uploaded files for serving images
+      - cdn:/var/www/cdn/darywin                     # Access uploaded files for serving images
 
 # =============================================================================
 # Named Volumes - Data persists across container restarts

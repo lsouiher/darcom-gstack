@@ -3,20 +3,20 @@
 start_time=$(date +%s)
 echo "Deploying DaryWin backend server..."
 
-cd /opt/movinin
+cd /opt/darywin
 git pull
-chmod +x -R /opt/movinin/__scripts
+chmod +x -R /opt/darywin/__scripts
 
-/bin/bash /opt/movinin/__scripts/free-mem.sh
+/bin/bash /opt/darywin/__scripts/free-mem.sh
 
-cd /opt/movinin/backend
+cd /opt/darywin/backend
 
 npm install
 
-sudo systemctl restart movinin
-sudo systemctl status movinin --no-pager
+sudo systemctl restart darywin
+sudo systemctl status darywin --no-pager
 
-/bin/bash /opt/movinin/__scripts/free-mem.sh
+/bin/bash /opt/darywin/__scripts/free-mem.sh
 
 finish_time=$(date +%s)
 elapsed_time=$((finish_time - start_time))
