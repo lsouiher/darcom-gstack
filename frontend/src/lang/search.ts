@@ -6,6 +6,8 @@ const strings = new LocalizedStrings({
   },
   en: {
   },
+  ar: {
+  },
 })
 
 langHelper.setLanguage(strings)

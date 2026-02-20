@@ -33,6 +33,10 @@ export const LANGUAGES = [
     code: 'en',
     label: 'English',
   },
+  {
+    code: 'ar',
+    label: 'العربية',
+  },
 ]
 
 type Currency = { code: string, symbol: string }
@@ -53,12 +57,8 @@ export const CURRENCIES: Currency[] = [
     symbol: '€',
   },
   {
-    code: 'GBP',
-    symbol: '£',
-  },
-  {
-    code: 'AUD',
-    symbol: '$',
+    code: 'DZD',
+    symbol: 'د.ج',
   },
 ]
 

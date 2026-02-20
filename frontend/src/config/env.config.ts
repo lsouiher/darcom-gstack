@@ -16,6 +16,11 @@ const LANGUAGES = [
     countryCode: 'fr',
     label: 'Français',
   },
+  {
+    code: 'ar',
+    countryCode: 'sa',
+    label: 'العربية',
+  },
 ]
 
 type Currency = { code: string, symbol: string }
@@ -36,12 +41,8 @@ const CURRENCIES: Currency[] = [
     symbol: '€',
   },
   {
-    code: 'GBP',
-    symbol: '£',
-  },
-  {
-    code: 'AUD',
-    symbol: '$',
+    code: 'DZD',
+    symbol: 'د.ج',
   },
 ]
 

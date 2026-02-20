@@ -34,6 +34,22 @@ const strings = new LocalizedStrings({
     DAYS: 'Days',
     COST: 'COST',
   },
+  ar: {
+    PROPERTY: 'العقار',
+    AGENCY: 'الوكالة',
+    RENTER: 'المستأجر',
+    PRICE: 'السعر',
+    STATUS: 'الحالة',
+    UPDATE_SELECTION: 'تعديل التحديد',
+    DELETE_SELECTION: 'حذف التحديد',
+    UPDATE_STATUS: 'تعديل الحالة',
+    NEW_STATUS: 'حالة جديدة',
+    DELETE_BOOKING: 'هل أنت متأكد أنك تريد حذف هذا الحجز؟',
+    DELETE_BOOKINGS: 'هل أنت متأكد أنك تريد حذف الحجوزات المحددة؟',
+    EMPTY_LIST: 'لا توجد حجوزات.',
+    DAYS: 'أيام',
+    COST: 'التكلفة',
+  },
 })
 
 langHelper.setLanguage(strings)
