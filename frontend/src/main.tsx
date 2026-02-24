@@ -165,9 +165,9 @@ const theme = createTheme(
     direction: isAr ? 'rtl' : 'ltr',
     palette: {
       primary: {
-        main: '#1a1a1a',
-        // contrastText: '#003B95',
-        // dark: '#003B95',
+        main: '#D32F2F',
+        dark: '#B71C1C',
+        contrastText: '#fff',
       },
     },
     typography: {
@@ -205,11 +205,11 @@ const theme = createTheme(
         styleOverrides: {
           root: {
             '& .Mui-checked': {
-              color: '#232323 !important',
+              color: '#D32F2F !important',
             },
             '& .Mui-checked+.MuiSwitch-track': {
               opacity: 0.7,
-              backgroundColor: '#232323 !important',
+              backgroundColor: '#D32F2F !important',
             },
           },
         },

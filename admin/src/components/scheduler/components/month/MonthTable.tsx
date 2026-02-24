@@ -110,7 +110,7 @@ const MonthTable = ({ daysList, resource, eachWeekStart }: Props) => {
                       position: 'absolute',
                       top: 0,
                       // background: isToday ? theme.palette.secondary.main : 'transparent',
-                      background: isToday ? '#1a1a1a' : 'transparent',
+                      background: isToday ? '#D32F2F' : 'transparent',
                       color: isToday ? theme.palette.secondary.contrastText : '',
                       marginBottom: 2,
                     }}
