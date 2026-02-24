@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Layout from '@/components/Layout'
 import { strings } from '@/lang/agencies'
 import Search from '@/components/Search'
@@ -14,7 +14,7 @@ import '@/assets/css/agencies.css'
 const Agencies = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [keyword, setKeyword] = useState('')
   const [rowCount, setRowCount] = useState(-1)
 
@@ -22,7 +22,7 @@ const Agencies = () => {
     setKeyword(newKeyword)
   }
 
-  const handleAgencyListLoad: movininTypes.DataEvent<movininTypes.User> = (data) => {
+  const handleAgencyListLoad: darywinTypes.DataEvent<darywinTypes.User> = (data) => {
     if (data) {
       setRowCount(data.rowCount)
     }
@@ -32,7 +32,7 @@ const Agencies = () => {
     setRowCount(_rowCount)
   }
 
-  const onLoad = (_user?: movininTypes.User) => {
+  const onLoad = (_user?: darywinTypes.User) => {
     setUser(_user)
   }
 

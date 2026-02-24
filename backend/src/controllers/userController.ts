@@ -7,7 +7,7 @@ import mongoose from 'mongoose'
 import { CookieOptions, Request, Response } from 'express'
 import nodemailer from 'nodemailer'
 import axios from 'axios'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import i18n from '../lang/i18n'
 import * as env from '../config/env.config'
 import User from '../models/User'
@@ -37,11 +37,11 @@ const getStatusMessage = (lang: string, msg: string): string => `<!DOCTYPE html>
  * @async
  * @param {Request} req
  * @param {Response} res
- * @param {movininTypes.UserType} userType
+ * @param {darywinTypes.UserType} userType
  * @returns {unknown}
  */
-const _signup = async (req: Request, res: Response, userType: movininTypes.UserType) => {
-  const { body }: { body: movininTypes.SignUpPayload } = req
+const _signup = async (req: Request, res: Response, userType: darywinTypes.UserType) => {
+  const { body }: { body: darywinTypes.SignUpPayload } = req
 
   //
   // Create user
@@ -129,7 +129,7 @@ const _signup = async (req: Request, res: Response, userType: movininTypes.UserT
  * @returns {unknown}
  */
 export const signup = async (req: Request, res: Response) => {
-  await _signup(req, res, movininTypes.UserType.User)
+  await _signup(req, res, darywinTypes.UserType.User)
 }
 
 /**
@@ -142,7 +142,7 @@ export const signup = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const adminSignup = async (req: Request, res: Response) => {
-  await _signup(req, res, movininTypes.UserType.Admin)
+  await _signup(req, res, darywinTypes.UserType.Admin)
 }
 
 /**
@@ -155,7 +155,7 @@ export const adminSignup = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const create = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.CreateUserPayload } = req
+  const { body }: { body: darywinTypes.CreateUserPayload } = req
 
   try {
     body.verified = false
@@ -203,7 +203,7 @@ export const create = async (req: Request, res: Response) => {
         `<p>${i18n.t('HELLO')}${user.fullName},<br><br>
         ${i18n.t('ACCOUNT_ACTIVATION_LINK')}<br><br>
         ${helper.joinURL(
-          user.type === movininTypes.UserType.User ? env.FRONTEND_HOST : env.ADMIN_HOST,
+          user.type === darywinTypes.UserType.User ? env.FRONTEND_HOST : env.ADMIN_HOST,
           'activate',
         )}/?u=${encodeURIComponent(user._id.toString())}&e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(token.token)}<br><br>
         ${i18n.t('REGARDS')}<br></p>`,
@@ -236,12 +236,12 @@ export const checkToken = async (req: Request, res: Response) => {
     })
 
     if (user) {
-      const type = req.params.type.toUpperCase() as movininTypes.AppType
+      const type = req.params.type.toUpperCase() as darywinTypes.AppType
 
       if (
-        ![movininTypes.AppType.Frontend, movininTypes.AppType.Admin].includes(type)
-        || (type === movininTypes.AppType.Admin && user.type === movininTypes.UserType.User)
-        || (type === movininTypes.AppType.Frontend && user.type !== movininTypes.UserType.User)
+        ![darywinTypes.AppType.Frontend, darywinTypes.AppType.Admin].includes(type)
+        || (type === darywinTypes.AppType.Admin && user.type === darywinTypes.UserType.User)
+        || (type === darywinTypes.AppType.Frontend && user.type !== darywinTypes.UserType.User)
         || user.active
       ) {
         res.sendStatus(204)
@@ -318,12 +318,12 @@ export const resend = async (req: Request, res: Response) => {
     const user = await User.findOne({ email })
 
     if (user) {
-      const type = req.params.type.toUpperCase() as movininTypes.AppType
+      const type = req.params.type.toUpperCase() as darywinTypes.AppType
 
       if (
-        ![movininTypes.AppType.Frontend.toString(), movininTypes.AppType.Admin.toString()].includes(type)
-        || (type === movininTypes.AppType.Admin && user.type === movininTypes.UserType.User)
-        || (type === movininTypes.AppType.Frontend && user.type !== movininTypes.UserType.User)
+        ![darywinTypes.AppType.Frontend.toString(), darywinTypes.AppType.Admin.toString()].includes(type)
+        || (type === darywinTypes.AppType.Admin && user.type === darywinTypes.UserType.User)
+        || (type === darywinTypes.AppType.Frontend && user.type !== darywinTypes.UserType.User)
       ) {
         res.sendStatus(403)
         return
@@ -349,7 +349,7 @@ export const resend = async (req: Request, res: Response) => {
           `<p>${i18n.t('HELLO')}${user.fullName},<br><br>
             ${reset ? i18n.t('PASSWORD_RESET_LINK') : i18n.t('ACCOUNT_ACTIVATION_LINK')}<br><br>
             ${helper.joinURL(
-            user.type === movininTypes.UserType.User ? env.FRONTEND_HOST : env.ADMIN_HOST,
+            user.type === darywinTypes.UserType.User ? env.FRONTEND_HOST : env.ADMIN_HOST,
             reset ? 'reset-password' : 'activate',
           )}/?u=${encodeURIComponent(user._id.toString())}&e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(token.token)}<br><br>
             ${i18n.t('REGARDS')}<br></p>`,
@@ -377,7 +377,7 @@ export const resend = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const activate = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.ActivatePayload } = req
+  const { body }: { body: darywinTypes.ActivatePayload } = req
   const { userId } = body
 
   try {
@@ -422,7 +422,7 @@ export const activate = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const signin = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.SignInPayload } = req
+  const { body }: { body: darywinTypes.SignInPayload } = req
   const { email: emailFromBody, password, stayConnected, mobile } = body
 
   try {
@@ -437,15 +437,15 @@ export const signin = async (req: Request, res: Response) => {
     }
 
     const user = await User.findOne({ email })
-    const type = req.params.type.toUpperCase() as movininTypes.AppType
+    const type = req.params.type.toUpperCase() as darywinTypes.AppType
 
     if (
       !password
       || !user
       || !user.password
-      || ![movininTypes.AppType.Frontend, movininTypes.AppType.Admin].includes(type)
-      || (type === movininTypes.AppType.Admin && user.type === movininTypes.UserType.User)
-      || (type === movininTypes.AppType.Frontend && user.type !== movininTypes.UserType.User)
+      || ![darywinTypes.AppType.Frontend, darywinTypes.AppType.Admin].includes(type)
+      || (type === darywinTypes.AppType.Admin && user.type === darywinTypes.UserType.User)
+      || (type === darywinTypes.AppType.Frontend && user.type !== darywinTypes.UserType.User)
     ) {
       res.sendStatus(204)
       return
@@ -479,7 +479,7 @@ export const signin = async (req: Request, res: Response) => {
       const payload: authHelper.SessionData = { id: user._id.toString() }
       const token = await authHelper.encryptJWT(payload, stayConnected)
 
-      const loggedUser: movininTypes.User = {
+      const loggedUser: darywinTypes.User = {
         _id: user._id.toString(),
         email: user.email,
         fullName: user.fullName,
@@ -531,7 +531,7 @@ export const signin = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const socialSignin = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.SignInPayload } = req
+  const { body }: { body: darywinTypes.SignInPayload } = req
   const { socialSignInType, accessToken, email: emailFromBody, fullName, avatar, stayConnected, mobile } = body
 
   try {
@@ -569,7 +569,7 @@ export const socialSignin = async (req: Request, res: Response) => {
         verified: true,
         language: 'en',
         enableEmailNotifications: true,
-        type: movininTypes.UserType.User,
+        type: darywinTypes.UserType.User,
         blacklisted: false,
         avatar,
       })
@@ -601,7 +601,7 @@ export const socialSignin = async (req: Request, res: Response) => {
     const payload: authHelper.SessionData = { id: user._id.toString() }
     const token = await authHelper.encryptJWT(payload, stayConnected)
 
-    const loggedUser: movininTypes.User = {
+    const loggedUser: darywinTypes.User = {
       _id: user._id.toString(),
       email: user.email,
       fullName: user.fullName,
@@ -757,7 +757,7 @@ export const deletePushToken = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const validateEmail = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.ValidateEmailPayload } = req
+  const { body }: { body: darywinTypes.ValidateEmailPayload } = req
   const { email } = body
 
   try {
@@ -856,7 +856,7 @@ export const confirmEmail = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const resendLink = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.ResendLinkPayload } = req
+  const { body }: { body: darywinTypes.ResendLinkPayload } = req
   const { email } = body
 
   try {
@@ -918,7 +918,7 @@ export const resendLink = async (req: Request, res: Response) => {
  */
 export const update = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.UpdateUserPayload } = req
+    const { body }: { body: darywinTypes.UpdateUserPayload } = req
     const { _id } = body
 
     if (!helper.isValidObjectId(_id)) {
@@ -954,7 +954,7 @@ export const update = async (req: Request, res: Response) => {
     user.birthDate = birthDate ? new Date(birthDate) : undefined
     user.blacklisted = !!blacklisted
     if (type) {
-      user.type = type as movininTypes.UserType
+      user.type = type as darywinTypes.UserType
     }
     if (typeof enableEmailNotifications !== 'undefined') {
       user.enableEmailNotifications = enableEmailNotifications
@@ -981,7 +981,7 @@ export const update = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const updateEmailNotifications = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.UpdateEmailNotificationsPayload } = req
+  const { body }: { body: darywinTypes.UpdateEmailNotificationsPayload } = req
 
   try {
     const { _id } = body
@@ -1020,7 +1020,7 @@ export const updateEmailNotifications = async (req: Request, res: Response) => {
  */
 export const updateLanguage = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.UpdateLanguage } = req
+    const { body }: { body: darywinTypes.UpdateLanguage } = req
     const { id, language } = body
 
     if (!helper.isValidObjectId(id)) {
@@ -1240,7 +1240,7 @@ export const deleteTempAvatar = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const changePassword = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.changePasswordPayload } = req
+  const { body }: { body: darywinTypes.changePasswordPayload } = req
   const {
     _id,
     password: currentPassword,
@@ -1351,7 +1351,7 @@ export const getUsers = async (req: Request, res: Response) => {
     const options = 'i'
     const page: number = Number.parseInt(req.params.page, 10)
     const size: number = Number.parseInt(req.params.size, 10)
-    const { body }: { body: movininTypes.GetUsersBody } = req
+    const { body }: { body: darywinTypes.GetUsersBody } = req
     const { types, user: userId } = body
 
     const $match: mongoose.QueryFilter<env.User> = {
@@ -1446,7 +1446,7 @@ export const deleteUsers = async (req: Request, res: Response) => {
           }
         }
 
-        if (user.type === movininTypes.UserType.Agency) {
+        if (user.type === darywinTypes.UserType.Agency) {
           await Booking.deleteMany({ agency: id })
           const properties = await Property.find({ agency: id })
           await Property.deleteMany({ agency: id })
@@ -1468,7 +1468,7 @@ export const deleteUsers = async (req: Request, res: Response) => {
               }
             }
           }
-        } else if (user.type === movininTypes.UserType.User) {
+        } else if (user.type === darywinTypes.UserType.User) {
           await Booking.deleteMany({ renter: id })
         }
 
@@ -1530,7 +1530,7 @@ export const sendEmail = async (req: Request, res: Response) => {
       throw new Error('Unauthorized!')
     }
 
-    const { body }: { body: movininTypes.SendEmailPayload } = req
+    const { body }: { body: darywinTypes.SendEmailPayload } = req
     const { from, to, subject, message, isContactForm } = body
 
     const mailOptions: nodemailer.SendMailOptions = {

@@ -5,8 +5,8 @@ import {
   Switch,
 } from '@mui/material'
 import { Info as InfoIcon } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as blStrings } from '@/lang/booking-list'
 import { strings as bfStrings } from '@/lang/booking-filter'
@@ -33,20 +33,20 @@ const Booking = () => {
   const [loading, setLoading] = useState(false)
   const [noMatch, setNoMatch] = useState(false)
   const [error, setError] = useState(false)
-  const [booking, setBooking] = useState<movininTypes.Booking>()
+  const [booking, setBooking] = useState<darywinTypes.Booking>()
   const [visible, setVisible] = useState(false)
   const [isAgency, setIsAgency] = useState(false)
-  const [agency, setAgency] = useState<movininTypes.Option>()
-  const [property, setProperty] = useState<movininTypes.Property>()
+  const [agency, setAgency] = useState<darywinTypes.Option>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
   const [price, setPrice] = useState<number>()
-  const [location, setLocation] = useState<movininTypes.Option>()
+  const [location, setLocation] = useState<darywinTypes.Option>()
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
-  const [status, setStatus] = useState<movininTypes.BookingStatus>()
+  const [status, setStatus] = useState<darywinTypes.BookingStatus>()
   const [cancellation, setCancellation] = useState(false)
   const [language, setLanguage] = useState(env.DEFAULT_LANGUAGE)
 
-  const onLoad = async (user?: movininTypes.User) => {
+  const onLoad = async (user?: darywinTypes.User) => {
     if (user) {
       setLoading(true)
       setLanguage(user.language as string)
@@ -63,15 +63,15 @@ const Booking = () => {
               setPrice(await PaymentService.convertPrice(_booking.price!))
               setLoading(false)
               setVisible(true)
-              setIsAgency(user.type === movininTypes.RecordType.Agency)
-              const cmp = _booking.agency as movininTypes.User
+              setIsAgency(user.type === darywinTypes.RecordType.Agency)
+              const cmp = _booking.agency as darywinTypes.User
               setAgency({
                 _id: cmp._id as string,
                 name: cmp.fullName,
                 image: cmp.avatar,
               })
-              setProperty(_booking.property as movininTypes.Property)
-              const loc = _booking.location as movininTypes.Location
+              setProperty(_booking.property as darywinTypes.Property)
+              const loc = _booking.location as darywinTypes.Location
               setLocation({
                 _id: loc._id,
                 name: loc.name || '',
@@ -101,7 +101,7 @@ const Booking = () => {
     }
   }
 
-  const days = movininHelper.days(from, to)
+  const days = darywinHelper.days(from, to)
 
   return (
     <Layout onLoad={onLoad} strict>
@@ -187,13 +187,13 @@ const Booking = () => {
             <div className="col-2-header">
               <div className="price">
                 <span className="price-days">{helper.getDays(days)}</span>
-                <span className="price-main">{`${movininHelper.formatPrice(price as number, commonStrings.CURRENCY, language)}`}</span>
-                <span className="price-day">{`${csStrings.PRICE_PER_DAY} ${movininHelper.formatPrice((price as number) / days, commonStrings.CURRENCY, language)}`}</span>
+                <span className="price-main">{`${darywinHelper.formatPrice(price as number, commonStrings.CURRENCY, language)}`}</span>
+                <span className="price-day">{`${csStrings.PRICE_PER_DAY} ${darywinHelper.formatPrice((price as number) / days, commonStrings.CURRENCY, language)}`}</span>
               </div>
             </div>
             <PropertyList
               className="property"
-              properties={((property && [booking.property]) as movininTypes.Property[]) || []}
+              properties={((property && [booking.property]) as darywinTypes.Property[]) || []}
               hidePrice
               hideAgency={env.HIDE_AGENCIES}
             />

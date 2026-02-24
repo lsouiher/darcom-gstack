@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { FormControl, FormControlLabel, Switch } from '@mui/material'
 import { EventSeat as BookingIcon, } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as csStrings } from '@/lang/properties'
 import { strings } from '@/lang/checkout'
 import * as helper from '@/utils/helper'
@@ -11,7 +11,7 @@ import * as PaymentService from '@/services/PaymentService'
 import '@/assets/css/checkout-options.css'
 
 interface CheckoutOptionsProps {
-  property: movininTypes.Property
+  property: darywinTypes.Property
   from: Date
   to: Date
   language: string
@@ -51,10 +51,10 @@ const CheckoutOptions = ({
   const handleCancellationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (property && from && to) {
       const _cancellation = e.target.checked
-      const options: movininTypes.PropertyOptions = {
+      const options: darywinTypes.PropertyOptions = {
         cancellation: _cancellation
       }
-      const _price = await PaymentService.convertPrice(movininHelper.calculateTotalPrice(property, from, to, options))
+      const _price = await PaymentService.convertPrice(darywinHelper.calculateTotalPrice(property, from, to, options))
 
       setCancellation(_cancellation)
       onCancellationChange(_cancellation)

@@ -14,8 +14,8 @@ import {
   Info as InfoIcon,
 } from '@mui/icons-material'
 import { DateTimeValidationError } from '@mui/x-date-pickers'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as blStrings } from '@/lang/booking-list'
 import { strings as bfStrings } from '@/lang/booking-filter'
@@ -43,42 +43,42 @@ import '@/assets/css/booking.css'
 const UpdateBooking = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [loading, setLoading] = useState(false)
   const [noMatch, setNoMatch] = useState(false)
   const [error, setError] = useState(false)
-  const [booking, setBooking] = useState<movininTypes.Booking>()
+  const [booking, setBooking] = useState<darywinTypes.Booking>()
   const [visible, setVisible] = useState(false)
   const [isAgency, setIsAgency] = useState(false)
-  const [agency, setAgency] = useState<movininTypes.Option>()
-  const [property, setProperty] = useState<movininTypes.Property>()
+  const [agency, setAgency] = useState<darywinTypes.Option>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
   const [price, setPrice] = useState<number>()
-  const [renter, setRenter] = useState<movininTypes.Option>()
-  const [location, setLocation] = useState<movininTypes.Option>()
+  const [renter, setRenter] = useState<darywinTypes.Option>()
+  const [location, setLocation] = useState<darywinTypes.Option>()
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
   const [minDate, setMinDate] = useState<Date>()
-  const [status, setStatus] = useState<movininTypes.BookingStatus>()
+  const [status, setStatus] = useState<darywinTypes.BookingStatus>()
   const [cancellation, setCancellation] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [language, setLanguage] = useState(env.DEFAULT_LANGUAGE)
   const [fromError, setFromError] = useState(false)
   const [toError, setToError] = useState(false)
 
-  const handleAgencyChange = (values: movininTypes.Option[]) => {
+  const handleAgencyChange = (values: darywinTypes.Option[]) => {
     setAgency(values.length > 0 ? values[0] : undefined)
   }
 
-  const handleRenterChange = (values: movininTypes.Option[]) => {
+  const handleRenterChange = (values: darywinTypes.Option[]) => {
     setRenter(values.length > 0 ? values[0] : undefined)
   }
 
-  const handleLocationChange = (values: movininTypes.Option[]) => {
+  const handleLocationChange = (values: darywinTypes.Option[]) => {
     setLocation(values.length > 0 ? values[0] : undefined)
   }
 
   const handlePropertySelectListChange = useCallback(
-    async (values: movininTypes.Property[]) => {
+    async (values: darywinTypes.Property[]) => {
       try {
         const newProperty = values.length > 0 ? values[0] : undefined
 
@@ -87,13 +87,13 @@ const UpdateBooking = () => {
           const _property = await PropertyService.getProperty(newProperty._id)
 
           if (_property) {
-            const _booking = movininHelper.clone(booking)
+            const _booking = darywinHelper.clone(booking)
             _booking.property = _property
 
-            const options: movininTypes.PropertyOptions = {
+            const options: darywinTypes.PropertyOptions = {
               cancellation
             }
-            const _price = await movininHelper.calculateTotalPrice(_property, from!, to!, options)
+            const _price = await darywinHelper.calculateTotalPrice(_property, from!, to!, options)
             setPrice(_price)
 
             setBooking(_booking)
@@ -114,19 +114,19 @@ const UpdateBooking = () => {
     [property, booking, cancellation, from, to],
   )
 
-  const handleStatusChange = (value: movininTypes.BookingStatus) => {
+  const handleStatusChange = (value: darywinTypes.BookingStatus) => {
     setStatus(value)
   }
 
   const handleCancellationChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (booking) {
-      const _booking = movininHelper.clone(booking) as movininTypes.Booking
+      const _booking = darywinHelper.clone(booking) as darywinTypes.Booking
       _booking.cancellation = e.target.checked
 
-      const options: movininTypes.PropertyOptions = {
+      const options: darywinTypes.PropertyOptions = {
         cancellation: _booking.cancellation
       }
-      const _price = await movininHelper.calculateTotalPrice(property!, from!, to!, options)
+      const _price = await darywinHelper.calculateTotalPrice(property!, from!, to!, options)
       setPrice(_price)
       setBooking(_booking)
       setPrice(_price)
@@ -182,7 +182,7 @@ const UpdateBooking = () => {
         return
       }
 
-      const _booking: movininTypes.Booking = {
+      const _booking: darywinTypes.Booking = {
         _id: booking._id,
         agency: agency._id,
         property: property._id,
@@ -207,7 +207,7 @@ const UpdateBooking = () => {
     }
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     if (_user) {
       setLoading(true)
       setUser(_user)
@@ -221,7 +221,7 @@ const UpdateBooking = () => {
             const _booking = await BookingService.getBooking(id)
 
             if (_booking) {
-              if (!helper.admin(_user) && (_booking.agency as movininTypes.User)._id !== _user._id) {
+              if (!helper.admin(_user) && (_booking.agency as darywinTypes.User)._id !== _user._id) {
                 setLoading(false)
                 setNoMatch(true)
                 return
@@ -237,21 +237,21 @@ const UpdateBooking = () => {
               setPrice(_booking.price)
               setLoading(false)
               setVisible(true)
-              setIsAgency(_user.type === movininTypes.RecordType.Agency)
-              const cmp = _booking.agency as movininTypes.User
+              setIsAgency(_user.type === darywinTypes.RecordType.Agency)
+              const cmp = _booking.agency as darywinTypes.User
               setAgency({
                 _id: cmp._id as string,
                 name: cmp.fullName,
                 image: cmp.avatar,
               })
-              setProperty(_booking.property as movininTypes.Property)
-              const rtn = _booking.renter as movininTypes.User
+              setProperty(_booking.property as darywinTypes.Property)
+              const rtn = _booking.renter as darywinTypes.User
               setRenter({
                 _id: rtn._id as string,
                 name: rtn.fullName,
                 image: rtn.avatar,
               })
-              const loc = _booking.location as movininTypes.Location
+              const loc = _booking.location as darywinTypes.Location
               setLocation({
                 _id: loc._id,
                 name: loc.name || '',
@@ -286,7 +286,7 @@ const UpdateBooking = () => {
     }
   }
 
-  const days = movininHelper.days(from, to)
+  const days = darywinHelper.days(from, to)
 
   return (
     <Layout onLoad={onLoad} strict>
@@ -340,7 +340,7 @@ const UpdateBooking = () => {
                   required
                   onChange={async (date) => {
                     if (date) {
-                      const _booking = movininHelper.clone(booking) as movininTypes.Booking
+                      const _booking = darywinHelper.clone(booking) as darywinTypes.Booking
                       _booking.from = date
 
                       setBooking(_booking)
@@ -355,10 +355,10 @@ const UpdateBooking = () => {
                         setTo(undefined)
                         setPrice(0)
                       } else {
-                        const options: movininTypes.PropertyOptions = {
+                        const options: darywinTypes.PropertyOptions = {
                           cancellation
                         }
-                        const _price = await movininHelper.calculateTotalPrice(property!, date, to!, options)
+                        const _price = await darywinHelper.calculateTotalPrice(property!, date, to!, options)
                         setBooking(_booking)
                         setPrice(_price)
                       }
@@ -385,13 +385,13 @@ const UpdateBooking = () => {
                   required
                   onChange={async (date) => {
                     if (date) {
-                      const _booking = movininHelper.clone(booking) as movininTypes.Booking
+                      const _booking = darywinHelper.clone(booking) as darywinTypes.Booking
                       _booking.to = date
 
-                      const options: movininTypes.PropertyOptions = {
+                      const options: darywinTypes.PropertyOptions = {
                         cancellation
                       }
-                      const _price = await movininHelper.calculateTotalPrice(property!, from!, date, options)
+                      const _price = await darywinHelper.calculateTotalPrice(property!, from!, date, options)
                       setBooking(_booking)
                       setPrice(_price)
                       setTo(date)
@@ -453,8 +453,8 @@ const UpdateBooking = () => {
                 <div className="col-2-header">
                   <div className="price">
                     <span className="price-days">{helper.getDays(days)}</span>
-                    <span className="price-main">{`${movininHelper.formatPrice(price as number, commonStrings.CURRENCY, language)}`}</span>
-                    <span className="price-day">{`${csStrings.PRICE_PER_DAY} ${movininHelper.formatPrice((price as number) / days, commonStrings.CURRENCY, language)}`}</span>
+                    <span className="price-main">{`${darywinHelper.formatPrice(price as number, commonStrings.CURRENCY, language)}`}</span>
+                    <span className="price-day">{`${csStrings.PRICE_PER_DAY} ${darywinHelper.formatPrice((price as number) / days, commonStrings.CURRENCY, language)}`}</span>
                   </div>
                 </div>
               )
@@ -464,7 +464,7 @@ const UpdateBooking = () => {
               className="property"
               user={user}
               booking={booking}
-              properties={((property && [booking.property]) as movininTypes.Property[]) || []}
+              properties={((property && [booking.property]) as darywinTypes.Property[]) || []}
               language={user?.language || env.DEFAULT_LANGUAGE}
               hidePrice
             />

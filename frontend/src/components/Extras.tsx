@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   Check as CheckIcon,
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as helper from '@/utils/helper'
 import { strings as csStrings } from '@/lang/properties'
 import { strings as commonStrings } from '@/lang/common'
@@ -11,7 +11,7 @@ import * as UserService from '@/services/UserService'
 import '@/assets/css/extras.css'
 
 interface ExtrasProps {
-  booking: movininTypes.Booking
+  booking: darywinTypes.Booking
 }
 
 const Extras = ({ booking }: ExtrasProps) => {
@@ -22,7 +22,7 @@ const Extras = ({ booking }: ExtrasProps) => {
     const init = async () => {
       if (booking) {
         const language = UserService.getLanguage()
-        const property = booking.property as movininTypes.Property
+        const property = booking.property as darywinTypes.Property
 
         if (booking.cancellation) {
           setCancellationOption(await helper.getCancellationOption(property.cancellation, language))

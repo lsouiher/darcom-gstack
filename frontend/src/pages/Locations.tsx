@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Dialog, DialogContent } from '@mui/material'
 import L from 'leaflet'
 import env from '@/config/env.config'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as LocationService from '@/services/LocationService'
 import Layout from '@/components/Layout'
 import Map from '@/components/Map'
@@ -12,7 +12,7 @@ import Footer from '@/components/Footer'
 import '@/assets/css/locations.css'
 
 const Locations = () => {
-  const [locations, setLocations] = useState<movininTypes.Location[]>([])
+  const [locations, setLocations] = useState<darywinTypes.Location[]>([])
   const [location, setLocation] = useState('')
   const [openSearchFormDialog, setOpenSearchFormDialog] = useState(false)
 

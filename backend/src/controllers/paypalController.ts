@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import i18n from '../lang/i18n'
 import * as logger from '../utils/logger'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../config/env.config'
 import Booking from '../models/Booking'
 import User from '../models/User'
@@ -20,7 +20,7 @@ import * as ipinfoHelper from '../utils/ipinfoHelper'
 export const createPayPalOrder = async (req: Request, res: Response) => {
   try {
     const paypal = await import('../payment/paypal.js')
-    const { bookingId, amount, currency, name, description }: movininTypes.CreatePayPalOrderPayload = req.body
+    const { bookingId, amount, currency, name, description }: darywinTypes.CreatePayPalOrderPayload = req.body
 
     const clientIp = ipinfoHelper.getClientIp(req)
     const countryCode = await ipinfoHelper.getCountryCode(clientIp)
@@ -78,7 +78,7 @@ export const checkPayPalOrder = async (req: Request, res: Response) => {
     //
     if (order.status === 'COMPLETED') {
       booking.expireAt = undefined
-      booking.status = movininTypes.BookingStatus.Paid
+      booking.status = darywinTypes.BookingStatus.Paid
       await booking.save()
 
       const property = await Property.findById(booking.property)
@@ -112,7 +112,7 @@ export const checkPayPalOrder = async (req: Request, res: Response) => {
       await bookingController.notify(user, booking._id.toString(), agency, message)
 
       // Notify admin
-      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: movininTypes.UserType.Admin }))
+      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: darywinTypes.UserType.Admin }))
       if (admin) {
         i18n.locale = admin.language
         message = i18n.t('BOOKING_PAID_NOTIFICATION')

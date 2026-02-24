@@ -3,7 +3,7 @@ import {
   Delete as DeleteIcon,
   PhotoCamera as ImageIcon
 } from '@mui/icons-material'
-import * as movininHelper from ':movinin-helper'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/image-editor'
 import ImageViewer from './ImageViewer'
@@ -60,7 +60,7 @@ const ImageEditor = ({
             }
           }
           const filename = await PropertyService.uploadImage(file)
-          const mainImg = movininHelper.clone(image) as ImageItem
+          const mainImg = darywinHelper.clone(image) as ImageItem
           mainImg.filename = filename
           mainImg.temp = true
           setImage(mainImg)
@@ -90,8 +90,8 @@ const ImageEditor = ({
               filenames.push(file.name)
               const imgItem = { temp: true, filename }
               images.push(imgItem)
-              setImages(movininHelper.cloneArray(images) as ImageItem[])
-              setFilenames(movininHelper.cloneArray(filenames) as string[])
+              setImages(darywinHelper.cloneArray(images) as ImageItem[])
+              setFilenames(darywinHelper.cloneArray(filenames) as string[])
               if (onAdd) {
                 onAdd(imgItem)
               }
@@ -107,7 +107,7 @@ const ImageEditor = ({
   }
 
   const src = (_image: ImageItem) =>
-    movininHelper.joinURL(
+    darywinHelper.joinURL(
       _image.temp ? env.CDN_TEMP_PROPERTIES : env.CDN_PROPERTIES,
       _image.filename
     )
@@ -122,8 +122,8 @@ const ImageEditor = ({
           src={
             image
               ? image.temp
-                ? movininHelper.joinURL(env.CDN_TEMP_PROPERTIES, image.filename)
-                : movininHelper.joinURL(env.CDN_PROPERTIES, image.filename)
+                ? darywinHelper.joinURL(env.CDN_TEMP_PROPERTIES, image.filename)
+                : darywinHelper.joinURL(env.CDN_PROPERTIES, image.filename)
               : Property
           }
         />
@@ -206,11 +206,11 @@ const ImageEditor = ({
                       }
 
                       if (status === 200) {
-                        const _images = movininHelper.cloneArray(images) || []
+                        const _images = darywinHelper.cloneArray(images) || []
                         _images.splice(index, 1)
                         setImages(_images)
 
-                        const _filenames = movininHelper.cloneArray(filenames) || []
+                        const _filenames = darywinHelper.cloneArray(filenames) || []
                         _filenames.splice(index, 1)
                         setFilenames(_filenames)
 

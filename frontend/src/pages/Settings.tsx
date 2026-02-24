@@ -12,8 +12,8 @@ import {
 } from '@mui/material'
 import validator from 'validator'
 import { intervalToDuration } from 'date-fns'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
@@ -68,7 +68,7 @@ const Settings = () => {
   }
 
   const validateBirthDate = (date?: Date) => {
-    if (date && movininHelper.isDate(date)) {
+    if (date && darywinHelper.isDate(date)) {
       const now = new Date()
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0
       const _birthDateValid = sub >= env.MINIMUM_AGE
@@ -93,10 +93,10 @@ const Settings = () => {
       if (user && user._id) {
         setEnableEmailNotifications(e.target.checked)
 
-        const _user = movininHelper.clone(user) as movininTypes.User
+        const _user = darywinHelper.clone(user) as darywinTypes.User
         _user.enableEmailNotifications = e.target.checked
 
-        const payload: movininTypes.UpdateEmailNotificationsPayload = {
+        const payload: darywinTypes.UpdateEmailNotificationsPayload = {
           _id: user._id,
           enableEmailNotifications: _user.enableEmailNotifications
         }
@@ -118,7 +118,7 @@ const Settings = () => {
     setLoading(true)
   }
 
-  const onAvatarChange = (_user: movininTypes.User) => {
+  const onAvatarChange = (_user: darywinTypes.User) => {
     setUser(_user)
     setLoading(false)
   }
@@ -142,7 +142,7 @@ const Settings = () => {
         return
       }
 
-      const data: movininTypes.UpdateUserPayload = {
+      const data: darywinTypes.UpdateUserPayload = {
         _id: user._id,
         fullName,
         birthDate,
@@ -163,7 +163,7 @@ const Settings = () => {
     }
   }
 
-  const onLoad = (_user?: movininTypes.User) => {
+  const onLoad = (_user?: darywinTypes.User) => {
     if (_user) {
       setUser(_user)
       setFullName(_user.fullName)

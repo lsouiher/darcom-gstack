@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import * as helper from '@/utils/helper'
 import i18n from '@/lang/i18n'
@@ -13,8 +13,8 @@ import Switch from './Switch'
 interface StatusFilterProps {
   visible?: boolean
   style?: object
-  onLoad?: (checkedStatuses: movininTypes.BookingStatus[]) => void
-  onChange?: (checkedStatuses: movininTypes.BookingStatus[]) => void
+  onLoad?: (checkedStatuses: darywinTypes.BookingStatus[]) => void
+  onChange?: (checkedStatuses: darywinTypes.BookingStatus[]) => void
 }
 
 const allStatuses = helper.getBookingStatuses().map((status) => status.value)
@@ -25,10 +25,10 @@ const StatusFilter = ({
   onLoad,
   onChange
 }: StatusFilterProps) => {
-  const [statuses, setStatuses] = useState<movininTypes.StatusFilterItem[]>(
+  const [statuses, setStatuses] = useState<darywinTypes.StatusFilterItem[]>(
     helper.getBookingStatuses().map((status) => ({ ...status, checked: false }))
   )
-  const [checkedStatuses, setCheckedStatuses] = useState<movininTypes.BookingStatus[]>([])
+  const [checkedStatuses, setCheckedStatuses] = useState<darywinTypes.BookingStatus[]>([])
   const [allChecked, setAllChecked] = useState(false)
 
   useEffect(() => {
@@ -38,9 +38,9 @@ const StatusFilter = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleChange = (_checkedStatuses: movininTypes.BookingStatus[]) => {
+  const handleChange = (_checkedStatuses: darywinTypes.BookingStatus[]) => {
     if (onChange) {
-      onChange(_checkedStatuses.length === 0 ? allStatuses : movininHelper.clone(_checkedStatuses))
+      onChange(_checkedStatuses.length === 0 ? allStatuses : darywinHelper.clone(_checkedStatuses))
     }
   }
 
@@ -58,7 +58,7 @@ const StatusFilter = ({
                     onValueChange={(checked) => {
                       if (checked) {
                         status.checked = true
-                        setStatuses(movininHelper.clone(statuses))
+                        setStatuses(darywinHelper.clone(statuses))
                         checkedStatuses.push(status.value)
 
                         if (checkedStatuses.length === statuses.length) {
@@ -66,7 +66,7 @@ const StatusFilter = ({
                         }
                       } else {
                         status.checked = false
-                        setStatuses(movininHelper.clone(statuses))
+                        setStatuses(darywinHelper.clone(statuses))
                         const index = checkedStatuses.indexOf(status.value)
                         checkedStatuses.splice(index, 1)
 
@@ -89,21 +89,21 @@ const StatusFilter = ({
               textStyle={styles.linkText}
               label={allChecked ? i18n.t('UNCHECK_ALL') : i18n.t('CHECK_ALL')}
               onPress={() => {
-                let _checkedStatuses: movininTypes.BookingStatus[] = []
+                let _checkedStatuses: darywinTypes.BookingStatus[] = []
                 if (allChecked) {
                   statuses.forEach((status) => {
                     status.checked = false
                   })
                   setAllChecked(false)
-                  setStatuses(movininHelper.clone(statuses))
+                  setStatuses(darywinHelper.clone(statuses))
                   setCheckedStatuses(_checkedStatuses)
                 } else {
                   statuses.forEach((status) => {
                     status.checked = true
                   })
                   setAllChecked(true)
-                  setStatuses(movininHelper.clone(statuses))
-                  _checkedStatuses = movininHelper.clone(statuses.map((status) => status.value))
+                  setStatuses(darywinHelper.clone(statuses))
+                  _checkedStatuses = darywinHelper.clone(statuses.map((status) => status.value))
                   setCheckedStatuses(_checkedStatuses)
 
                   if (onChange) {

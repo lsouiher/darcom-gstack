@@ -5,7 +5,7 @@ import {
   MenuItem,
   SelectChangeEvent
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings } from '@/lang/properties'
 
 interface PropertyTypeListProps {
@@ -48,13 +48,13 @@ const PropertyTypeList = ({
         required={required}
         fullWidth
       >
-        <MenuItem value={movininTypes.PropertyType.House}>{strings.HOUSE}</MenuItem>
-        <MenuItem value={movininTypes.PropertyType.Apartment}>{strings.APARTMENT}</MenuItem>
-        <MenuItem value={movininTypes.PropertyType.Plot}>{strings.PLOT}</MenuItem>
-        <MenuItem value={movininTypes.PropertyType.Farm}>{strings.FARM}</MenuItem>
-        <MenuItem value={movininTypes.PropertyType.Commercial}>{strings.COMMERCIAL}</MenuItem>
-        <MenuItem value={movininTypes.PropertyType.Industrial}>{strings.INDUSTRIAL}</MenuItem>
-        <MenuItem value={movininTypes.PropertyType.Townhouse}>{strings.TOWN_HOUSE}</MenuItem>
+        <MenuItem value={darywinTypes.PropertyType.House}>{strings.HOUSE}</MenuItem>
+        <MenuItem value={darywinTypes.PropertyType.Apartment}>{strings.APARTMENT}</MenuItem>
+        <MenuItem value={darywinTypes.PropertyType.Plot}>{strings.PLOT}</MenuItem>
+        <MenuItem value={darywinTypes.PropertyType.Farm}>{strings.FARM}</MenuItem>
+        <MenuItem value={darywinTypes.PropertyType.Commercial}>{strings.COMMERCIAL}</MenuItem>
+        <MenuItem value={darywinTypes.PropertyType.Industrial}>{strings.INDUSTRIAL}</MenuItem>
+        <MenuItem value={darywinTypes.PropertyType.Townhouse}>{strings.TOWN_HOUSE}</MenuItem>
       </Select>
     </div>
   )

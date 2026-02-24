@@ -1,7 +1,7 @@
 FROM node:lts-alpine AS packages
-WORKDIR /movinin/packages
+WORKDIR /darywin/packages
 
-COPY ./packages /movinin/packages
+COPY ./packages /darywin/packages
 
 # Install dependencies for all internal packages
 RUN set -e && \
@@ -16,7 +16,7 @@ RUN set -e && \
 
 FROM node:lts-alpine AS build
 
-WORKDIR /movinin/backend
+WORKDIR /darywin/backend
 
 COPY ./backend/package*.json ./
 
@@ -24,11 +24,11 @@ RUN npm install --force && \
     npm cache clean --force
 
 FROM node:lts-alpine
-WORKDIR /movinin/backend
+WORKDIR /darywin/backend
 
-COPY --from=build /movinin/backend/node_modules ./node_modules
+COPY --from=build /darywin/backend/node_modules ./node_modules
 
-COPY --from=packages /movinin/packages /movinin/packages
+COPY --from=packages /darywin/packages /darywin/packages
 
 COPY ./backend ./
 COPY ./backend/.env.docker .env

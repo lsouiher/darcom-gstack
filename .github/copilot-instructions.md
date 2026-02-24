@@ -8,12 +8,12 @@ This file gives concise, repository-specific guidance for AI coding agents so th
   - Backend: Node/Express REST API (routes → controllers → models) using MongoDB via Mongoose. See [backend/src](backend/src).
   - Frontend/Admin: React apps built with Vite. Service layer for API calls in `src/services/`. See [frontend/src](frontend/src) and [admin/src](admin/src).
   - Mobile: React Native (Expo) app following similar `services/` + `context/` patterns. See [mobile/src](mobile/src) and `app.json`.
-  - Shared types/utilities: `packages/movinin-types/` and `packages/movinin-helper/` are authoritative sources for enums/interfaces and helpers used across apps.
+  - Shared types/utilities: `packages/darywin-types/` and `packages/darywin-helper/` are authoritative sources for enums/interfaces and helpers used across apps.
 
 - **Where to look first (quick tour):**
   - API surface and business logic: [backend/src/routes](backend/src/routes), [backend/src/controllers](backend/src/controllers), [backend/src/models](backend/src/models)
   - Client API usage: [frontend/src/services](frontend/src/services), [admin/src/services](admin/src/services)
-  - Shared contracts: [packages/movinin-types](packages/movinin-types)
+  - Shared contracts: [packages/darywin-types](packages/darywin-types)
 
 - **Key integration points to be aware of:**
   - MongoDB (dev via `docker-compose.dev.yml`), see `docker-compose*.yml` for service names.
@@ -29,7 +29,7 @@ This file gives concise, repository-specific guidance for AI coding agents so th
 
 - **Testing and CI pointers:**
   - Backend contains the Jest test suite under `backend/__tests__/`. Prefer running focused tests during development: `npx jest __tests__/some.test.ts`.
-  - When changing shared types (`packages/movinin-types`), run builds and tests in all consuming apps to catch type regressions.
+  - When changing shared types (`packages/darywin-types`), run builds and tests in all consuming apps to catch type regressions.
 
 - **Code style & conventions (explicit):**
   - No semicolons. Single quotes. 2-space indent. Each app has its own `eslint.config.js`.
@@ -38,7 +38,7 @@ This file gives concise, repository-specific guidance for AI coding agents so th
 
 - **Patterns and examples to follow:**
   - API client with interceptors: look for `axiosInstance` or similar in `src/services/` and mirror its usage for new HTTP interactions.
-  - Shared enums/interfaces: import from `packages/movinin-types` rather than redefining types.
+  - Shared enums/interfaces: import from `packages/darywin-types` rather than redefining types.
   - i18n: language files live in each app's `lang/` directory — follow existing keys and structure when adding text.
 
 - **Debugging tips:**
@@ -46,12 +46,12 @@ This file gives concise, repository-specific guidance for AI coding agents so th
   - Frontend/Admin: use Vite console and React devtools (devtool disabling is handled by `disable-react-devtools` package for production builds).
 
 - **Files to reference when making changes / PR checklist:**
-  - Use `packages/movinin-types` for shared payload types.
+  - Use `packages/darywin-types` for shared payload types.
   - Update affected `package.json` scripts only in the app you modify.
   - Run `npm run pre-commit` at repo root and app-level linters before opening a PR.
 
 - **What not to change without review:**
-  - Database schemas (`backend/src/models/*`) and shared types in `packages/movinin-types` — these are widely consumed and require coordination.
+  - Database schemas (`backend/src/models/*`) and shared types in `packages/darywin-types` — these are widely consumed and require coordination.
   - Payment gateway flows (Stripe/PayPal) — sensitive logic and external side effects.
 
 If anything here is unclear or you want additional examples (small code snippets or specific file links), tell me which section to expand.

@@ -15,7 +15,7 @@ import {
   Button as NativeButton
 } from 'react-native-paper'
 import { enUS, fr } from 'date-fns/locale'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '@/config/env.config'
 import i18n from '@/lang/i18n'
 import * as helper from '@/utils/helper'
@@ -26,7 +26,7 @@ interface BookingListProps {
   navigation?: NativeStackNavigationProp<StackParams, keyof StackParams>,
   agencies?: string[]
   statuses?: string[]
-  filter?: movininTypes.Filter
+  filter?: darywinTypes.Filter
   user: string
   booking?: string
   language?: string
@@ -48,7 +48,7 @@ const BookingList = ({
   const [loading, setLoading] = useState(true)
   const [fetch, setFetch] = useState(false)
   const [page, setPage] = useState(0)
-  const [rows, setRows] = useState<movininTypes.Booking[]>([])
+  const [rows, setRows] = useState<darywinTypes.Booking[]>([])
   const [selectedId, setSelectedId] = useState('')
   const [openCancelDialog, setOpenCancelDialog] = useState(false)
   const [cancelRequestProcessing, setCancelRequestProcessing] = useState(false)
@@ -65,7 +65,7 @@ const BookingList = ({
           _page = 0
           setPage(0)
         }
-        const payload: movininTypes.GetBookingsPayload = {
+        const payload: darywinTypes.GetBookingsPayload = {
           agencies,
           statuses,
           filter,

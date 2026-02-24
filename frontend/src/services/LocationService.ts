@@ -1,4 +1,4 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
@@ -8,9 +8,9 @@ import * as UserService from './UserService'
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Location>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Location>>}
  */
-export const getLocations = (keyword: string, page: number, size: number): Promise<movininTypes.Result<movininTypes.Location>> =>
+export const getLocations = (keyword: string, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Location>> =>
   axiosInstance
     .get(
       `/api/locations/${page}/${size}/${UserService.getLanguage()}/?s=${encodeURIComponent(keyword)}`
@@ -20,9 +20,9 @@ export const getLocations = (keyword: string, page: number, size: number): Promi
 /**
  * Get locations with position.
  *
- * @returns {Promise<movininTypes.Result<movininTypes.Location>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Location>>}
  */
-export const getLocationsWithPosition = (): Promise<movininTypes.Location[]> =>
+export const getLocationsWithPosition = (): Promise<darywinTypes.Location[]> =>
   axiosInstance
     .get(
       `/api/locations-with-position/${UserService.getLanguage()}`
@@ -33,9 +33,9 @@ export const getLocationsWithPosition = (): Promise<movininTypes.Location[]> =>
  * Get a Location by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.Location>}
+ * @returns {Promise<darywinTypes.Location>}
  */
-export const getLocation = (id: string): Promise<movininTypes.Location> =>
+export const getLocation = (id: string): Promise<darywinTypes.Location> =>
   axiosInstance
     .get(
       `/api/location/${encodeURIComponent(id)}/${UserService.getLanguage()}`

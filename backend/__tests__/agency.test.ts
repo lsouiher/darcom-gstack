@@ -5,7 +5,7 @@ import url from 'url'
 import path from 'path'
 import asyncFs from 'node:fs/promises'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as testHelper from './testHelper'
 import app from '../src/app'
@@ -35,8 +35,8 @@ beforeAll(async () => {
   // create two agencies
   AGENCY1_NAME = testHelper.getAgencyName()
   const agencyName2 = testHelper.getAgencyName()
-  AGENCY1_ID = await testHelper.createAgency(`${AGENCY1_NAME}@test.movinin.io`, AGENCY1_NAME)
-  AGENCY2_ID = await testHelper.createAgency(`${agencyName2}@test.movinin.io`, agencyName2)
+  AGENCY1_ID = await testHelper.createAgency(`${AGENCY1_NAME}@test.darywin.com`, AGENCY1_NAME)
+  AGENCY2_ID = await testHelper.createAgency(`${agencyName2}@test.darywin.com`, agencyName2)
 })
 
 //
@@ -60,7 +60,7 @@ describe('POST /api/validate-agency', () => {
   it('should validate a agency', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    let payload: movininTypes.ValidateAgencyPayload = { fullName: AGENCY1_NAME }
+    let payload: darywinTypes.ValidateAgencyPayload = { fullName: AGENCY1_NAME }
     let res = await request(app)
       .post('/api/validate-agency')
       .set(env.X_ACCESS_TOKEN, token)
@@ -110,7 +110,7 @@ describe('POST /api/validate-agency', () => {
           fullName: 'admin',
           language: 'en',
           password: (await authHelper.hashPassword(testHelper.PASSWORD)),
-          type: movininTypes.UserType.Admin,
+          type: darywinTypes.UserType.Admin,
         })
       }
 
@@ -137,7 +137,7 @@ describe('PUT /api/update-agency', () => {
     const phone = '01010101'
     const payLater = false
 
-    const payload: movininTypes.UpdateAgencyPayload = {
+    const payload: darywinTypes.UpdateAgencyPayload = {
       _id: AGENCY1_ID,
       fullName: AGENCY1_NAME,
       bio,
@@ -250,7 +250,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     const token = await testHelper.signinAsAdmin()
 
     let agencyName = testHelper.getAgencyName()
-    let agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    let agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     let agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     let avatarName = 'avatar1.jpg'
@@ -269,7 +269,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     let property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: propertyImageName,
       images: [additionalImageName],
@@ -288,7 +288,7 @@ describe('DELETE /api/delete-agency/:id', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     const propertyImage = path.join(env.CDN_PROPERTIES, propertyImageName)
     if (!(await helper.pathExists(propertyImage))) {
@@ -320,7 +320,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     expect(res.statusCode).toBe(400)
 
     agencyName = testHelper.getAgencyName()
-    agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     await agency?.save()
@@ -332,7 +332,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     expect(agency).toBeNull()
 
     agencyName = testHelper.getAgencyName()
-    agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     agency!.avatar = `${nanoid()}.jpg`
@@ -341,7 +341,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: null,
       images: null,
@@ -360,7 +360,7 @@ describe('DELETE /api/delete-agency/:id', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
     res = await request(app)
@@ -372,7 +372,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     await testHelper.deleteLocation(locationId)
 
     agencyName = testHelper.getAgencyName()
-    agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     agency = await User.findById(agencyId)
     expect(agency).not.toBeNull()
     avatarName = 'avatar1.jpg'
@@ -387,7 +387,7 @@ describe('DELETE /api/delete-agency/:id', () => {
     property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: `${nanoid()}.jpg`,
       images: [`${nanoid()}.jpg`],
@@ -406,7 +406,7 @@ describe('DELETE /api/delete-agency/:id', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
     res = await request(app)

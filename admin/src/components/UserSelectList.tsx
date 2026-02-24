@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { TextFieldVariants } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as UserService from '@/services/UserService'
 import * as helper from '@/utils/helper'
@@ -9,11 +9,11 @@ import MultipleSelect from './MultipleSelect'
 
 interface UserSelectListProps {
   multiple?: boolean
-  value?: movininTypes.Option | movininTypes.Option[]
+  value?: darywinTypes.Option | darywinTypes.Option[]
   label?: string
   required?: boolean
   variant?: TextFieldVariants
-  onChange?: (values: movininTypes.Option[]) => void
+  onChange?: (values: darywinTypes.Option[]) => void
 }
 
 const UserSelectList = ({
@@ -26,26 +26,26 @@ const UserSelectList = ({
 }: UserSelectListProps) => {
   const [init, setInit] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [renters, setRenters] = useState<movininTypes.Option[]>([])
+  const [renters, setRenters] = useState<darywinTypes.Option[]>([])
   const [fetch, setFetch] = useState(false)
   const [page, setPage] = useState(1)
   const [keyword, setKeyword] = useState('')
-  const [selectedOptions, setSelectedOptions] = useState<movininTypes.Option[]>([])
+  const [selectedOptions, setSelectedOptions] = useState<darywinTypes.Option[]>([])
 
   useEffect(() => {
-    const _value = multiple ? value as movininTypes.Option[] : [value as movininTypes.Option]
-    if (value && !movininHelper.arrayEqual(selectedOptions, _value)) {
+    const _value = multiple ? value as darywinTypes.Option[] : [value as darywinTypes.Option]
+    if (value && !darywinHelper.arrayEqual(selectedOptions, _value)) {
       setSelectedOptions(_value)
     }
   }, [multiple, value, selectedOptions])
 
-  const getRenters = (users: movininTypes.User[]): movininTypes.Option[] =>
+  const getRenters = (users: darywinTypes.User[]): darywinTypes.Option[] =>
     users.map((user) => {
       const { _id, fullName, avatar } = user
       return { _id: _id as string, name: fullName, image: avatar }
     })
 
-  const fetchData = async (_page: number, _keyword: string, onFetch?: movininTypes.DataEvent<movininTypes.User>) => {
+  const fetchData = async (_page: number, _keyword: string, onFetch?: darywinTypes.DataEvent<darywinTypes.User>) => {
     try {
       setLoading(true)
 
@@ -73,7 +73,7 @@ const UserSelectList = ({
     }
   }
 
-  const handleChange = (values: movininTypes.Option[]) => {
+  const handleChange = (values: darywinTypes.Option[]) => {
     if (onChange) {
       onChange(values)
     }
@@ -88,7 +88,7 @@ const UserSelectList = ({
       selectedOptions={selectedOptions}
       required={required || false}
       multiple={multiple}
-      type={movininTypes.RecordType.User}
+      type={darywinTypes.RecordType.User}
       variant={variant || 'standard'}
       ListboxProps={{
         onScroll: (event) => {

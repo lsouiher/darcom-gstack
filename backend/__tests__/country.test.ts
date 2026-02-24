@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import request from 'supertest'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import app from '../src/app'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as testHelper from './testHelper'
@@ -12,7 +12,7 @@ import Location from '../src/models/Location'
 
 let COUNTRY_ID: string
 
-let COUNTRY_NAMES: movininTypes.CountryName[] = [
+let COUNTRY_NAMES: darywinTypes.CountryName[] = [
   {
     language: 'en',
     name: nanoid(),
@@ -56,7 +56,7 @@ describe('POST /api/validate-country', () => {
     await countryValue.save()
     const country = new Country({ values: [countryValue._id.toString()] })
     await country.save()
-    const payload: movininTypes.ValidateCountryPayload = {
+    const payload: darywinTypes.ValidateCountryPayload = {
       language,
       name,
     }
@@ -244,12 +244,12 @@ describe('GET /api/countries-with-locations/:language/:imageRequired/:minLocatio
     let res = await request(app)
       .get(`/api/countries-with-locations/${language}/false/1`)
     expect(res.statusCode).toBe(200)
-    expect(res.body.find((country: movininTypes.Country) => country._id === COUNTRY_ID)).toBeDefined()
+    expect(res.body.find((country: darywinTypes.Country) => country._id === COUNTRY_ID)).toBeDefined()
 
     res = await request(app)
       .get(`/api/countries-with-locations/${language}/true/1`)
     expect(res.statusCode).toBe(200)
-    expect(res.body.find((country: movininTypes.Country) => country._id === COUNTRY_ID)).toBeUndefined()
+    expect(res.body.find((country: darywinTypes.Country) => country._id === COUNTRY_ID)).toBeUndefined()
 
     await locationValueEn.deleteOne()
     await locationValueFr.deleteOne()
@@ -258,7 +258,7 @@ describe('GET /api/countries-with-locations/:language/:imageRequired/:minLocatio
     res = await request(app)
       .get(`/api/countries-with-locations/${language}/false/1`)
     expect(res.statusCode).toBe(200)
-    expect(res.body.find((country: movininTypes.Country) => country._id === COUNTRY_ID)).toBeUndefined()
+    expect(res.body.find((country: darywinTypes.Country) => country._id === COUNTRY_ID)).toBeUndefined()
 
     // test failure (wrong language)
     res = await request(app)

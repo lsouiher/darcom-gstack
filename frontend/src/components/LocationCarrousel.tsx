@@ -6,8 +6,8 @@ import {
   ArrowLeft,
   LocationOn as LocationIcon,
 } from '@mui/icons-material'
-import * as movininHelper from ':movinin-helper'
-import * as movininTypes from ':movinin-types'
+import * as darywinHelper from ':darywin-helper'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings } from '@/lang/location-carrousel'
 import { strings as commonStrings } from '@/lang/common'
@@ -17,8 +17,8 @@ import Slick from '@/components/Slick'
 import '@/assets/css/location-carrousel.css'
 
 interface LocationCarrouselProps {
-  locations: movininTypes.Location[]
-  onSelect?: (location: movininTypes.Location) => void
+  locations: darywinTypes.Location[]
+  onSelect?: (location: darywinTypes.Location) => void
 }
 
 const LocationCarrousel = ({
@@ -71,7 +71,7 @@ const LocationCarrousel = ({
             <div className="location-image">
               {
                 location.image ? (
-                  <img alt="" src={movininHelper.joinURL(env.CDN_LOCATIONS, location.image)} />
+                  <img alt="" src={darywinHelper.joinURL(env.CDN_LOCATIONS, location.image)} />
                 )
                   : <LocationIcon className="location-icon" />
               }

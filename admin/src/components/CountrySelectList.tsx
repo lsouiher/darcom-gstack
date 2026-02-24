@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { TextFieldVariants } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as CountryService from '@/services/CountryService'
 import * as helper from '@/utils/helper'
 import MultipleSelect from './MultipleSelect'
 
 interface CountrySelectListProps {
-  value?: movininTypes.Country | movininTypes.Country[] | null
+  value?: darywinTypes.Country | darywinTypes.Country[] | null
   multiple?: boolean
   label?: string
   required?: boolean
   variant?: TextFieldVariants
-  onChange?: (values: movininTypes.Option[]) => void
+  onChange?: (values: darywinTypes.Option[]) => void
 }
 
 const CountrySelectList = ({
@@ -26,20 +26,20 @@ const CountrySelectList = ({
 }: CountrySelectListProps) => {
   const [init, setInit] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Country[]>([])
+  const [rows, setRows] = useState<darywinTypes.Country[]>([])
   const [fetch, setFetch] = useState(true)
   const [page, setPage] = useState(1)
   const [keyword, setKeyword] = useState('')
-  const [selectedOptions, setSelectedOptions] = useState<movininTypes.Country[]>([])
+  const [selectedOptions, setSelectedOptions] = useState<darywinTypes.Country[]>([])
 
   useEffect(() => {
-    const _value = multiple ? value as movininTypes.Country[] : [value as movininTypes.Country]
+    const _value = multiple ? value as darywinTypes.Country[] : [value as darywinTypes.Country]
 
-    // if (value && !movininHelper.arrayEqual(selectedOptions, _value)) {
+    // if (value && !darywinHelper.arrayEqual(selectedOptions, _value)) {
     //   setSelectedOptions(_value)
     // }
 
-    if (value && !movininHelper.arrayEqual(selectedOptions, _value)) {
+    if (value && !darywinHelper.arrayEqual(selectedOptions, _value)) {
       setSelectedOptions(_value)
     }
 
@@ -48,7 +48,7 @@ const CountrySelectList = ({
     }
   }, [value, multiple, selectedOptions])
 
-  const fetchData = async (_page: number, _keyword: string, onFetch?: movininTypes.DataEvent<movininTypes.Country>) => {
+  const fetchData = async (_page: number, _keyword: string, onFetch?: darywinTypes.DataEvent<darywinTypes.Country>) => {
     try {
       if (fetch || _page === 1) {
         setLoading(true)
@@ -75,7 +75,7 @@ const CountrySelectList = ({
     }
   }
 
-  const handleChange = (values: movininTypes.Option[]) => {
+  const handleChange = (values: darywinTypes.Option[]) => {
     if (onChange) {
       onChange(values)
     }
@@ -90,7 +90,7 @@ const CountrySelectList = ({
       selectedOptions={selectedOptions}
       required={required || false}
       multiple={multiple}
-      type={movininTypes.RecordType.Country}
+      type={darywinTypes.RecordType.Country}
       variant={variant || 'standard'}
       ListboxProps={{
         onScroll: (event) => {

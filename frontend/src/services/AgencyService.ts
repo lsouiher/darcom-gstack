@@ -1,12 +1,12 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 
 /**
  * Get all agencies.
  *
- * @returns {Promise<movininTypes.User[]>}
+ * @returns {Promise<darywinTypes.User[]>}
  */
-export const getAllAgencies = (): Promise<movininTypes.User[]> =>
+export const getAllAgencies = (): Promise<darywinTypes.User[]> =>
   axiosInstance
     .get(
       '/api/all-agencies',
@@ -20,9 +20,9 @@ export const getAllAgencies = (): Promise<movininTypes.User[]> =>
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.User>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.User>>}
  */
-export const getAgencies = (keyword: string, page: number, size: number): Promise<movininTypes.Result<movininTypes.User>> =>
+export const getAgencies = (keyword: string, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.User>> =>
   axiosInstance
     .get(
       `/api/agencies/${page}/${size}/?s=${encodeURIComponent(keyword)}`,

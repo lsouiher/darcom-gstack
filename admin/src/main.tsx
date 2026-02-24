@@ -67,9 +67,13 @@ if (lang) {
 
 language = UserService.getLanguage()
 const isFr = language === 'fr'
+const isAr = language === 'ar'
+
+document.documentElement.dir = isAr ? 'rtl' : 'ltr'
 
 const theme = createTheme(
   {
+    direction: isAr ? 'rtl' : 'ltr',
     palette: {
       primary: {
         main: '#D32F2F',

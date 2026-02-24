@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation, DrawerActions, RouteProp } from '@react-navigation/native'
 import { Avatar, Badge } from 'react-native-paper'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import * as movininHelper from ':movinin-helper'
+import * as darywinHelper from ':darywin-helper'
 
 import * as UserService from '@/services/UserService'
 import * as env from '@/config/env.config'
@@ -41,7 +41,7 @@ const Header = ({
         const user = await UserService.getUser(currentUser._id)
 
         if (user.avatar) {
-          setAvatar(movininHelper.joinURL(env.CDN_USERS, user.avatar))
+          setAvatar(darywinHelper.joinURL(env.CDN_USERS, user.avatar))
         } else {
           setAvatar('')
         }

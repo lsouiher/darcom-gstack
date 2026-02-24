@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 import Layout from '@/components/Layout'
 import i18n from '@/lang/i18n'
@@ -20,11 +20,11 @@ const BookingsScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
   const [language, setLanguage] = useState(env.DEFAULT_LANGUAGE)
   const [reload, setReload] = useState(false)
   const [visible, setVisible] = useState(false)
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [hasBookings, setHasBookings] = useState(false)
   const [agencies, setCompanies] = useState<string[]>([])
   const [statuses, setStatuses] = useState<string[]>([])
-  const [filter, setFilter] = useState<movininTypes.Filter>()
+  const [filter, setFilter] = useState<darywinTypes.Filter>()
 
   const _init = async () => {
     try {
@@ -92,7 +92,7 @@ const BookingsScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
     setStatuses(_statuses)
   }
 
-  const onSubmitBookingFilter = (_filter: movininTypes.Filter) => {
+  const onSubmitBookingFilter = (_filter: darywinTypes.Filter) => {
     setFilter(_filter)
   }
 

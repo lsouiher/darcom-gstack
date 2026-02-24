@@ -2,7 +2,7 @@ import axiosInstance from './axiosInstance'
 import * as env from '@/config/env.config'
 import * as UserService from './UserService'
 import * as axiosHelper from '@/utils/axiosHelper'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 axiosHelper.init(axiosInstance)
 
@@ -11,9 +11,9 @@ axiosHelper.init(axiosInstance)
  *
  * @async
  * @param {string} userId
- * @returns {Promise<movininTypes.NotificationCounter>}
+ * @returns {Promise<darywinTypes.NotificationCounter>}
  */
-export const getNotificationCounter = async (userId: string): Promise<movininTypes.NotificationCounter> => {
+export const getNotificationCounter = async (userId: string): Promise<darywinTypes.NotificationCounter> => {
   const headers = await UserService.authHeader()
   return axiosInstance
     .get(
@@ -86,9 +86,9 @@ export const deleteNotifications = async (userId: string, ids: string[]): Promis
  * @async
  * @param {string} userId
  * @param {number} page
- * @returns {Promise<movininTypes.Result<movininTypes.Notification>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Notification>>}
  */
-export const getNotifications = async (userId: string, page: number): Promise<movininTypes.Result<movininTypes.Notification>> => {
+export const getNotifications = async (userId: string, page: number): Promise<darywinTypes.Result<darywinTypes.Notification>> => {
   const headers = await UserService.authHeader()
   return axiosInstance
     .get(

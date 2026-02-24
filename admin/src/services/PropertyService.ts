@@ -1,14 +1,14 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
 /**
  * Create a Property.
  *
- * @param {movininTypes.CreatePropertyPayload} data
- * @returns {Promise<movininTypes.Property>}
+ * @param {darywinTypes.CreatePropertyPayload} data
+ * @returns {Promise<darywinTypes.Property>}
  */
-export const create = (data: movininTypes.CreatePropertyPayload): Promise<movininTypes.Property> =>
+export const create = (data: darywinTypes.CreatePropertyPayload): Promise<darywinTypes.Property> =>
   axiosInstance
     .post(
       '/api/create-property',
@@ -20,10 +20,10 @@ export const create = (data: movininTypes.CreatePropertyPayload): Promise<movini
 /**
  * Update a Property.
  *
- * @param {movininTypes.UpdatePropertyPayload} data
+ * @param {darywinTypes.UpdatePropertyPayload} data
  * @returns {Promise<number>}
  */
-export const update = (data: movininTypes.UpdatePropertyPayload): Promise<number> =>
+export const update = (data: darywinTypes.UpdatePropertyPayload): Promise<number> =>
   axiosInstance
     .put(
       '/api/update-property',
@@ -116,9 +116,9 @@ export const deleteTempImage = (image: string): Promise<number> =>
  * Get a Property by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.Property>}
+ * @returns {Promise<darywinTypes.Property>}
  */
-export const getProperty = (id: string): Promise<movininTypes.Property> =>
+export const getProperty = (id: string): Promise<darywinTypes.Property> =>
   axiosInstance
     .get(
       `/api/property/${encodeURIComponent(id)}/${UserService.getLanguage()}`,
@@ -130,12 +130,12 @@ export const getProperty = (id: string): Promise<movininTypes.Property> =>
  * Get Properties.
  *
  * @param {string} keyword
- * @param {movininTypes.GetPropertiesPayload} data
+ * @param {darywinTypes.GetPropertiesPayload} data
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Property>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Property>>}
  */
-export const getProperties = (keyword: string, data: movininTypes.GetPropertiesPayload, page: number, size: number): Promise<movininTypes.Result<movininTypes.Property>> =>
+export const getProperties = (keyword: string, data: darywinTypes.GetPropertiesPayload, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Property>> =>
   axiosInstance
     .post(
       `/api/properties/${page}/${size}/?s=${encodeURIComponent(keyword)}`,
@@ -148,12 +148,12 @@ export const getProperties = (keyword: string, data: movininTypes.GetPropertiesP
  * Get Properties by Agency and Location.
  *
  * @param {string} keyword
- * @param {movininTypes.GetBookingPropertiesPayload} data
+ * @param {darywinTypes.GetBookingPropertiesPayload} data
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Property[]>}
+ * @returns {Promise<darywinTypes.Property[]>}
  */
-export const getBookingProperties = (keyword: string, data: movininTypes.GetBookingPropertiesPayload, page: number, size: number): Promise<movininTypes.Property[]> =>
+export const getBookingProperties = (keyword: string, data: darywinTypes.GetBookingPropertiesPayload, page: number, size: number): Promise<darywinTypes.Property[]> =>
   axiosInstance
     .post(
       `/api/booking-properties/${page}/${size}/?s=${encodeURIComponent(keyword)}`,

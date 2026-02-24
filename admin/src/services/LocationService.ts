@@ -1,14 +1,14 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
 /**
  * Validate a Location name.
  *
- * @param {movininTypes.ValidateLocationPayload} data
+ * @param {darywinTypes.ValidateLocationPayload} data
  * @returns {Promise<number>}
  */
-export const validate = (data: movininTypes.ValidateLocationPayload): Promise<number> =>
+export const validate = (data: darywinTypes.ValidateLocationPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/validate-location',
@@ -20,10 +20,10 @@ export const validate = (data: movininTypes.ValidateLocationPayload): Promise<nu
 /**
  * Create a Location.
  *
- * @param {movininTypes.UpsertLocationPayload} data
+ * @param {darywinTypes.UpsertLocationPayload} data
  * @returns {Promise<number>}
  */
-export const create = (data: movininTypes.UpsertLocationPayload): Promise<number> =>
+export const create = (data: darywinTypes.UpsertLocationPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/create-location',
@@ -36,10 +36,10 @@ export const create = (data: movininTypes.UpsertLocationPayload): Promise<number
  * Update a Location.
  *
  * @param {string} id
- * @param {movininTypes.UpsertLocationPayload} data
+ * @param {darywinTypes.UpsertLocationPayload} data
  * @returns {Promise<number>}
  */
-export const update = (id: string, data: movininTypes.UpsertLocationPayload): Promise<{ status: number, data: movininTypes.Location }> =>
+export const update = (id: string, data: darywinTypes.UpsertLocationPayload): Promise<{ status: number, data: darywinTypes.Location }> =>
   axiosInstance
     .put(
       `/api/update-location/${id}`,
@@ -66,9 +66,9 @@ export const deleteLocation = (id: string): Promise<number> =>
  * Get a Location by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.Location>}
+ * @returns {Promise<darywinTypes.Location>}
  */
-export const getLocation = (id: string): Promise<movininTypes.Location> =>
+export const getLocation = (id: string): Promise<darywinTypes.Location> =>
   axiosInstance
     .get(
       `/api/location/${encodeURIComponent(id)}/${UserService.getLanguage()}`,
@@ -82,9 +82,9 @@ export const getLocation = (id: string): Promise<movininTypes.Location> =>
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Location>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Location>>}
  */
-export const getLocations = (keyword: string, page: number, size: number): Promise<movininTypes.Result<movininTypes.Location>> =>
+export const getLocations = (keyword: string, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Location>> =>
   axiosInstance
     .get(
       `/api/locations/${page}/${size}/${UserService.getLanguage()}/?s=${encodeURIComponent(keyword)}`,

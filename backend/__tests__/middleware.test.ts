@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import request from 'supertest'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import app from '../src/app'
 import * as env from '../src/config/env.config'
@@ -31,13 +31,13 @@ afterAll(async () => {
 
 describe('POST /api/sign-in/admin', () => {
   it('should authenticate through admin HttpOnly cookie', async () => {
-    const payload: movininTypes.SignInPayload = {
+    const payload: darywinTypes.SignInPayload = {
       email: ADMIN_EMAIL,
       password: testHelper.PASSWORD,
     }
 
     let res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Admin}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Admin}`)
       .send(payload)
     expect(res.statusCode).toBe(200)
     const cookies = res.headers['set-cookie'] as unknown as string[]
@@ -45,7 +45,7 @@ describe('POST /api/sign-in/admin', () => {
     const cookie = cookies[1].replace(env.X_ACCESS_TOKEN, env.ADMIN_AUTH_COOKIE_NAME)
 
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Admin}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Admin}`)
       .set('Origin', env.ADMIN_HOST)
       .send(payload)
     expect(res.statusCode).toBe(200)
@@ -59,7 +59,7 @@ describe('POST /api/sign-in/admin', () => {
 
     // Not allowed by CORS
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Admin}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Admin}`)
       .set('Origin', 'http://unknow/')
       .send(payload)
     expect(res.statusCode).toBe(500)
@@ -68,13 +68,13 @@ describe('POST /api/sign-in/admin', () => {
 
 describe('POST /api/sign-in/frontend', () => {
   it('should authenticate through frontend HttpOnly cookie', async () => {
-    const payload: movininTypes.SignInPayload = {
+    const payload: darywinTypes.SignInPayload = {
       email: USER_EMAIL,
       password: testHelper.PASSWORD,
     }
 
     let res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(200)
     const cookies = res.headers['set-cookie'] as unknown as string[]
@@ -82,13 +82,13 @@ describe('POST /api/sign-in/frontend', () => {
     const cookie = cookies[1].replace(env.X_ACCESS_TOKEN, env.FRONTEND_AUTH_COOKIE_NAME)
 
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .set('Origin', env.FRONTEND_HOST)
       .send(payload)
     expect(res.statusCode).toBe(200)
 
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(200)
 
@@ -101,7 +101,7 @@ describe('POST /api/sign-in/frontend', () => {
 
     // Not allowed by CORS
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .set('Origin', 'http://unknow/')
       .send(payload)
     expect(res.statusCode).toBe(500)

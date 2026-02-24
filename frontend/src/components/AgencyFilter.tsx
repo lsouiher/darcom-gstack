@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import Accordion from './Accordion'
@@ -8,7 +8,7 @@ import Accordion from './Accordion'
 import '@/assets/css/agency-filter.css'
 
 interface AgencyFilterProps {
-  agencies: movininTypes.User[]
+  agencies: darywinTypes.User[]
   collapse?: boolean
   className?: string
   onChange?: (value: string[]) => void
@@ -20,7 +20,7 @@ const AgencyFilter = ({
   className,
   onChange
 }: AgencyFilterProps) => {
-  const [agencies, setAgencies] = useState<movininTypes.User[]>([])
+  const [agencies, setAgencies] = useState<darywinTypes.User[]>([])
   const [checkedAgencies, setCheckedAgencies] = useState<string[]>([])
   const [allChecked, setAllChecked] = useState(false)
   const refs = useRef<(HTMLInputElement | null)[]>([])
@@ -50,7 +50,7 @@ const AgencyFilter = ({
     setCheckedAgencies(checkedAgencies)
 
     if (onChange) {
-      onChange(checkedAgencies.length === 0 ? movininHelper.flattenAgencies(agencies) : movininHelper.clone(checkedAgencies))
+      onChange(checkedAgencies.length === 0 ? darywinHelper.flattenAgencies(agencies) : darywinHelper.clone(checkedAgencies))
     }
   }
 
@@ -81,12 +81,12 @@ const AgencyFilter = ({
         }
       })
 
-      const agencyIds = movininHelper.flattenAgencies(agencies)
+      const agencyIds = darywinHelper.flattenAgencies(agencies)
       setAllChecked(true)
       setCheckedAgencies(agencyIds)
 
       if (onChange) {
-        onChange(movininHelper.clone(agencyIds))
+        onChange(darywinHelper.clone(agencyIds))
       }
     }
   }
@@ -118,7 +118,7 @@ const AgencyFilter = ({
                   tabIndex={0}
                 >
                   <img
-                    src={movininHelper.joinURL(env.CDN_USERS, agency.avatar)}
+                    src={darywinHelper.joinURL(env.CDN_USERS, agency.avatar)}
                     alt={agency.fullName}
                     title={agency.fullName}
                   />

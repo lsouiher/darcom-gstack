@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../config/env.config'
 import * as databaseHelper from '../utils/databaseHelper'
 import User from '../models/User'
@@ -16,7 +16,7 @@ try {
   }
 
   // delete admin user if it exists
-  const adminUser = await User.findOne({ email: env.ADMIN_EMAIL, type: movininTypes.UserType.Admin })
+  const adminUser = await User.findOne({ email: env.ADMIN_EMAIL, type: darywinTypes.UserType.Admin })
 
   if (adminUser) {
     await NotificationCounter.deleteMany({ user: adminUser._id })

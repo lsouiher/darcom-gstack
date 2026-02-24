@@ -9,8 +9,8 @@ import {
   Search as SearchIcon,
   Clear as ClearIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/booking-filter'
 import LocationSelectList from './LocationSelectList'
@@ -23,7 +23,7 @@ interface BookingFilterProps {
   collapse?: boolean
   className?: string
   language?: string
-  onSubmit?: (filter: movininTypes.Filter | null) => void
+  onSubmit?: (filter: darywinTypes.Filter | null) => void
 }
 
 const BookingFilter = ({
@@ -44,14 +44,14 @@ const BookingFilter = ({
     setKeyword(e.target.value)
   }
 
-  const handleLocationChange = (locations: movininTypes.Option[]) => {
+  const handleLocationChange = (locations: darywinTypes.Option[]) => {
     setLocation(locations.length > 0 ? locations[0]._id : '')
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLElement>) => {
     e.preventDefault()
 
-    let filter: movininTypes.Filter | null = {
+    let filter: darywinTypes.Filter | null = {
       from, to, location, keyword
     }
 
@@ -59,7 +59,7 @@ const BookingFilter = ({
       filter = null
     }
     if (onSubmit) {
-      onSubmit(movininHelper.clone(filter))
+      onSubmit(darywinHelper.clone(filter))
     }
   }
 

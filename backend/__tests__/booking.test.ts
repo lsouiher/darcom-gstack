@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import request from 'supertest'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import app from '../src/app'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as testHelper from './testHelper'
@@ -37,14 +37,14 @@ beforeAll(async () => {
 
   // create a agency
   const agencyName = testHelper.getAgencyName()
-  AGENCY_ID = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+  AGENCY_ID = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
 
   // create renter 1
   const renter1 = new User({
     fullName: RENTER1_NAME,
     email: testHelper.GetRandomEmail(),
     language: testHelper.LANGUAGE,
-    type: movininTypes.UserType.User,
+    type: darywinTypes.UserType.User,
   })
   await renter1.save()
   RENTER1_ID = renter1._id.toString()
@@ -53,10 +53,10 @@ beforeAll(async () => {
   LOCATION_ID = await testHelper.createLocation('Location 1 EN', 'Location 1 FR')
 
   // create property
-  const payload: movininTypes.CreatePropertyPayload = {
+  const payload: darywinTypes.CreatePropertyPayload = {
     name: 'Beautiful House in Detroit',
     agency: AGENCY_ID,
-    type: movininTypes.PropertyType.House,
+    type: darywinTypes.PropertyType.House,
     description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
     image: 'house.jpg',
     images: [],
@@ -75,7 +75,7 @@ beforeAll(async () => {
     hidden: true,
     cancellation: 0,
     available: false,
-    rentalTerm: movininTypes.RentalTerm.Daily,
+    rentalTerm: darywinTypes.RentalTerm.Daily,
   }
 
   // property 1
@@ -120,14 +120,14 @@ describe('POST /api/create-booking', () => {
   it('should create a booking', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.Booking = {
+    const payload: darywinTypes.Booking = {
       agency: AGENCY_ID,
       property: PROPERTY1_ID,
       renter: RENTER1_ID,
       location: LOCATION_ID,
       from: new Date(2024, 2, 1),
       to: new Date(2024, 2, 4),
-      status: movininTypes.BookingStatus.Pending,
+      status: darywinTypes.BookingStatus.Pending,
       cancellation: true,
       price: 4000,
     }
@@ -152,7 +152,7 @@ describe('POST /api/checkout', () => {
     let bookings = await Booking.find({ renter: RENTER1_ID })
     expect(bookings.length).toBe(1)
 
-    const payload: movininTypes.CheckoutPayload = {
+    const payload: darywinTypes.CheckoutPayload = {
       booking: {
         agency: AGENCY_ID,
         property: PROPERTY1_ID,
@@ -160,7 +160,7 @@ describe('POST /api/checkout', () => {
         location: LOCATION_ID,
         from: new Date(2024, 3, 1),
         to: new Date(2024, 3, 4),
-        status: movininTypes.BookingStatus.Pending,
+        status: darywinTypes.BookingStatus.Pending,
         cancellation: true,
         price: 4000,
       },
@@ -178,12 +178,12 @@ describe('POST /api/checkout', () => {
     // Test failed stripe payment
     payload.payLater = false
     const receiptEmail = testHelper.GetRandomEmail()
-    const paymentIntentPayload: movininTypes.CreatePaymentPayload = {
+    const paymentIntentPayload: darywinTypes.CreatePaymentPayload = {
       amount: 534,
       currency: 'usd',
       receiptEmail,
       customerName: 'John Doe',
-      description: "Movin' In Testing Service",
+      description: "DaryWin Testing Service",
       locale: 'en',
       name: 'Test',
     }
@@ -237,7 +237,7 @@ describe('POST /api/checkout', () => {
     expect(bookingId).toBeTruthy()
     await testHelper.deleteNotifications(bookingId)
     const booking = await Booking.findById(bookingId)
-    expect(booking?.status).toBe(movininTypes.BookingStatus.Void)
+    expect(booking?.status).toBe(darywinTypes.BookingStatus.Void)
     expect(booking?.sessionId).toBe(payload.sessionId)
     payload.payLater = true
 
@@ -319,7 +319,7 @@ describe('POST /api/update-booking', () => {
   it('should update a booking', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.Booking = {
+    const payload: darywinTypes.Booking = {
       _id: BOOKING_ID,
       agency: AGENCY_ID,
       property: PROPERTY2_ID,
@@ -327,7 +327,7 @@ describe('POST /api/update-booking', () => {
       location: LOCATION_ID,
       from: new Date(2024, 2, 1),
       to: new Date(2024, 2, 4),
-      status: movininTypes.BookingStatus.Paid,
+      status: darywinTypes.BookingStatus.Paid,
       cancellation: true,
       price: 4800,
     }
@@ -338,7 +338,7 @@ describe('POST /api/update-booking', () => {
     expect(res.statusCode).toBe(200)
     expect(res.body.property).toBe(PROPERTY2_ID)
     expect(res.body.price).toBe(4800)
-    expect(res.body.status).toBe(movininTypes.BookingStatus.Paid)
+    expect(res.body.status).toBe(darywinTypes.BookingStatus.Paid)
 
     res = await request(app)
       .put('/api/update-booking')
@@ -347,7 +347,7 @@ describe('POST /api/update-booking', () => {
     expect(res.statusCode).toBe(200)
     expect(res.body.property).toBe(PROPERTY2_ID)
     expect(res.body.price).toBe(4800)
-    expect(res.body.status).toBe(movininTypes.BookingStatus.Paid)
+    expect(res.body.status).toBe(darywinTypes.BookingStatus.Paid)
 
     payload._id = testHelper.GetRandromObjectIdAsString()
     res = await request(app)
@@ -358,7 +358,7 @@ describe('POST /api/update-booking', () => {
 
     // notifyDriver
     payload._id = BOOKING_ID
-    payload.status = movininTypes.BookingStatus.Cancelled
+    payload.status = darywinTypes.BookingStatus.Cancelled
     payload.renter = testHelper.GetRandromObjectIdAsString()
     res = await request(app)
       .put('/api/update-booking')
@@ -367,7 +367,7 @@ describe('POST /api/update-booking', () => {
     expect(res.statusCode).toBe(200)
 
     payload.renter = RENTER1_ID
-    payload.status = movininTypes.BookingStatus.Void
+    payload.status = darywinTypes.BookingStatus.Void
     let pushToken = new PushToken({ user: payload.renter, token: 'ExponentPushToken[CokU9KJ9-Yq2ulVTyYOI8J]' })
     await pushToken.save()
     res = await request(app)
@@ -377,7 +377,7 @@ describe('POST /api/update-booking', () => {
     expect(res.statusCode).toBe(200)
     await PushToken.deleteOne({ _id: pushToken._id })
 
-    payload.status = movininTypes.BookingStatus.Deposit
+    payload.status = darywinTypes.BookingStatus.Deposit
     pushToken = new PushToken({ user: payload.renter, token: 'ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]' })
     await pushToken.save()
     res = await request(app)
@@ -387,7 +387,7 @@ describe('POST /api/update-booking', () => {
     expect(res.statusCode).toBe(200)
     await PushToken.deleteOne({ _id: pushToken._id })
 
-    payload.status = movininTypes.BookingStatus.Cancelled
+    payload.status = darywinTypes.BookingStatus.Cancelled
     pushToken = new PushToken({ user: payload.renter, token: '0' })
     await pushToken.save()
     res = await request(app)
@@ -418,9 +418,9 @@ describe('POST /api/update-booking-status', () => {
   it('should update booking status', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.UpdateStatusPayload = {
+    const payload: darywinTypes.UpdateStatusPayload = {
       ids: [BOOKING_ID],
-      status: movininTypes.BookingStatus.Reserved,
+      status: darywinTypes.BookingStatus.Reserved,
     }
     let res = await request(app)
       .post('/api/update-booking-status')
@@ -428,7 +428,7 @@ describe('POST /api/update-booking-status', () => {
       .send(payload)
     expect(res.statusCode).toBe(200)
     let booking = await Booking.findById(BOOKING_ID)
-    expect(booking?.status).toBe(movininTypes.BookingStatus.Reserved)
+    expect(booking?.status).toBe(darywinTypes.BookingStatus.Reserved)
 
     res = await request(app)
       .post('/api/update-booking-status')
@@ -436,7 +436,7 @@ describe('POST /api/update-booking-status', () => {
       .send(payload)
     expect(res.statusCode).toBe(200)
     booking = await Booking.findById(BOOKING_ID)
-    expect(booking?.status).toBe(movininTypes.BookingStatus.Reserved)
+    expect(booking?.status).toBe(darywinTypes.BookingStatus.Reserved)
 
     res = await request(app)
       .post('/api/update-booking-status')
@@ -502,9 +502,9 @@ describe('POST /api/bookings/:page/:size/:language', () => {
   it('should get bookings', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.GetBookingsPayload = {
+    const payload: darywinTypes.GetBookingsPayload = {
       agencies: [AGENCY_ID],
-      statuses: [movininTypes.BookingStatus.Reserved],
+      statuses: [darywinTypes.BookingStatus.Reserved],
       filter: {
         location: LOCATION_ID,
         from: new Date(2024, 2, 1),
@@ -585,7 +585,7 @@ describe('GET /api/has-bookings/:renter', () => {
       .set(env.X_ACCESS_TOKEN, token)
     expect(res.statusCode).toBe(204)
     const booking = await Booking.findById(BOOKING_ID)
-    expect(booking?.status).toBe(movininTypes.BookingStatus.Reserved)
+    expect(booking?.status).toBe(darywinTypes.BookingStatus.Reserved)
 
     res = await request(app)
       .get(`/api/has-bookings/${nanoid()}`)
@@ -676,7 +676,7 @@ describe('DELETE /api/delete-temp-booking', () => {
       fullName: 'Renter',
       email: testHelper.GetRandomEmail(),
       language: testHelper.LANGUAGE,
-      type: movininTypes.UserType.User,
+      type: darywinTypes.UserType.User,
       expireAt,
     })
     await renter.save()
@@ -688,7 +688,7 @@ describe('DELETE /api/delete-temp-booking', () => {
       location: LOCATION_ID,
       from: new Date(2024, 2, 1),
       to: new Date(2024, 2, 4),
-      status: movininTypes.BookingStatus.Void,
+      status: darywinTypes.BookingStatus.Void,
       sessionId,
       expireAt,
       cancellation: true,

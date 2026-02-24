@@ -1,12 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as UserService from '@/services/UserService'
 
 // Create context
 export interface UserContextType {
-  user: movininTypes.User | null
-  setUser: React.Dispatch<React.SetStateAction<movininTypes.User | null>>
+  user: darywinTypes.User | null
+  setUser: React.Dispatch<React.SetStateAction<darywinTypes.User | null>>
   userLoaded: boolean
   setUserLoaded: React.Dispatch<React.SetStateAction<boolean>>
   unauthorized: boolean
@@ -21,7 +21,7 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children, refreshKey = 0 }) => {
-  const [user, setUser] = useState<movininTypes.User | null>(null)
+  const [user, setUser] = useState<darywinTypes.User | null>(null)
   const [userLoaded, setUserLoaded] = useState(false)
   const [unauthorized, setUnauthorized] = useState(false)
 

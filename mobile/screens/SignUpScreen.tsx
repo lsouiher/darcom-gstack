@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { intervalToDuration } from 'date-fns'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import validator from 'validator'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 import i18n from '@/lang/i18n'
 import TextInput from '@/components/TextInput'
@@ -293,7 +293,7 @@ const SignUpScreen = ({ navigation, route }: NativeStackScreenProps<StackParams,
 
       setLoading(true)
 
-      const data: movininTypes.SignUpPayload = {
+      const data: darywinTypes.SignUpPayload = {
         email,
         phone,
         password,

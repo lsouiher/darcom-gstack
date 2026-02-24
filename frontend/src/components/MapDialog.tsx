@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import Map from '@/components/Map'
 
 import '@/assets/css/map-dialog.css'
 
 interface MapDialogProps {
-  location?: movininTypes.Location
+  location?: darywinTypes.Location
   openMapDialog: boolean
   onClose: () => void
 }

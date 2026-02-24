@@ -7,7 +7,7 @@ import {
   Button,
   TextFieldVariants
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as bfStrings } from '@/lang/booking-filter'
@@ -22,11 +22,11 @@ interface PropertySelectListProps {
   required?: boolean
   multiple?: boolean
   variant?: TextFieldVariants
-  value?: movininTypes.Property
+  value?: darywinTypes.Property
   agency: string
   location: string
   readOnly?: boolean
-  onChange?: (values: movininTypes.Property[]) => void
+  onChange?: (values: darywinTypes.Property[]) => void
 }
 
 const PropertySelectList = ({
@@ -47,11 +47,11 @@ const PropertySelectList = ({
   const [currentLocation, setCurrentLocation] = useState('-1')
   const [keyword, setKeyword] = useState('')
   const [page, setPage] = useState(1)
-  const [properties, setProperties] = useState<movininTypes.Property[]>([])
+  const [properties, setProperties] = useState<darywinTypes.Property[]>([])
   const [openDialog, setOpenDialog] = useState(false)
   const [closeDialog, setCloseDialog] = useState(false)
   const [reload, setReload] = useState(false)
-  const [selectedOptions, setSelectedOptions] = useState<movininTypes.Property[]>([])
+  const [selectedOptions, setSelectedOptions] = useState<darywinTypes.Property[]>([])
 
   useEffect(() => {
     if (value) {
@@ -101,7 +101,7 @@ const PropertySelectList = ({
     }
   }, [currentLocation, location])
 
-  const handleChange = (values: movininTypes.Property[]) => {
+  const handleChange = (values: darywinTypes.Property[]) => {
     if (onChange) {
       onChange(values)
     }
@@ -109,7 +109,7 @@ const PropertySelectList = ({
 
   const fetchData = async (_page: number, _keyword: string, _agency: string, _location: string) => {
     try {
-      const payload: movininTypes.GetBookingPropertiesPayload = { agency: _agency, location: _location }
+      const payload: darywinTypes.GetBookingPropertiesPayload = { agency: _agency, location: _location }
 
       if (closeDialog) {
         setCloseDialog(false)
@@ -152,7 +152,7 @@ const PropertySelectList = ({
         loading={loading}
         required={required}
         multiple={multiple}
-        type={movininTypes.RecordType.Property}
+        type={darywinTypes.RecordType.Property}
         variant={variant || 'standard'}
         readOnly={readOnly}
         ListboxProps={{

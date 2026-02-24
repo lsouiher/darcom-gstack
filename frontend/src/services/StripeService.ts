@@ -1,4 +1,4 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 
 /**
@@ -20,10 +20,10 @@ export const ORDER_DESCRIPTION_MAX_LENGTH = 500
 /**
  * Create Checkout Session.
  *
- * @param {movininTypes.CreatePaymentPayload} payload
- * @returns {Promise<movininTypes.PaymentResult>}
+ * @param {darywinTypes.CreatePaymentPayload} payload
+ * @returns {Promise<darywinTypes.PaymentResult>}
  */
-export const createCheckoutSession = (payload: movininTypes.CreatePaymentPayload): Promise<movininTypes.PaymentResult> =>
+export const createCheckoutSession = (payload: darywinTypes.CreatePaymentPayload): Promise<darywinTypes.PaymentResult> =>
   axiosInstance
     .post(
       '/api/create-checkout-session',
@@ -48,10 +48,10 @@ export const checkCheckoutSession = (sessionId: string): Promise<number> =>
 /**
  * Create Payment Intent
  *
- * @param {movininTypes.CreatePaymentPayload} payload
- * @returns {Promise<movininTypes.CreatePaymentResult>}
+ * @param {darywinTypes.CreatePaymentPayload} payload
+ * @returns {Promise<darywinTypes.CreatePaymentResult>}
  */
-export const createPaymentIntent = (payload: movininTypes.CreatePaymentPayload): Promise<movininTypes.PaymentResult> =>
+export const createPaymentIntent = (payload: darywinTypes.CreatePaymentPayload): Promise<darywinTypes.PaymentResult> =>
   axiosInstance
     .post(
       '/api/create-payment-intent',

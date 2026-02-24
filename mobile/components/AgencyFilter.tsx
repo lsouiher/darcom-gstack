@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import * as helper from '@/utils/helper'
 import * as env from '@/config/env.config'
@@ -24,7 +24,7 @@ const AgencyFilter = ({
   onLoad,
   onChange
 }: AgencyFilterProps) => {
-  const [agencies, setAgencies] = useState<movininTypes.User[]>([])
+  const [agencies, setAgencies] = useState<darywinTypes.User[]>([])
   const [checkedAgencies, setCheckedAgencies] = useState<string[]>([])
   const [allChecked, setAllChecked] = useState(false)
 
@@ -32,13 +32,13 @@ const AgencyFilter = ({
     try {
       const allAgencies = await AgencyService.getAllAgencies()
       if (allAgencies) {
-        const _agencies = allAgencies.map((agency: movininTypes.User) => ({
+        const _agencies = allAgencies.map((agency: darywinTypes.User) => ({
           ...agency,
           checked: false,
         }))
         setAgencies(_agencies)
         if (onLoad) {
-          onLoad(movininHelper.flattenAgencies(_agencies))
+          onLoad(darywinHelper.flattenAgencies(_agencies))
         }
       } else {
         helper.error()
@@ -66,7 +66,7 @@ const AgencyFilter = ({
                     onValueChange={(checked) => {
                       if (checked) {
                         agency.checked = true
-                        setAgencies(movininHelper.clone(agencies))
+                        setAgencies(darywinHelper.clone(agencies))
                         checkedAgencies.push(agency._id as string)
 
                         if (checkedAgencies.length === agencies.length) {
@@ -74,7 +74,7 @@ const AgencyFilter = ({
                         }
                       } else {
                         agency.checked = false
-                        setAgencies(movininHelper.clone(agencies))
+                        setAgencies(darywinHelper.clone(agencies))
                         const index = checkedAgencies.indexOf(agency._id as string)
                         checkedAgencies.splice(index, 1)
 
@@ -84,14 +84,14 @@ const AgencyFilter = ({
                       }
 
                       if (onChange) {
-                        onChange(checkedAgencies.length === 0 ? movininHelper.flattenAgencies(agencies) : movininHelper.clone(checkedAgencies))
+                        onChange(checkedAgencies.length === 0 ? darywinHelper.flattenAgencies(agencies) : darywinHelper.clone(checkedAgencies))
                       }
                     }}
                   >
                     <Image
                       style={styles.image}
                       source={{
-                        uri: movininHelper.joinURL(env.CDN_USERS, agency.avatar),
+                        uri: darywinHelper.joinURL(env.CDN_USERS, agency.avatar),
                       }}
                     />
                   </Switch>
@@ -110,15 +110,15 @@ const AgencyFilter = ({
                   agency.checked = false
                 })
                 setAllChecked(false)
-                setAgencies(movininHelper.clone(agencies))
+                setAgencies(darywinHelper.clone(agencies))
                 setCheckedAgencies(_checkedAgencies)
               } else {
                 agencies.forEach((agency) => {
                   agency.checked = true
                 })
                 setAllChecked(true)
-                setAgencies(movininHelper.clone(agencies))
-                _checkedAgencies = movininHelper.clone(movininHelper.flattenAgencies(agencies))
+                setAgencies(darywinHelper.clone(agencies))
+                _checkedAgencies = darywinHelper.clone(darywinHelper.flattenAgencies(agencies))
                 setCheckedAgencies(_checkedAgencies)
 
                 if (onChange) {

@@ -14,8 +14,8 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
@@ -34,8 +34,8 @@ import AgencyBadge from '@/components/AgencyBadge'
 
 const PropertyBookings = () => {
   const navigate = useNavigate()
-  const [user, setUser] = useState<movininTypes.User>()
-  const [property, setProperty] = useState<movininTypes.Property>()
+  const [user, setUser] = useState<darywinTypes.User>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
   const [error, setError] = useState(false)
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -75,7 +75,7 @@ const PropertyBookings = () => {
     }
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     setLoading(true)
 
     const params = new URLSearchParams(window.location.search)
@@ -89,10 +89,10 @@ const PropertyBookings = () => {
           const _property = await PropertyService.getProperty(id)
 
           if (_property) {
-            if (_user.type === movininTypes.RecordType.Admin) {
+            if (_user.type === darywinTypes.RecordType.Admin) {
               try {
                 const _agencies = await AgencyService.getAllAgencies()
-                const agencyIds = movininHelper.flattenAgencies(_agencies)
+                const agencyIds = darywinHelper.flattenAgencies(_agencies)
                 setAgencies(agencyIds)
                 setProperty(_property)
                 setVisible(true)
@@ -135,7 +135,7 @@ const PropertyBookings = () => {
           <div className="col-1">
             <section className="property-sec">
               <div className="property-img">
-                <img alt="" src={movininHelper.joinURL(env.CDN_PROPERTIES, property.image)} />
+                <img alt="" src={darywinHelper.joinURL(env.CDN_PROPERTIES, property.image)} />
               </div>
               <div className="agency">
                 <AgencyBadge agency={property.agency} />

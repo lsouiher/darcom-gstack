@@ -11,8 +11,8 @@ import {
   Chip
 } from '@mui/material'
 import { LocationOn as LocationIcon, AccountCircle } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 
 import '@/assets/css/multiple-select.css'
@@ -137,7 +137,7 @@ const MultipleSelect = ({
           const { inputProps } = params
           inputProps.autoComplete = 'off'
 
-          if (type === movininTypes.RecordType.User && !multiple && values.length === 1 && values[0]) {
+          if (type === darywinTypes.RecordType.User && !multiple && values.length === 1 && values[0]) {
             const option = values[0]
 
             return (
@@ -153,7 +153,7 @@ const MultipleSelect = ({
                       <>
                         <InputAdornment position="start">
                           {option.image ? (
-                            <Avatar src={movininHelper.joinURL(env.CDN_USERS, option.image)} className="avatar-small suo" />
+                            <Avatar src={darywinHelper.joinURL(env.CDN_USERS, option.image)} className="avatar-small suo" />
                           ) : (
                             <AccountCircle className="avatar-small suo" color="disabled" />
                           )}
@@ -167,7 +167,7 @@ const MultipleSelect = ({
             )
           }
 
-          if (type === movininTypes.RecordType.Agency && !multiple && values.length === 1 && values[0]) {
+          if (type === darywinTypes.RecordType.Agency && !multiple && values.length === 1 && values[0]) {
             const option = values[0]
 
             return (
@@ -183,7 +183,7 @@ const MultipleSelect = ({
                       <>
                         <InputAdornment position="start">
                           <div className="agency-ia">
-                            <img src={movininHelper.joinURL(env.CDN_USERS, option.image)} alt={option.name} />
+                            <img src={darywinHelper.joinURL(env.CDN_USERS, option.image)} alt={option.name} />
                           </div>
                         </InputAdornment>
                         {params.InputProps.startAdornment}
@@ -195,7 +195,7 @@ const MultipleSelect = ({
             )
           }
 
-          if (type === movininTypes.RecordType.Location && !multiple && values.length === 1 && values[0]) {
+          if (type === darywinTypes.RecordType.Location && !multiple && values.length === 1 && values[0]) {
             return (
               <TextField
                 {...params}
@@ -219,7 +219,7 @@ const MultipleSelect = ({
             )
           }
 
-          if (type === movininTypes.RecordType.Property && !multiple && values.length === 1 && values[0]) {
+          if (type === darywinTypes.RecordType.Property && !multiple && values.length === 1 && values[0]) {
             const option = values[0]
 
             return (
@@ -235,7 +235,7 @@ const MultipleSelect = ({
                       <>
                         <InputAdornment position="start">
                           <img
-                            src={movininHelper.joinURL(env.CDN_PROPERTIES, option.image)}
+                            src={darywinHelper.joinURL(env.CDN_PROPERTIES, option.image)}
                             alt={option.name}
                             style={{
                               height: env.SELECTED_PROPERTY_OPTION_IMAGE_HEIGHT,
@@ -275,25 +275,25 @@ const MultipleSelect = ({
             delete props.key
           }
 
-          if (type === movininTypes.RecordType.User) {
+          if (type === darywinTypes.RecordType.User) {
             return (
               <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image">
-                  {option.image ? <Avatar src={movininHelper.joinURL(env.CDN_USERS, option.image)} className="avatar-medium" /> : <AccountCircle className="avatar-medium" color="disabled" />}
+                  {option.image ? <Avatar src={darywinHelper.joinURL(env.CDN_USERS, option.image)} className="avatar-medium" /> : <AccountCircle className="avatar-medium" color="disabled" />}
                 </span>
                 <span className="option-name">{option.name}</span>
               </li>
             )
-          } if (type === movininTypes.RecordType.Agency) {
+          } if (type === darywinTypes.RecordType.Agency) {
             return (
               <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image agency-ia">
-                  <img src={movininHelper.joinURL(env.CDN_USERS, option.image)} alt={option.name} />
+                  <img src={darywinHelper.joinURL(env.CDN_USERS, option.image)} alt={option.name} />
                 </span>
                 <span className="option-name">{option.name}</span>
               </li>
             )
-          } if (type === movininTypes.RecordType.Location) {
+          } if (type === darywinTypes.RecordType.Location) {
             return (
               <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image">
@@ -302,12 +302,12 @@ const MultipleSelect = ({
                 <span className="option-name">{option.name}</span>
               </li>
             )
-          } if (type === movininTypes.RecordType.Property) {
+          } if (type === darywinTypes.RecordType.Property) {
             return (
               <li {...props} key={option._id} className={`${props.className} ms-option`}>
                 <span className="option-image property-ia">
                   <img
-                    src={movininHelper.joinURL(env.CDN_PROPERTIES, option.image)}
+                    src={darywinHelper.joinURL(env.CDN_PROPERTIES, option.image)}
                     alt={option.name}
                     style={{
                       height: env.PROPERTY_OPTION_IMAGE_HEIGHT,

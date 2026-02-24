@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/properties'
 import Accordion from './Accordion'
@@ -10,12 +10,12 @@ import '@/assets/css/availability-filter.css'
 
 interface AvailabilityFilterProps {
   className?: string
-  onChange?: (values: movininTypes.Availablity[]) => void
+  onChange?: (values: darywinTypes.Availablity[]) => void
 }
 
 const allValues = [
-  movininTypes.Availablity.Available,
-  movininTypes.Availablity.Unavailable
+  darywinTypes.Availablity.Available,
+  darywinTypes.Availablity.Unavailable
 ]
 
 const AvailabilityFilter = ({
@@ -23,7 +23,7 @@ const AvailabilityFilter = ({
   onChange
 }: AvailabilityFilterProps) => {
   const [allChecked, setAllChecked] = useState(false)
-  const [values, setValues] = useState<movininTypes.Availablity[]>([])
+  const [values, setValues] = useState<darywinTypes.Availablity[]>([])
 
   const availableRef = useRef<HTMLInputElement>(null)
   const unavailableRef = useRef<HTMLInputElement>(null)
@@ -35,23 +35,23 @@ const AvailabilityFilter = ({
     }
   }, [allChecked])
 
-  const handleChange = (_values: movininTypes.Availablity[]) => {
+  const handleChange = (_values: darywinTypes.Availablity[]) => {
     if (onChange) {
-      onChange(_values.length === 0 ? allValues : movininHelper.clone(_values))
+      onChange(_values.length === 0 ? allValues : darywinHelper.clone(_values))
     }
   }
 
   const handleAvailableChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if (e.currentTarget instanceof HTMLInputElement) {
       if (e.currentTarget.checked) {
-        values.push(movininTypes.Availablity.Available)
+        values.push(darywinTypes.Availablity.Available)
 
         if (values.length === 2) {
           setAllChecked(true)
         }
       } else {
         values.splice(
-          values.findIndex((v) => v === movininTypes.Availablity.Available),
+          values.findIndex((v) => v === darywinTypes.Availablity.Available),
           1,
         )
 
@@ -79,14 +79,14 @@ const AvailabilityFilter = ({
   const handleUnavailableChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if (e.currentTarget instanceof HTMLInputElement) {
       if (e.currentTarget.checked) {
-        values.push(movininTypes.Availablity.Unavailable)
+        values.push(darywinTypes.Availablity.Unavailable)
 
         if (values.length === 2) {
           setAllChecked(true)
         }
       } else {
         values.splice(
-          values.findIndex((v) => v === movininTypes.Availablity.Unavailable),
+          values.findIndex((v) => v === darywinTypes.Availablity.Unavailable),
           1,
         )
 
@@ -125,13 +125,13 @@ const AvailabilityFilter = ({
         availableRef.current.checked = true
         unavailableRef.current.checked = true
 
-        const _values = [movininTypes.Availablity.Available, movininTypes.Availablity.Unavailable]
+        const _values = [darywinTypes.Availablity.Available, darywinTypes.Availablity.Unavailable]
 
         setAllChecked(true)
         setValues(_values)
 
         if (onChange) {
-          onChange(movininHelper.clone(_values))
+          onChange(darywinHelper.clone(_values))
         }
       }
     } else {

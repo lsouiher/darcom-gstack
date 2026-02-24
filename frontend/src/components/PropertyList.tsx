@@ -4,7 +4,7 @@ import {
   CardContent,
   Typography,
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import Const from '@/config/const'
 import { strings } from '@/lang/properties'
@@ -18,20 +18,20 @@ import '@/assets/css/property-list.css'
 
 interface PropertyListProps {
   agencies?: string[]
-  types?: movininTypes.PropertyType[]
-  rentalTerms?: movininTypes.RentalTerm[]
+  types?: darywinTypes.PropertyType[]
+  rentalTerms?: darywinTypes.RentalTerm[]
   location?: string
   from?: Date
   to?: Date
   reload?: boolean
-  properties?: movininTypes.Property[]
+  properties?: darywinTypes.Property[]
   className?: string
   loading?: boolean
   hideAgency?: boolean
   hidePrice?: boolean
   hideActions?: boolean
   sizeAuto?: boolean
-  onLoad?: movininTypes.DataEvent<movininTypes.Property>
+  onLoad?: darywinTypes.DataEvent<darywinTypes.Property>
 }
 
 const PropertyList = ({
@@ -54,7 +54,7 @@ const PropertyList = ({
   const [init, setInit] = useState(true)
   const [loading, setLoading] = useState(false)
   const [fetch, setFetch] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Property[]>([])
+  const [rows, setRows] = useState<darywinTypes.Property[]>([])
   const [page, setPage] = useState(1)
   const [rowCount, setRowCount] = useState(0)
   const [totalRecords, setTotalRecords] = useState(0)
@@ -81,7 +81,7 @@ const PropertyList = ({
     try {
       setLoading(true)
 
-      const payload: movininTypes.GetPropertiesPayload = {
+      const payload: darywinTypes.GetPropertiesPayload = {
         agencies: agencies ?? [],
         types,
         rentalTerms,
@@ -98,7 +98,7 @@ const PropertyList = ({
       }
       const _totalRecords = Array.isArray(_data.pageInfo) && _data.pageInfo.length > 0 ? _data.pageInfo[0].totalRecords : 0
 
-      let _rows: movininTypes.Property[] = []
+      let _rows: darywinTypes.Property[] = []
       if (env.PAGINATION_MODE === Const.PAGINATION_MODE.INFINITE_SCROLL || env.isMobile) {
         _rows = _page === 1 ? _data.resultData : [...rows, ..._data.resultData]
       } else {

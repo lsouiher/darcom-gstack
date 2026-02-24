@@ -12,8 +12,8 @@ import {
   Link
 } from '@mui/material'
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as clStrings } from '@/lang/agency-list'
@@ -32,8 +32,8 @@ import '@/assets/css/agency.css'
 const Agency = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
-  const [agency, setAgency] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
+  const [agency, setAgency] = useState<darywinTypes.User>()
   const [agencies, setAgencies] = useState<string[]>()
   const [error, setError] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -48,7 +48,7 @@ const Agency = () => {
 
   const onAvatarChange = (avatar: string) => {
     if (user && agency && user._id === agency._id) {
-      const _user = movininHelper.clone(user)
+      const _user = darywinHelper.clone(user)
       _user.avatar = avatar
 
       setUser(_user)
@@ -85,7 +85,7 @@ const Agency = () => {
     setOpenDeleteDialog(false)
   }
 
-  const handlePropertyListLoad: movininTypes.DataEvent<movininTypes.Property> = (data) => {
+  const handlePropertyListLoad: darywinTypes.DataEvent<darywinTypes.Property> = (data) => {
     if (data) {
       setRowCount(data.rowCount)
     }
@@ -95,7 +95,7 @@ const Agency = () => {
     setRowCount(_rowCount)
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     setUser(_user)
 
     if (_user && _user.verified) {
@@ -131,7 +131,7 @@ const Agency = () => {
     }
   }
 
-  const edit = user && agency && (user.type === movininTypes.RecordType.Admin || user._id === agency._id)
+  const edit = user && agency && (user.type === darywinTypes.RecordType.Admin || user._id === agency._id)
 
   return (
     <Layout onLoad={onLoad} strict>
@@ -142,7 +142,7 @@ const Agency = () => {
               {edit ? (
                 <Avatar
                   record={agency}
-                  type={movininTypes.RecordType.Agency}
+                  type={darywinTypes.RecordType.Agency}
                   mode="update"
                   size="large"
                   hideDelete
@@ -155,7 +155,7 @@ const Agency = () => {
               ) : (
                 <div className="property-agency">
                   <span className="property-agency-logo">
-                    <img src={movininHelper.joinURL(env.CDN_USERS, agency.avatar)} alt={agency.fullName} style={{ width: env.AGENCY_IMAGE_WIDTH }} />
+                    <img src={darywinHelper.joinURL(env.CDN_USERS, agency.avatar)} alt={agency.fullName} style={{ width: env.AGENCY_IMAGE_WIDTH }} />
                   </span>
                   <span className="property-agency-info">{agency.fullName}</span>
                 </div>
@@ -205,9 +205,9 @@ const Agency = () => {
           <div className="col-2">
             <PropertyList
               user={user}
-              types={movininHelper.getAllPropertyTypes()}
-              rentalTerms={movininHelper.getAllRentalTerms()}
-              availability={[movininTypes.Availablity.Available, movininTypes.Availablity.Unavailable]}
+              types={darywinHelper.getAllPropertyTypes()}
+              rentalTerms={darywinHelper.getAllRentalTerms()}
+              availability={[darywinTypes.Availablity.Available, darywinTypes.Availablity.Unavailable]}
               agencies={agencies}
               keyword=""
               reload={false}

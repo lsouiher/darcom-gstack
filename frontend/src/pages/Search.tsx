@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import * as helper from '@/utils/helper'
 import * as LocationService from '@/services/LocationService'
 import * as AgencyService from '@/services/AgencyService'
@@ -24,35 +24,35 @@ const Properties = () => {
 
   const [visible, setVisible] = useState(false)
   const [noMatch, setNoMatch] = useState(false)
-  const [location, setLocation] = useState<movininTypes.Location>()
+  const [location, setLocation] = useState<darywinTypes.Location>()
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
-  const [allAgencies, setAllAgencies] = useState<movininTypes.User[]>([])
+  const [allAgencies, setAllAgencies] = useState<darywinTypes.User[]>([])
   const [agencies, setAgencies] = useState<string[]>()
   const [loading, setLoading] = useState(true)
-  const [propertyTypes, setPropertyTypes] = useState(movininHelper.getAllPropertyTypes())
-  const [rentalTerms, setRentalTerms] = useState(movininHelper.getAllRentalTerms())
+  const [propertyTypes, setPropertyTypes] = useState(darywinHelper.getAllPropertyTypes())
+  const [rentalTerms, setRentalTerms] = useState(darywinHelper.getAllRentalTerms())
   const [openMapDialog, setOpenMapDialog] = useState(false)
 
   const handleAgencyFilterChange = (newAgencies: string[]) => {
     setAgencies(newAgencies)
   }
 
-  const handlePropertyFilterSubmit = (filter: movininTypes.PropertyFilter) => {
+  const handlePropertyFilterSubmit = (filter: darywinTypes.PropertyFilter) => {
     setLocation(filter.location)
     setFrom(filter.from)
     setTo(filter.to)
   }
 
-  const handlePropertyTypeFilterChange = (values: movininTypes.PropertyType[]) => {
+  const handlePropertyTypeFilterChange = (values: darywinTypes.PropertyType[]) => {
     setPropertyTypes(values)
   }
 
-  const handleRentalTermFilterChange = (values: movininTypes.RentalTerm[]) => {
+  const handleRentalTermFilterChange = (values: darywinTypes.RentalTerm[]) => {
     setRentalTerms(values)
   }
 
-  const onLoad = async (user?: movininTypes.User) => {
+  const onLoad = async (user?: darywinTypes.User) => {
     const { state } = reactLocation
     if (!state) {
       setNoMatch(true)
@@ -68,7 +68,7 @@ const Properties = () => {
       return
     }
 
-    let _location: movininTypes.Location | null = null
+    let _location: darywinTypes.Location | null = null
     try {
       _location = await LocationService.getLocation(locationId)
 
@@ -79,7 +79,7 @@ const Properties = () => {
       }
 
       const _allAgencies = await AgencyService.getAllAgencies()
-      const _agencies = movininHelper.flattenAgencies(_allAgencies)
+      const _agencies = darywinHelper.flattenAgencies(_allAgencies)
 
       setLocation(_location)
       setFrom(_from)

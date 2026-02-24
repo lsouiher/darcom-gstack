@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import Stripe from 'stripe'
 import i18n from '../lang/i18n'
 import * as logger from '../utils/logger'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../config/env.config'
 import * as helper from '../utils/helper'
 import Booking from '../models/Booking'
@@ -29,7 +29,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
       name,
       description,
       customerName,
-    }: movininTypes.CreatePaymentPayload = req.body
+    }: darywinTypes.CreatePaymentPayload = req.body
 
     //
     // 1. Create the customer if he does not already exist
@@ -75,7 +75,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
       expires_at: expireAt,
     })
 
-    const result: movininTypes.PaymentResult = {
+    const result: darywinTypes.PaymentResult = {
       sessionId: session.id,
       customerId: customer.id,
       clientSecret: session.client_secret,
@@ -131,7 +131,7 @@ export const checkCheckoutSession = async (req: Request, res: Response) => {
     //
     if (session.payment_status === 'paid') {
       booking.expireAt = undefined
-      booking.status = movininTypes.BookingStatus.Paid
+      booking.status = darywinTypes.BookingStatus.Paid
       await booking.save()
 
       const property = await Property.findById(booking.property)
@@ -165,7 +165,7 @@ export const checkCheckoutSession = async (req: Request, res: Response) => {
       await bookingController.notify(user, booking._id.toString(), agency, message)
 
       // Notify admin
-      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: movininTypes.UserType.Admin }))
+      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: darywinTypes.UserType.Admin }))
       if (admin) {
         i18n.locale = admin.language
         message = i18n.t('BOOKING_PAID_NOTIFICATION')
@@ -204,7 +204,7 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
       receiptEmail,
       description,
       customerName,
-    }: movininTypes.CreatePaymentPayload = req.body
+    }: darywinTypes.CreatePaymentPayload = req.body
 
     //
     // 1. Create the customer if he does not already exist
@@ -243,7 +243,7 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
     //
     // 3. Send result
     //
-    const result: movininTypes.PaymentResult = {
+    const result: darywinTypes.PaymentResult = {
       paymentIntentId: paymentIntent.id,
       customerId: customer.id,
       clientSecret: paymentIntent.client_secret,

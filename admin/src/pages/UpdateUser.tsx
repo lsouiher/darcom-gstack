@@ -16,8 +16,8 @@ import {
 import { Info as InfoIcon } from '@mui/icons-material'
 import { intervalToDuration } from 'date-fns'
 import validator from 'validator'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
@@ -38,8 +38,8 @@ import '@/assets/css/update-user.css'
 const UpdateUser = () => {
   const navigate = useNavigate()
 
-  const [loggedUser, setLoggedUser] = useState<movininTypes.User>()
-  const [user, setUser] = useState<movininTypes.User>()
+  const [loggedUser, setLoggedUser] = useState<darywinTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [visible, setVisible] = useState(false)
   const [noMatch, setNoMatch] = useState(false)
   const [admin, setAdmin] = useState(false)
@@ -91,7 +91,7 @@ const UpdateUser = () => {
 
     setType(e.target.value)
 
-    if (_type === movininTypes.RecordType.Agency) {
+    if (_type === darywinTypes.RecordType.Agency) {
       await validateFullName(fullName)
     } else {
       setFullNameError(false)
@@ -107,7 +107,7 @@ const UpdateUser = () => {
   }
 
   const handleFullNameBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    if (type === movininTypes.RecordType.Agency) {
+    if (type === darywinTypes.RecordType.Agency) {
       await validateFullName(e.target.value)
     } else {
       setFullNameError(false)
@@ -139,7 +139,7 @@ const UpdateUser = () => {
   }
 
   const validateBirthDate = (date?: Date) => {
-    if (date && movininHelper.isDate(date) && type === movininTypes.RecordType.User) {
+    if (date && darywinHelper.isDate(date) && type === darywinTypes.RecordType.User) {
       const now = new Date()
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0
       const _birthDateValid = sub >= env.MINIMUM_AGE
@@ -165,20 +165,20 @@ const UpdateUser = () => {
 
   const onAvatarChange = (_avatar: string) => {
     if (loggedUser && user && loggedUser._id === user._id) {
-      const _loggedUser = movininHelper.clone(loggedUser)
+      const _loggedUser = darywinHelper.clone(loggedUser)
       _loggedUser.avatar = _avatar
 
       setLoggedUser(_loggedUser)
     }
 
-    const _user = movininHelper.clone(user)
+    const _user = darywinHelper.clone(user)
     _user.avatar = _avatar
 
     setLoading(false)
     setUser(_user)
     setAvatar(_avatar)
 
-    if (_avatar !== null && type === movininTypes.RecordType.Agency) {
+    if (_avatar !== null && type === darywinTypes.RecordType.Agency) {
       setAvatarError(false)
     }
   }
@@ -189,7 +189,7 @@ const UpdateUser = () => {
 
   const handleResendActivationLink = async () => {
     try {
-      const status = await UserService.resend(email, false, type === movininTypes.RecordType.User ? 'frontend' : 'admin')
+      const status = await UserService.resend(email, false, type === darywinTypes.RecordType.User ? 'frontend' : 'admin')
 
       if (status === 200) {
         helper.info(commonStrings.ACTIVATION_EMAIL_SENT)
@@ -201,7 +201,7 @@ const UpdateUser = () => {
     }
   }
 
-  const onLoad = async (_loggedUser?: movininTypes.User) => {
+  const onLoad = async (_loggedUser?: darywinTypes.User) => {
     if (_loggedUser && _loggedUser.verified) {
       setLoading(true)
 
@@ -257,7 +257,7 @@ const UpdateUser = () => {
         return
       }
 
-      if (type === movininTypes.RecordType.Agency) {
+      if (type === darywinTypes.RecordType.Agency) {
         const fullNameValid = await validateFullName(fullName, false)
 
         if (!fullNameValid) {
@@ -277,14 +277,14 @@ const UpdateUser = () => {
         return
       }
 
-      if (type === movininTypes.RecordType.Agency && !avatar) {
+      if (type === darywinTypes.RecordType.Agency && !avatar) {
         setAvatarError(true)
         setError(false)
         return
       }
 
       const language = UserService.getLanguage()
-      const data: movininTypes.UpdateUserPayload = {
+      const data: darywinTypes.UpdateUserPayload = {
         _id: user._id as string,
         phone,
         location,
@@ -297,14 +297,14 @@ const UpdateUser = () => {
         blacklisted,
       }
 
-      if (type === movininTypes.RecordType.Agency) {
+      if (type === darywinTypes.RecordType.Agency) {
         data.payLater = payLater
       }
 
       const status = await UserService.updateUser(data)
 
       if (status === 200) {
-        const _user = movininHelper.clone(user) as movininTypes.User
+        const _user = darywinHelper.clone(user) as darywinTypes.User
         _user.fullName = fullName
         _user.type = type
         setUser(_user)
@@ -319,10 +319,10 @@ const UpdateUser = () => {
     }
   }
 
-  const agency = type === movininTypes.RecordType.Agency
-  const renter = type === movininTypes.RecordType.User
+  const agency = type === darywinTypes.RecordType.Agency
+  const renter = type === darywinTypes.RecordType.User
   const activate = admin
-    || (loggedUser && user && loggedUser.type === movininTypes.RecordType.Agency && user.type === movininTypes.RecordType.User && user.agency as string === loggedUser._id)
+    || (loggedUser && user && loggedUser.type === darywinTypes.RecordType.Agency && user.type === darywinTypes.RecordType.User && user.agency as string === loggedUser._id)
 
   return (
     <Layout onLoad={onLoad} strict>
@@ -345,7 +345,7 @@ const UpdateUser = () => {
                 onChange={onAvatarChange}
                 color="disabled"
                 className="avatar-ctn"
-                hideDelete={type === movininTypes.RecordType.Agency}
+                hideDelete={type === darywinTypes.RecordType.Agency}
               />
 
               {agency && (
@@ -359,9 +359,9 @@ const UpdateUser = () => {
                 <FormControl fullWidth margin="dense" style={{ marginTop: agency ? 0 : 39 }}>
                   <InputLabel className="required">{commonStrings.TYPE}</InputLabel>
                   <Select label={commonStrings.TYPE} value={type} onChange={handleUserTypeChange} variant="standard" required fullWidth>
-                    <MenuItem value={movininTypes.RecordType.Admin}>{helper.getUserType(movininTypes.UserType.Admin)}</MenuItem>
-                    <MenuItem value={movininTypes.RecordType.Agency}>{helper.getUserType(movininTypes.UserType.Agency)}</MenuItem>
-                    <MenuItem value={movininTypes.RecordType.User}>{helper.getUserType(movininTypes.UserType.User)}</MenuItem>
+                    <MenuItem value={darywinTypes.RecordType.Admin}>{helper.getUserType(darywinTypes.UserType.Admin)}</MenuItem>
+                    <MenuItem value={darywinTypes.RecordType.Agency}>{helper.getUserType(darywinTypes.UserType.Agency)}</MenuItem>
+                    <MenuItem value={darywinTypes.RecordType.User}>{helper.getUserType(darywinTypes.UserType.User)}</MenuItem>
                   </Select>
                 </FormControl>
               )}

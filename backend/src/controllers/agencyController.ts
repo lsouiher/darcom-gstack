@@ -2,7 +2,7 @@ import path from 'node:path'
 import asyncFs from 'node:fs/promises'
 import escapeStringRegexp from 'escape-string-regexp'
 import { Request, Response } from 'express'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import i18n from '../lang/i18n'
 import * as env from '../config/env.config'
 import User from '../models/User'
@@ -23,14 +23,14 @@ import * as logger from '../utils/logger'
  * @returns {unknown}
  */
 export const validate = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.ValidateAgencyPayload } = req
+  const { body }: { body: darywinTypes.ValidateAgencyPayload } = req
   const { fullName } = body
 
   try {
     const keyword = escapeStringRegexp(fullName)
     const options = 'i'
     const user = await User.findOne({
-      type: movininTypes.UserType.Agency,
+      type: darywinTypes.UserType.Agency,
       fullName: { $regex: new RegExp(`^${keyword}$`), $options: options },
     })
     if (user) {
@@ -54,7 +54,7 @@ export const validate = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const update = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.UpdateAgencyPayload } = req
+  const { body }: { body: darywinTypes.UpdateAgencyPayload } = req
   const { _id } = body
 
   try {
@@ -228,7 +228,7 @@ export const getAgencies = async (req: Request, res: Response) => {
       [
         {
           $match: {
-            type: movininTypes.UserType.Agency,
+            type: darywinTypes.UserType.Agency,
             avatar: { $ne: null },
             fullName: { $regex: keyword, $options: options },
           },
@@ -274,7 +274,7 @@ export const getAllAgencies = async (req: Request, res: Response) => {
       [
         {
           $match: {
-            type: movininTypes.UserType.Agency,
+            type: darywinTypes.UserType.Agency,
             avatar: { $ne: null },
             blacklisted: false,
           },

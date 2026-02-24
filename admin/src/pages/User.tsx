@@ -14,8 +14,8 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as ulStrings } from '@/lang/user-list'
@@ -35,8 +35,8 @@ const User = () => {
 
   const statuses = helper.getBookingStatuses().map((status) => status.value)
 
-  const [loggedUser, setLoggedUser] = useState<movininTypes.User>()
-  const [user, setUser] = useState<movininTypes.User>()
+  const [loggedUser, setLoggedUser] = useState<darywinTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(true)
   const [noMatch, setNoMatch] = useState(false)
@@ -90,7 +90,7 @@ const User = () => {
     setOpenDeleteDialog(false)
   }
 
-  const onLoad = async (_loggedUser?: movininTypes.User) => {
+  const onLoad = async (_loggedUser?: darywinTypes.User) => {
     if (_loggedUser && _loggedUser.verified) {
       setLoading(true)
 
@@ -113,7 +113,7 @@ const User = () => {
               const admin = helper.admin(_loggedUser)
               if (admin) {
                 const _agencies = await AgencyService.getAllAgencies()
-                const agencyIds = movininHelper.flattenAgencies(_agencies)
+                const agencyIds = darywinHelper.flattenAgencies(_agencies)
                 setState(agencyIds)
               } else {
                 setState([_loggedUser._id as string])
@@ -138,18 +138,18 @@ const User = () => {
     }
   }
 
-  const edit = loggedUser && user && (loggedUser.type === movininTypes.RecordType.Admin || loggedUser._id === user._id || (loggedUser.type === movininTypes.RecordType.Agency && loggedUser._id === user.agency))
-  const agency = user && user.type === movininTypes.RecordType.Agency
+  const edit = loggedUser && user && (loggedUser.type === darywinTypes.RecordType.Admin || loggedUser._id === user._id || (loggedUser.type === darywinTypes.RecordType.Agency && loggedUser._id === user.agency))
+  const agency = user && user.type === darywinTypes.RecordType.Agency
 
   let _agencies: string[] = []
   if (loggedUser && user) {
     if ((agency && loggedUser._id === user._id)
-      || (loggedUser.type === movininTypes.RecordType.Admin && user.type === movininTypes.RecordType.Agency)
+      || (loggedUser.type === darywinTypes.RecordType.Admin && user.type === darywinTypes.RecordType.Agency)
     ) {
       _agencies = [user._id as string]
-    } else if (loggedUser.type === movininTypes.RecordType.Agency && user.type === movininTypes.RecordType.User) {
+    } else if (loggedUser.type === darywinTypes.RecordType.Agency && user.type === darywinTypes.RecordType.User) {
       _agencies = [loggedUser._id as string]
-    } else if (loggedUser.type === movininTypes.RecordType.Admin) {
+    } else if (loggedUser.type === darywinTypes.RecordType.Admin) {
       _agencies = agencies
     }
   }

@@ -11,8 +11,8 @@ import {
   Paper
 } from '@mui/material'
 import validator from 'validator'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/settings'
@@ -76,10 +76,10 @@ const Settings = () => {
       if (user) {
         setEnableEmailNotifications(e.target.checked)
 
-        const _user = movininHelper.clone(user) as movininTypes.User
+        const _user = darywinHelper.clone(user) as darywinTypes.User
         _user.enableEmailNotifications = e.target.checked
 
-        const payload: movininTypes.UpdateEmailNotificationsPayload = {
+        const payload: darywinTypes.UpdateEmailNotificationsPayload = {
           _id: user._id as string,
           enableEmailNotifications: _user.enableEmailNotifications
         }
@@ -104,7 +104,7 @@ const Settings = () => {
   }
 
   const onAvatarChange = (avatar: string) => {
-    const _user = movininHelper.clone(user)
+    const _user = darywinHelper.clone(user)
     _user.avatar = avatar
     setUser(_user)
     setLoading(false)
@@ -124,7 +124,7 @@ const Settings = () => {
         return
       }
 
-      const data: movininTypes.UpdateUserPayload = {
+      const data: darywinTypes.UpdateUserPayload = {
         _id: user._id as string,
         fullName,
         phone,
@@ -144,7 +144,7 @@ const Settings = () => {
     }
   }
 
-  const onLoad = (_user?: movininTypes.User) => {
+  const onLoad = (_user?: darywinTypes.User) => {
     if (_user) {
       setUser(_user)
       setAdmin(helper.admin(_user))

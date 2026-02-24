@@ -1,9 +1,9 @@
 {
   "expo": {
     "jsEngine": "hermes",
-    "name": "Movin' In",
+    "name": "DaryWin",
     "version": "6.7.0",
-    "slug": "movinin",
+    "slug": "darywin",
     "icon": "./assets/icon.png",
     "assetBundlePatterns": [
       "**/*"
@@ -19,13 +19,13 @@
       },
       "icon": "./assets/icon.png",
       "googleServicesFile": "./google-services.json",
-      "package": "com.movinin"
+      "package": "com.darywin"
     },
     "ios": {
       "buildNumber": "6.7.0",
       "supportsTablet": true,
       "icon": "./assets/icon.png",
-      "bundleIdentifier": "com.movinin"
+      "bundleIdentifier": "com.darywin"
     },
     "plugins": [
       "expo-localization",

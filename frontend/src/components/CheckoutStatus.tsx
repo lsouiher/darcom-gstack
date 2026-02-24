@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { DirectionsCar as CarIcon } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { fr, enUS } from 'date-fns/locale'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import * as helper from '@/utils/helper'
 import * as BookingService from '@/services/BookingService'
 import * as PaymentService from '@/services/PaymentService'
@@ -31,7 +31,7 @@ const CheckoutStatus = (
     className,
   }: CheckoutStatusProps
 ) => {
-  const [booking, setBooking] = useState<movininTypes.Booking>()
+  const [booking, setBooking] = useState<darywinTypes.Booking>()
   const [price, setPrice] = useState(0)
   const [loading, setLoading] = useState(true)
 
@@ -55,7 +55,7 @@ const CheckoutStatus = (
   const _fr = language === 'fr'
   const _locale = _fr ? fr : enUS
   const _format = _fr ? 'eee d LLL yyyy kk:mm' : 'eee, d LLL yyyy, p'
-  const days = (booking && movininHelper.days(new Date(booking.from), new Date(booking.to))) || 0
+  const days = (booking && darywinHelper.days(new Date(booking.from), new Date(booking.to))) || 0
   const success = status === 'success'
 
   return booking && (
@@ -79,24 +79,24 @@ const CheckoutStatus = (
               <div className="status-detail">
                 <span className="status-detail-title">{checkoutStrings.PROPERTY}</span>
                 <div className="status-detail-value">
-                  <span>{(booking.property as movininTypes.Property).name}</span>
+                  <span>{(booking.property as darywinTypes.Property).name}</span>
                 </div>
               </div>
               <div className="status-detail">
                 <span className="status-detail-title">{checkoutStrings.DAYS}</span>
                 <div className="status-detail-value">
-                  {`${helper.getDaysShort(days)} (${movininHelper.capitalize(
+                  {`${helper.getDaysShort(days)} (${darywinHelper.capitalize(
                     format(new Date(booking.from), _format, { locale: _locale }),
-                  )} - ${movininHelper.capitalize(format(new Date(booking.to), _format, { locale: _locale }))})`}
+                  )} - ${darywinHelper.capitalize(format(new Date(booking.to), _format, { locale: _locale }))})`}
                 </div>
               </div>
               <div className="status-detail">
                 <span className="status-detail-title">{commonStrings.LOCATION}</span>
-                <div className="status-detail-value">{(booking.location as movininTypes.Location).name}</div>
+                <div className="status-detail-value">{(booking.location as darywinTypes.Location).name}</div>
               </div>
               <div className="status-detail">
                 <span className="status-detail-title">{checkoutStrings.COST}</span>
-                <div className="status-detail-value status-price">{movininHelper.formatPrice(price, commonStrings.CURRENCY, language)}</div>
+                <div className="status-detail-value status-price">{darywinHelper.formatPrice(price, commonStrings.CURRENCY, language)}</div>
               </div>
             </div>
           </div>

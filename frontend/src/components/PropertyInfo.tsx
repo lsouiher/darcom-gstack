@@ -17,8 +17,8 @@ import {
   AttachMoney as RentalTermIcon,
   PhotoSizeSelectSmall as SizeIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as cpStrings } from '@/lang/property'
 import { strings } from '@/lang/properties'
 import * as helper from '@/utils/helper'
@@ -28,7 +28,7 @@ import env from '@/config/env.config'
 import '@/assets/css/property-info.css'
 
 interface PropertyInfoProps {
-  property: movininTypes.Property
+  property: darywinTypes.Property
   description?: boolean
   className?: string
   language: string
@@ -60,7 +60,7 @@ const PropertyInfo = ({
       ? <CheckIcon className="available" />
       : <InfoIcon className="extra-info" />)
 
-  const size = `${movininHelper.formatNumber(property.size as number, language)} ${env.SIZE_UNIT}`
+  const size = `${darywinHelper.formatNumber(property.size as number, language)} ${env.SIZE_UNIT}`
 
   return (
     (

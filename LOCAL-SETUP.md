@@ -1,6 +1,6 @@
 # Local Development Setup Guide
 
-This guide walks you through running Movin' In locally using Docker Desktop (no MongoDB installation required).
+This guide walks you through running DaryWin locally using Docker Desktop (no MongoDB installation required).
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ Copy the example environment files. **Run all commands from the project root dir
 
 ```bash
 # Make sure you're in the project root
-cd /path/to/movinin
+cd /path/to/darywin
 
 # Copy all three environment files (run these from the project root)
 cp backend/.env.docker.example backend/.env.docker
@@ -46,8 +46,8 @@ Copy-Item admin\.env.docker.example admin\.env.docker
 Edit `backend/.env.docker` and replace the placeholder values:
 
 ```bash
-MI_JWT_SECRET=your-secure-jwt-secret-key-here
-MI_COOKIE_SECRET=your-secure-cookie-secret-here
+DW_JWT_SECRET=your-secure-jwt-secret-key-here
+DW_COOKIE_SECRET=your-secure-cookie-secret-here
 ```
 
 Generate secure random strings for these values (e.g., use `openssl rand -hex 32`).
@@ -65,11 +65,11 @@ First run will take a few minutes to download images and build containers.
 Once services are running, seed the database:
 
 ```bash
-docker-compose -f docker-compose.dev.yml exec mi-dev-backend npm run setup
+docker-compose -f docker-compose.dev.yml exec dw-dev-backend npm run setup
 ```
 
 This creates a default admin account:
-- **Email:** admin@movinin.io
+- **Email:** admin@darywin.com
 - **Password:** M00vinin
 
 ### 5. Access the Applications
@@ -89,9 +89,9 @@ Docker Compose starts 5 services:
 |---------|-------------|------|
 | mongo | MongoDB database | 27018 |
 | mongo-express | Database admin UI | 8084 |
-| mi-dev-backend | Node.js/Express API | 4004 |
-| mi-dev-admin | React admin panel | 3003 |
-| mi-dev-frontend | React customer app | 8081 |
+| dw-dev-backend | Node.js/Express API | 4004 |
+| dw-dev-admin | React admin panel | 3003 |
+| dw-dev-frontend | React customer app | 8081 |
 
 ## Common Commands
 
@@ -102,7 +102,7 @@ Docker Compose starts 5 services:
 docker-compose -f docker-compose.dev.yml logs -f
 
 # Specific service
-docker-compose -f docker-compose.dev.yml logs -f mi-dev-backend
+docker-compose -f docker-compose.dev.yml logs -f dw-dev-backend
 ```
 
 ### Stop services
@@ -120,7 +120,7 @@ docker-compose -f docker-compose.dev.yml down -v
 ### Restart a specific service
 
 ```bash
-docker-compose -f docker-compose.dev.yml restart mi-dev-backend
+docker-compose -f docker-compose.dev.yml restart dw-dev-backend
 ```
 
 ### Rebuild containers (after Dockerfile changes)
@@ -137,34 +137,34 @@ Key settings already configured for Docker:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| MI_DB_URI | `mongodb://admin:admin@mongo:27017/movinin` | MongoDB connection |
-| MI_PORT | 4004 | API port |
-| MI_ADMIN_HOST | `http://localhost:3003/` | Admin panel URL |
-| MI_FRONTEND_HOST | `http://localhost:8081/` | Frontend URL |
+| DW_DB_URI | `mongodb://admin:admin@mongo:27017/darywin` | MongoDB connection |
+| DW_PORT | 4004 | API port |
+| DW_ADMIN_HOST | `http://localhost:3003/` | Admin panel URL |
+| DW_FRONTEND_HOST | `http://localhost:8081/` | Frontend URL |
 
 **Required secrets to set:**
-- `MI_JWT_SECRET` - JWT signing key
-- `MI_COOKIE_SECRET` - Cookie encryption key
+- `DW_JWT_SECRET` - JWT signing key
+- `DW_COOKIE_SECRET` - Cookie encryption key
 
 **Optional (for full functionality):**
-- `MI_STRIPE_SECRET_KEY` - Stripe payments
-- `MI_PAYPAL_CLIENT_ID` / `MI_PAYPAL_CLIENT_SECRET` - PayPal payments
-- `MI_SMTP_PASS` - Email service (SendGrid)
-- `MI_RECAPTCHA_SECRET` - reCAPTCHA verification
+- `DW_STRIPE_SECRET_KEY` - Stripe payments
+- `DW_PAYPAL_CLIENT_ID` / `DW_PAYPAL_CLIENT_SECRET` - PayPal payments
+- `DW_SMTP_PASS` - Email service (SendGrid)
+- `DW_RECAPTCHA_SECRET` - reCAPTCHA verification
 
 ### Frontend (`frontend/.env.docker`)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| VITE_MI_API_HOST | `http://localhost:4004` | Backend API URL |
+| VITE_DW_API_HOST | `http://localhost:4004` | Backend API URL |
 | VITE_PORT | 8081 | Dev server port |
-| VITE_MI_PAYMENT_GATEWAY | Stripe | Payment provider |
+| VITE_DW_PAYMENT_GATEWAY | Stripe | Payment provider |
 
 ### Admin (`admin/.env.docker`)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| VITE_MI_API_HOST | `http://localhost:4004` | Backend API URL |
+| VITE_DW_API_HOST | `http://localhost:4004` | Backend API URL |
 | VITE_PORT | 3003 | Dev server port |
 
 ## Hot Reload
@@ -186,7 +186,7 @@ Open http://localhost:8084 in your browser:
 
 ### Via MongoDB Client
 
-Connect to `mongodb://admin:admin@127.0.0.1:27018/movinin`
+Connect to `mongodb://admin:admin@127.0.0.1:27018/darywin`
 
 ## Running the Mobile App
 
@@ -204,7 +204,7 @@ The mobile app is NOT included in Docker Compose. To run it:
    ```
 4. Update `mobile/.env`:
    ```
-   MI_API_HOST=http://YOUR_LOCAL_IP:4004
+   DW_API_HOST=http://YOUR_LOCAL_IP:4004
    ```
    (Use your machine's IP, not localhost, for device access)
 5. Start Expo:
@@ -237,7 +237,7 @@ docker-compose -f docker-compose.dev.yml logs mongo
 
 The backend waits for MongoDB but may start before it's fully ready. Restart it:
 ```bash
-docker-compose -f docker-compose.dev.yml restart mi-dev-backend
+docker-compose -f docker-compose.dev.yml restart dw-dev-backend
 ```
 
 ### Changes not reflecting
@@ -257,7 +257,7 @@ sudo chown -R $USER:$USER .
 
 Check logs for the failing container:
 ```bash
-docker-compose -f docker-compose.dev.yml logs mi-dev-backend
+docker-compose -f docker-compose.dev.yml logs dw-dev-backend
 ```
 
 Common causes:

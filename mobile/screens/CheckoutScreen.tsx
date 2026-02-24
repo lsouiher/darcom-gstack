@@ -13,8 +13,8 @@ import validator from 'validator'
 import { format, intervalToDuration } from 'date-fns'
 import { enUS, fr } from 'date-fns/locale'
 import { PaymentSheetError, initPaymentSheet, useStripe } from '@stripe/stripe-react-native'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import Layout from '@/components/Layout'
 import i18n from '@/lang/i18n'
@@ -43,15 +43,15 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
   const [formVisible, setFormVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const [authenticated, setAuthenticated] = useState(false)
-  const [user, setUser] = useState<movininTypes.User | null>()
+  const [user, setUser] = useState<darywinTypes.User | null>()
   const [language, setLanguage] = useState(env.DEFAULT_LANGUAGE)
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [birthDate, setBirthDate] = useState<Date>()
   const [tosChecked, setTosChecked] = useState(false)
-  const [property, setProperty] = useState<movininTypes.Property | null>(null)
-  const [location, setLocation] = useState<movininTypes.Location | null>(null)
+  const [property, setProperty] = useState<darywinTypes.Property | null>(null)
+  const [location, setLocation] = useState<darywinTypes.Location | null>(null)
   const [from, setFrom] = useState<Date>()
   const [to, setTo] = useState<Date>()
   const [price, setPrice] = useState(0)
@@ -196,7 +196,7 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
       const _to = new Date(route.params.to)
       setTo(_to)
 
-      const _price = await StripeService.convertPrice(movininHelper.calculateTotalPrice(_property, _from, _to))
+      const _price = await StripeService.convertPrice(darywinHelper.calculateTotalPrice(_property, _from, _to))
       setPrice(_price)
 
       const included = (val: number) => val === 0
@@ -356,7 +356,7 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
     const options = {
       cancellation: checked
     }
-    const _price = await StripeService.convertPrice(movininHelper.calculateTotalPrice(property as movininTypes.Property, from as Date, to as Date, options))
+    const _price = await StripeService.convertPrice(darywinHelper.calculateTotalPrice(property as darywinTypes.Property, from as Date, to as Date, options))
     setCancellation(checked)
     setPrice(_price)
   }
@@ -406,7 +406,7 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
 
       setLoading(true)
 
-      let renter: movininTypes.User | undefined
+      let renter: darywinTypes.User | undefined
 
       if (!authenticated) {
         renter = {
@@ -425,14 +425,14 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
       let customerId: string | undefined
       try {
         if (!payLater) {
-          const name = movininHelper.truncateString(`${env.WEBSITE_NAME} - ${property.name}`, StripeService.ORDER_NAME_MAX_LENGTH)
+          const name = darywinHelper.truncateString(`${env.WEBSITE_NAME} - ${property.name}`, StripeService.ORDER_NAME_MAX_LENGTH)
           const _locale = _fr ? fr : enUS
-          const days = movininHelper.days(from, to)
-          const daysLabel = from && to && `${helper.getDaysShort(days)} (${movininHelper.capitalize(format(from, _format, { locale: _locale }),)} - ${movininHelper.capitalize(format(to, _format, { locale: _locale }))})`
+          const days = darywinHelper.days(from, to)
+          const daysLabel = from && to && `${helper.getDaysShort(days)} (${darywinHelper.capitalize(format(from, _format, { locale: _locale }),)} - ${darywinHelper.capitalize(format(to, _format, { locale: _locale }))})`
           const _description = `${env.WEBSITE_NAME} - ${property.name} - ${daysLabel} - ${location.name}`
-          const description = movininHelper.truncateString(_description, StripeService.ORDER_DESCRIPTION_MAX_LENGTH)
+          const description = darywinHelper.truncateString(_description, StripeService.ORDER_DESCRIPTION_MAX_LENGTH)
 
-          const createPaymentIntentPayload: movininTypes.CreatePaymentPayload = {
+          const createPaymentIntentPayload: darywinTypes.CreatePaymentPayload = {
             amount: price,
             currency,
             locale: language,
@@ -455,7 +455,7 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
             const { error: initPaymentSheetError } = await initPaymentSheet({
               customerId,
               paymentIntentClientSecret: clientSecret,
-              merchantDisplayName: "Movin' In",
+              merchantDisplayName: "DaryWin",
               googlePay: {
                 merchantCountryCode: env.STRIPE_COUNTRY_CODE.toUpperCase(),
                 testEnv: env.STRIPE_PUBLISHABLE_KEY.includes('_test_'),
@@ -498,21 +498,21 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
         return
       }
 
-      const basePrice = await movininHelper.convertPrice(price, currency, env.BASE_CURRENCY)
+      const basePrice = await darywinHelper.convertPrice(price, currency, env.BASE_CURRENCY)
 
-      const booking: movininTypes.Booking = {
+      const booking: darywinTypes.Booking = {
         agency: property.agency._id as string,
         property: property._id as string,
         renter: authenticated ? user?._id : undefined,
         location: location._id as string,
         from,
         to,
-        status: payLater ? movininTypes.BookingStatus.Pending : movininTypes.BookingStatus.Paid,
+        status: payLater ? darywinTypes.BookingStatus.Pending : darywinTypes.BookingStatus.Paid,
         cancellation,
         price: basePrice,
       }
 
-      const payload: movininTypes.CheckoutPayload = {
+      const payload: darywinTypes.CheckoutPayload = {
         renter,
         booking,
         payLater,
@@ -536,7 +536,7 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
 
   const iconSize = 18
   const iconColor = '#000'
-  const _fr = movininHelper.isFrench(language)
+  const _fr = darywinHelper.isFrench(language)
   const _format = _fr ? 'eee d LLL yyyy kk:mm' : 'eee, d LLL yyyy, p'
 
   return (
@@ -582,7 +582,7 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
 
                   <Text style={styles.detailTitle}>{i18n.t('DAYS')}</Text>
                   <Text style={styles.detailText}>
-                    {`${helper.getDaysShort(movininHelper.days(from, to))} (${movininHelper.capitalize(format(from, _format, { locale }))} - ${movininHelper.capitalize(
+                    {`${helper.getDaysShort(darywinHelper.days(from, to))} (${darywinHelper.capitalize(format(from, _format, { locale }))} - ${darywinHelper.capitalize(
                       format(to, _format, { locale }),
                     )})`}
                   </Text>
@@ -598,14 +598,14 @@ const CheckoutScreen = ({ navigation, route }: NativeStackScreenProps<StackParam
                     <Image
                       style={styles.agencyImg}
                       source={{
-                        uri: movininHelper.joinURL(env.CDN_USERS, property.agency.avatar),
+                        uri: darywinHelper.joinURL(env.CDN_USERS, property.agency.avatar),
                       }}
                     />
                     <Text style={styles.agencyText} numberOfLines={2} ellipsizeMode="tail">{property.agency.fullName}</Text>
                   </View>
 
                   <Text style={styles.detailTitle}>{i18n.t('COST')}</Text>
-                  <Text style={styles.detailTextBold}>{movininHelper.formatPrice(price, currencySymbol, language)}</Text>
+                  <Text style={styles.detailTextBold}>{darywinHelper.formatPrice(price, currencySymbol, language)}</Text>
                 </View>
 
                 {!authenticated && (

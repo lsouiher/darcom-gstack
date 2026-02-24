@@ -23,7 +23,7 @@ beforeAll(async () => {
   await testHelper.initialize()
   ADMIN_USER_ID = testHelper.getAdminUserId()
   const agencyName = testHelper.getAgencyName()
-  AGENCY_ID = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+  AGENCY_ID = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
 
   // create admin user notifications and notification counter
   let notification = new Notification({ user: ADMIN_USER_ID, message: 'Message 1' })

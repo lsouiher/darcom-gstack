@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import i18n from '@/lang/i18n'
 import Accordion from './Accordion'
@@ -11,17 +11,17 @@ import Switch from './Switch'
 interface RentalTermFilterProps {
   visible?: boolean
   style?: object
-  onChange?: (values: movininTypes.RentalTerm[]) => void
+  onChange?: (values: darywinTypes.RentalTerm[]) => void
 }
 
-const allRentalTerms = movininHelper.getAllRentalTerms()
+const allRentalTerms = darywinHelper.getAllRentalTerms()
 
 const RentalTermFilter = ({
   visible,
   style,
   onChange
 }: RentalTermFilterProps) => {
-  const [values, setValues] = useState<movininTypes.RentalTerm[]>([])
+  const [values, setValues] = useState<darywinTypes.RentalTerm[]>([])
   const [monthly, setMonthly] = useState(false)
   const [weekly, setWeekly] = useState(false)
   const [daily, setDaily] = useState(false)
@@ -29,22 +29,22 @@ const RentalTermFilter = ({
 
   const [allChecked, setAllChecked] = useState(false)
 
-  const handleChange = (_values: movininTypes.RentalTerm[]) => {
+  const handleChange = (_values: darywinTypes.RentalTerm[]) => {
     if (onChange) {
-      onChange(_values.length === 0 ? allRentalTerms : movininHelper.clone(_values))
+      onChange(_values.length === 0 ? allRentalTerms : darywinHelper.clone(_values))
     }
   }
 
   const onValueChangeMonthly = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.RentalTerm.Monthly)
+      values.push(darywinTypes.RentalTerm.Monthly)
 
       if (values.length === 4) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Monthly),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Monthly),
         1,
       )
 
@@ -60,14 +60,14 @@ const RentalTermFilter = ({
 
   const onValueChangeWeekly = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.RentalTerm.Weekly)
+      values.push(darywinTypes.RentalTerm.Weekly)
 
       if (values.length === 4) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Weekly),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Weekly),
         1,
       )
 
@@ -83,14 +83,14 @@ const RentalTermFilter = ({
 
   const onValueChangeDaily = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.RentalTerm.Daily)
+      values.push(darywinTypes.RentalTerm.Daily)
 
       if (values.length === 4) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Daily),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Daily),
         1,
       )
 
@@ -106,14 +106,14 @@ const RentalTermFilter = ({
 
   const onValueChangeYearly = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.RentalTerm.Yearly)
+      values.push(darywinTypes.RentalTerm.Yearly)
 
       if (values.length === 4) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Yearly),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Yearly),
         1,
       )
 
@@ -181,7 +181,7 @@ const RentalTermFilter = ({
                 setValues(allRentalTerms)
                 setAllChecked(true)
                 if (onChange) {
-                  onChange(movininHelper.clone(allRentalTerms))
+                  onChange(darywinHelper.clone(allRentalTerms))
                 }
               }
             }}

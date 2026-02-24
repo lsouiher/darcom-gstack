@@ -4,8 +4,8 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Dialog, Portal, Button as NativeButton, Paragraph } from 'react-native-paper'
 import { Locale, format } from 'date-fns'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import i18n from '@/lang/i18n'
 import * as UserService from '@/services/UserService'
@@ -17,7 +17,7 @@ import { useGlobalContext, GlobalContextType } from '@/context/GlobalContext'
 
 interface NotificationListProps {
   navigation: NativeStackNavigationProp<StackParams, keyof StackParams>
-  user?: movininTypes.User
+  user?: darywinTypes.User
   locale: Locale
 }
 
@@ -26,10 +26,10 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
 
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
-  const [rows, setRows] = useState<movininTypes.Notification[]>([])
+  const [rows, setRows] = useState<darywinTypes.Notification[]>([])
   const [totalRecords, setTotalRecords] = useState(-1)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
-  const [selectedRows, setSelectedRows] = useState<movininTypes.Notification[]>([])
+  const [selectedRows, setSelectedRows] = useState<darywinTypes.Notification[]>([])
   const [rowCount, setRowCount] = useState(-1)
 
   const notificationsListRef = useRef<ScrollView>(null)
@@ -102,7 +102,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
                       row.checked = checked
                     })
                   }
-                  setRows(movininHelper.clone(rows))
+                  setRows(darywinHelper.clone(rows))
                 }}
               />
               {checkedRows.length > 0 && (
@@ -121,7 +121,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
                               _rows.forEach((row) => {
                                 row.isRead = true
                               })
-                              setRows(movininHelper.clone(rows))
+                              setRows(darywinHelper.clone(rows))
                               setNotificationCount((prev) => prev - _rows.length)
                             } else {
                               helper.error()
@@ -151,7 +151,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
                               _rows.forEach((row) => {
                                 row.isRead = false
                               })
-                              setRows(movininHelper.clone(rows))
+                              setRows(darywinHelper.clone(rows))
                               setNotificationCount((prev) => prev + _rows.length)
                             } else {
                               helper.error()
@@ -189,7 +189,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
                     checked={row.checked}
                     onChange={(checked: boolean) => {
                       row.checked = checked
-                      setRows(movininHelper.clone(rows))
+                      setRows(darywinHelper.clone(rows))
                     }}
                   />
                 </View>
@@ -200,7 +200,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
                       fontWeight: !row.isRead ? '700' : '400',
                     }}
                   >
-                    {movininHelper.capitalize(format(new Date(row.createdAt as Date), _format, { locale }))}
+                    {darywinHelper.capitalize(format(new Date(row.createdAt as Date), _format, { locale }))}
                   </Text>
                   <View style={styles.messageContainer}>
                     <Text
@@ -227,7 +227,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
 
                                 if (status === 200) {
                                   row.isRead = true
-                                  setRows(movininHelper.clone(rows))
+                                  setRows(darywinHelper.clone(rows))
                                   setNotificationCount((prev) => prev - 1)
                                   navigate()
                                 } else {
@@ -253,7 +253,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
 
                               if (status === 200) {
                                 row.isRead = true
-                                setRows(movininHelper.clone(rows))
+                                setRows(darywinHelper.clone(rows))
                                 setNotificationCount((prev) => prev - 1)
                               } else {
                                 helper.error()
@@ -274,7 +274,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
 
                               if (status === 200) {
                                 row.isRead = false
-                                setRows(movininHelper.clone(rows))
+                                setRows(darywinHelper.clone(rows))
                                 setNotificationCount((prev) => prev + 1)
                               } else {
                                 helper.error()
@@ -371,7 +371,7 @@ const NotificationList = ({ user, locale, navigation }: NotificationListProps) =
                                 1,
                               )
                             })
-                            setRows(movininHelper.clone(rows))
+                            setRows(darywinHelper.clone(rows))
                             setRowCount(rowCount - selectedRows.length)
                             setTotalRecords(totalRecords - selectedRows.length)
                           }

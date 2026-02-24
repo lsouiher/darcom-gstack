@@ -1,6 +1,6 @@
 # Booking Request Flow
 
-This document explains the complete booking flow in Movin' In, from property selection to payment confirmation and notifications.
+This document explains the complete booking flow in DaryWin, from property selection to payment confirmation and notifications.
 
 ---
 
@@ -125,7 +125,7 @@ When a user selects a property and clicks "Book", they are navigated to the chec
 ### Frontend: `frontend/src/pages/Checkout.tsx` (lines 353-404)
 
 ```typescript
-const onLoad = async (_user?: movininTypes.User) => {
+const onLoad = async (_user?: darywinTypes.User) => {
   // Get data from navigation state
   const { state } = reactLocation
   const { propertyId, locationId, from: _from, to: _to } = state
@@ -138,7 +138,7 @@ const onLoad = async (_user?: movininTypes.User) => {
 
   // Calculate total price based on rental term
   const _price = await PaymentService.convertPrice(
-    movininHelper.calculateTotalPrice(_property, _from, _to)
+    darywinHelper.calculateTotalPrice(_property, _from, _to)
   )
 
   setProperty(_property)
@@ -149,7 +149,7 @@ const onLoad = async (_user?: movininTypes.User) => {
 }
 ```
 
-### Price Calculation: `packages/movinin-helper/index.ts`
+### Price Calculation: `packages/darywin-helper/index.ts`
 
 The price is calculated based on the property's rental term:
 
@@ -218,7 +218,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 
   // 3. Prepare renter data (for guest checkout)
-  let renter: movininTypes.User | undefined
+  let renter: darywinTypes.User | undefined
   if (!authenticated) {
     renter = {
       email,
@@ -230,21 +230,21 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 
   // 4. Convert price to base currency
-  const basePrice = await movininHelper.convertPrice(
+  const basePrice = await darywinHelper.convertPrice(
     price,
     PaymentService.getCurrency(),
     env.BASE_CURRENCY
   )
 
   // 5. Create booking object
-  const booking: movininTypes.Booking = {
+  const booking: darywinTypes.Booking = {
     agency: property.agency._id as string,
     property: property._id,
     renter: authenticated ? user?._id : undefined,
     location: location._id,
     from,
     to,
-    status: movininTypes.BookingStatus.Pending,
+    status: darywinTypes.BookingStatus.Pending,
     cancellation,
     price: basePrice,
   }
@@ -265,13 +265,13 @@ The system supports three payment paths:
 
 ```typescript
 // Checkout.tsx (lines 300-318)
-if (env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.Stripe) {
-  const payload: movininTypes.CreatePaymentPayload = {
+if (env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.Stripe) {
+  const payload: darywinTypes.CreatePaymentPayload = {
     amount: price,
     currency: PaymentService.getCurrency(),
     locale: language,
     receiptEmail: (!authenticated ? renter?.email : user?.email) as string,
-    name: movininHelper.truncateString(
+    name: darywinHelper.truncateString(
       `${env.WEBSITE_NAME} - ${property.name}`,
       StripeService.ORDER_NAME_MAX_LENGTH
     ),
@@ -300,7 +300,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
     name,
     description,
     customerName,
-  }: movininTypes.CreatePaymentPayload = req.body
+  }: darywinTypes.CreatePaymentPayload = req.body
 
   // 1. Find or create Stripe customer
   const customers = await stripeAPI.customers.list({ email: receiptEmail })
@@ -339,7 +339,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
   })
 
   // 3. Return session details to frontend
-  const result: movininTypes.PaymentResult = {
+  const result: darywinTypes.PaymentResult = {
     sessionId: session.id,
     customerId: customer.id,
     clientSecret: session.client_secret,
@@ -354,12 +354,12 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 // Checkout.tsx (lines 632-669)
 <PayPalButtons
   createOrder={async () => {
-    const name = movininHelper.truncateString(
+    const name = darywinHelper.truncateString(
       property.name,
       PayPalService.ORDER_NAME_MAX_LENGTH
     )
     const _description = `${property.name} - ${daysLabel} - ${location.name}`
-    const description = movininHelper.truncateString(
+    const description = darywinHelper.truncateString(
       _description,
       PayPalService.ORDER_DESCRIPTION_MAX_LENGTH
     )
@@ -430,13 +430,13 @@ After initiating payment, a temporary booking is created in the database.
 ### Frontend: `frontend/src/pages/Checkout.tsx` (lines 324-345)
 
 ```typescript
-const payload: movininTypes.CheckoutPayload = {
+const payload: darywinTypes.CheckoutPayload = {
   renter,           // New user data (if not authenticated)
   booking,          // Booking details
   payLater,         // Boolean: skip payment
   sessionId: _sessionId,        // Stripe session ID
   customerId: _customerId,      // Stripe customer ID
-  payPal: env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.PayPal,
+  payPal: env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.PayPal,
 }
 
 const { status, bookingId: _bookingId } = await BookingService.checkout(payload)
@@ -456,7 +456,7 @@ if (status === 200) {
 ```typescript
 export const checkout = async (req: Request, res: Response) => {
   let user: env.User | null
-  const { body }: { body: movininTypes.CheckoutPayload } = req
+  const { body }: { body: darywinTypes.CheckoutPayload } = req
   const { renter } = body
 
   if (!body.booking) {
@@ -525,14 +525,14 @@ export const checkout = async (req: Request, res: Response) => {
       }
 
       body.booking.paymentIntentId = paymentIntentId
-      body.booking.status = movininTypes.BookingStatus.Paid
+      body.booking.status = darywinTypes.BookingStatus.Paid
     } else {
       // Booking is TEMPORARY until payment verified
       let expireAt = new Date()
       expireAt.setSeconds(expireAt.getSeconds() + env.BOOKING_EXPIRE_AT)
 
       body.booking.sessionId = !payPal ? body.sessionId : undefined
-      body.booking.status = movininTypes.BookingStatus.Void  // Temporary status
+      body.booking.status = darywinTypes.BookingStatus.Void  // Temporary status
       body.booking.expireAt = expireAt  // TTL index - auto-deletes if unpaid
 
       // Temporary user also expires if not verified
@@ -561,7 +561,7 @@ export const checkout = async (req: Request, res: Response) => {
   await booking.save()
 
   // 5. For pay later or immediate payment: send notifications
-  if (body.payLater || (booking.status === movininTypes.BookingStatus.Paid && body.paymentIntentId && body.customerId)) {
+  if (body.payLater || (booking.status === darywinTypes.BookingStatus.Paid && body.paymentIntentId && body.customerId)) {
     // Send confirmation email
     if (!(await confirm(user, booking, body.payLater!))) {
       res.sendStatus(400)
@@ -583,7 +583,7 @@ export const checkout = async (req: Request, res: Response) => {
 
     // Notify admin
     const admin = !!env.ADMIN_EMAIL && (
-      await User.findOne({ email: env.ADMIN_EMAIL, type: movininTypes.UserType.Admin })
+      await User.findOne({ email: env.ADMIN_EMAIL, type: darywinTypes.UserType.Admin })
     )
     if (admin) {
       i18n.locale = admin.language
@@ -699,7 +699,7 @@ export const checkCheckoutSession = async (req: Request, res: Response) => {
   if (session.payment_status === 'paid') {
     // Remove TTL expiration (make booking permanent)
     booking.expireAt = undefined
-    booking.status = movininTypes.BookingStatus.Paid
+    booking.status = darywinTypes.BookingStatus.Paid
     await booking.save()
 
     const property = await Property.findById(booking.property)
@@ -734,7 +734,7 @@ export const checkCheckoutSession = async (req: Request, res: Response) => {
 
     // Notify admin (if configured)
     const admin = !!env.ADMIN_EMAIL && (
-      await User.findOne({ email: env.ADMIN_EMAIL, type: movininTypes.UserType.Admin })
+      await User.findOne({ email: env.ADMIN_EMAIL, type: darywinTypes.UserType.Admin })
     )
     if (admin) {
       i18n.locale = admin.language
@@ -1078,7 +1078,7 @@ export const cancelBooking = async (req: Request, res: Response) => {
     // Notify admin
     const admin = await User.findOne({
       email: env.ADMIN_EMAIL,
-      type: movininTypes.UserType.Admin
+      type: darywinTypes.UserType.Admin
     })
     if (admin) {
       i18n.locale = admin.language
@@ -1095,4 +1095,4 @@ export const cancelBooking = async (req: Request, res: Response) => {
 
 ---
 
-*Document generated for Movin' In v6.7.0*
+*Document generated for DaryWin v6.7.0*

@@ -8,7 +8,7 @@ import {
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import validator from 'validator'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 import TextInput from '@/components/TextInput'
 import Button from '@/components/Button'
@@ -153,7 +153,7 @@ const SignInScreen = ({ navigation, route }: NativeStackScreenProps<StackParams,
       return
     }
 
-    const data: movininTypes.SignInPayload = {
+    const data: darywinTypes.SignInPayload = {
       email,
       password,
       stayConnected,

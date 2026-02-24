@@ -12,8 +12,8 @@ import {
 import validator from 'validator'
 import { intervalToDuration } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as helper from '@/utils/helper'
 import { strings as commonStrings } from '@/lang/common'
@@ -131,7 +131,7 @@ const SignUp = () => {
   }
 
   const validateBirthDate = (date?: Date) => {
-    if (date && movininHelper.isDate(date)) {
+    if (date && darywinHelper.isDate(date)) {
       const now = new Date()
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0
       const _birthDateValid = sub >= env.MINIMUM_AGE
@@ -222,7 +222,7 @@ const SignUp = () => {
 
       setLoading(true)
 
-      const data: movininTypes.SignUpPayload = {
+      const data: darywinTypes.SignUpPayload = {
         email,
         phone,
         password,
@@ -270,7 +270,7 @@ const SignUp = () => {
     }
   }
 
-  const onLoad = (user?: movininTypes.User) => {
+  const onLoad = (user?: darywinTypes.User) => {
     if (user) {
       navigate('/')
     } else {

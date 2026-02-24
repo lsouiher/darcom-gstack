@@ -7,7 +7,7 @@ import {
   Button,
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as suStrings } from '@/lang/sign-up'
 import { strings } from '@/lang/sign-in'
@@ -43,7 +43,7 @@ const SignIn = () => {
     try {
       e.preventDefault()
 
-      const data: movininTypes.SignInPayload = {
+      const data: darywinTypes.SignInPayload = {
         email,
         password,
         stayConnected: UserService.getStayConnected()
@@ -79,7 +79,7 @@ const SignIn = () => {
     }
   }
 
-  const onLoad = async (user?: movininTypes.User) => {
+  const onLoad = async (user?: darywinTypes.User) => {
     UserService.setStayConnected(false)
 
     if (user) {
