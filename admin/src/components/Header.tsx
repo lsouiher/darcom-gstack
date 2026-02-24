@@ -269,7 +269,7 @@ const Header = ({
   )
 
   return (
-    <div style={hidden ? { display: 'none' } : classes.grow} className="header">
+    <div style={hidden ? { display: 'none' } : classes.grow} className="header" dir="ltr">
       <AppBar position="fixed" sx={{ bgcolor: '#121212' }}>
         <Toolbar className="toolbar">
           {isLoaded && isSignedIn && (

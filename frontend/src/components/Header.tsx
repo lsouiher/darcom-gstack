@@ -333,7 +333,7 @@ const Header = ({
 
   return (
     (!hidden && (
-      <div style={classes.grow} className="header">
+      <div style={classes.grow} className="header" dir="ltr">
         <AppBar position="relative" sx={{ bgcolor: '#fff', boxShadow: 'none', borderBottom: '1px solid #ddd' }}>
           <Toolbar className="toolbar">
             {isLoaded && (
