@@ -1,13 +1,13 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 
 /**
  * Validate an Agency name.
  *
- * @param {movininTypes.ValidateAgencyPayload} data
+ * @param {darywinTypes.ValidateAgencyPayload} data
  * @returns {Promise<number>}
  */
-export const validate = (data: movininTypes.ValidateAgencyPayload): Promise<number> =>
+export const validate = (data: darywinTypes.ValidateAgencyPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/validate-agency',
@@ -19,10 +19,10 @@ export const validate = (data: movininTypes.ValidateAgencyPayload): Promise<numb
 /**
  * Update an Agency.
  *
- * @param {movininTypes.UpdateAgencyPayload} data
+ * @param {darywinTypes.UpdateAgencyPayload} data
  * @returns {Promise<number>}
  */
-export const update = (data: movininTypes.UpdateAgencyPayload): Promise<number> =>
+export const update = (data: darywinTypes.UpdateAgencyPayload): Promise<number> =>
   axiosInstance
     .put(
       '/api/update-agency',
@@ -49,9 +49,9 @@ export const deleteAgency = (id: string): Promise<number> =>
  * Get an Agency by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.User>}
+ * @returns {Promise<darywinTypes.User>}
  */
-export const getAgency = (id: string): Promise<movininTypes.User> =>
+export const getAgency = (id: string): Promise<darywinTypes.User> =>
   axiosInstance
     .get(
       `/api/agency/${encodeURIComponent(id)}`,
@@ -65,10 +65,10 @@ export const getAgency = (id: string): Promise<movininTypes.User> =>
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.User>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.User>>}
  */
 export const getAgencies = (keyword: string, page: number, size: number)
-  : Promise<movininTypes.Result<movininTypes.User>> =>
+  : Promise<darywinTypes.Result<darywinTypes.User>> =>
   axiosInstance
     .get(
       `/api/agencies/${page}/${size}/?s=${encodeURIComponent(keyword)}`,
@@ -79,9 +79,9 @@ export const getAgencies = (keyword: string, page: number, size: number)
 /**
  * Get all Agencies.
  *
- * @returns {Promise<movininTypes.User[]>}
+ * @returns {Promise<darywinTypes.User[]>}
  */
-export const getAllAgencies = (): Promise<movininTypes.User[]> =>
+export const getAllAgencies = (): Promise<darywinTypes.User[]> =>
   axiosInstance
     .get(
       '/api/all-agencies',

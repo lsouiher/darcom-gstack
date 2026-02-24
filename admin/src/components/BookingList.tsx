@@ -24,8 +24,8 @@ import {
 } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { fr as dfnsFR, enUS as dfnsENUS } from 'date-fns/locale'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as csStrings } from '@/lang/properties'
@@ -40,11 +40,11 @@ import '@/assets/css/booking-list.css'
 interface BookingListProps {
   agencies?: string[]
   statuses?: string[]
-  filter?: movininTypes.Filter | null
+  filter?: darywinTypes.Filter | null
   property?: string
   offset?: number
-  user?: movininTypes.User
-  loggedUser?: movininTypes.User
+  user?: darywinTypes.User
+  loggedUser?: darywinTypes.User
   containerClassName?: string
   hideDates?: boolean
   hidePropertyColumn?: boolean
@@ -52,7 +52,7 @@ interface BookingListProps {
   language?: string
   loading?: boolean
   checkboxSelection?: boolean
-  onLoad?: movininTypes.DataEvent<movininTypes.Booking>
+  onLoad?: darywinTypes.DataEvent<darywinTypes.Booking>
 }
 
 const BookingList = ({
@@ -73,10 +73,10 @@ const BookingList = ({
 }: BookingListProps) => {
   const navigate = useNavigate()
 
-  const [loggedUser, setLoggedUser] = useState<movininTypes.User>()
-  const [user, setUser] = useState<movininTypes.User>()
-  const [columns, setColumns] = useState<GridColDef<movininTypes.Booking>[]>([])
-  const [rows, setRows] = useState<movininTypes.Booking[]>([])
+  const [loggedUser, setLoggedUser] = useState<darywinTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
+  const [columns, setColumns] = useState<GridColDef<darywinTypes.Booking>[]>([])
+  const [rows, setRows] = useState<darywinTypes.Booking[]>([])
   const [rowCount, setRowCount] = useState(0)
   const [fetch, setFetch] = useState(false)
   const [selectedId, setSelectedId] = useState('')
@@ -84,8 +84,8 @@ const BookingList = ({
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [agencies, setAgencies] = useState<string[] | undefined>(bookingAgencies)
   const [statuses, setStatuses] = useState<string[] | undefined>(bookingStatuses)
-  const [status, setStatus] = useState<movininTypes.BookingStatus>()
-  const [filter, setFilter] = useState<movininTypes.Filter | undefined | null>(bookingFilter)
+  const [status, setStatus] = useState<darywinTypes.BookingStatus>()
+  const [filter, setFilter] = useState<darywinTypes.Filter | undefined | null>(bookingFilter)
   const [property, setProperty] = useState<string>(bookingProperty || '')
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false)
   const [openDeleteDialog, setopenDeleteDialog] = useState(false)
@@ -105,14 +105,14 @@ const BookingList = ({
     }
   }, [paginationModel])
 
-  const fetchData = async (_page: number, _user?: movininTypes.User, _property?: string) => {
+  const fetchData = async (_page: number, _user?: darywinTypes.User, _property?: string) => {
     try {
       const _pageSize = env.isMobile ? env.BOOKINGS_MOBILE_PAGE_SIZE : pageSize
 
       if (agencies && statuses) {
         setLoading(true)
 
-        const payload: movininTypes.GetBookingsPayload = {
+        const payload: darywinTypes.GetBookingsPayload = {
           agencies,
           statuses,
           filter: filter || undefined,
@@ -203,7 +203,7 @@ const BookingList = ({
       if (page === 0) {
         fetchData(0, user)
       } else {
-        const _paginationModel = movininHelper.clone(paginationModel)
+        const _paginationModel = darywinHelper.clone(paginationModel)
         _paginationModel.page = 0
         setPaginationModel(_paginationModel)
       }
@@ -213,24 +213,24 @@ const BookingList = ({
   const getDate = (date?: string) => {
     if (date) {
       const d = new Date(date)
-      return `${movininHelper.formatDatePart(d.getDate())}-${movininHelper.formatDatePart(d.getMonth() + 1)}-${d.getFullYear()}`
+      return `${darywinHelper.formatDatePart(d.getDate())}-${darywinHelper.formatDatePart(d.getMonth() + 1)}-${d.getFullYear()}`
     }
 
     throw new Error('Invalid date')
   }
 
-  const getColumns = (): GridColDef<movininTypes.Booking>[] => {
-    const _columns: GridColDef<movininTypes.Booking>[] = [
+  const getColumns = (): GridColDef<darywinTypes.Booking>[] => {
+    const _columns: GridColDef<darywinTypes.Booking>[] = [
       {
         field: 'renter',
         headerName: strings.RENTER,
         flex: 1,
-        renderCell: ({ row, value }: GridRenderCellParams<movininTypes.Booking, string>) => (
+        renderCell: ({ row, value }: GridRenderCellParams<darywinTypes.Booking, string>) => (
           <Tooltip title={value} placement="left">
-            <Link href={`/user?u=${(row?.renter as movininTypes.User)._id}`}>{value}</Link>
+            <Link href={`/user?u=${(row?.renter as darywinTypes.User)._id}`}>{value}</Link>
           </Tooltip>
         ),
-        valueGetter: (value: movininTypes.User) => value?.fullName,
+        valueGetter: (value: darywinTypes.User) => value?.fullName,
       },
       {
         field: 'from',
@@ -248,14 +248,14 @@ const BookingList = ({
         field: 'price',
         headerName: strings.PRICE,
         flex: 1,
-        renderCell: ({ value }: GridRenderCellParams<movininTypes.Booking, string>) => <span className="bp">{value}</span>,
-        valueGetter: (value: number) => movininHelper.formatPrice(value, commonStrings.CURRENCY, language as string),
+        renderCell: ({ value }: GridRenderCellParams<darywinTypes.Booking, string>) => <span className="bp">{value}</span>,
+        valueGetter: (value: number) => darywinHelper.formatPrice(value, commonStrings.CURRENCY, language as string),
       },
       {
         field: 'status',
         headerName: strings.STATUS,
         flex: 1,
-        renderCell: ({ value }: GridRenderCellParams<movininTypes.Booking, movininTypes.BookingStatus>) => <BookingStatus value={value!} showIcon />,
+        renderCell: ({ value }: GridRenderCellParams<darywinTypes.Booking, darywinTypes.BookingStatus>) => <BookingStatus value={value!} showIcon />,
         valueGetter: (value: string) => value,
       },
       {
@@ -263,7 +263,7 @@ const BookingList = ({
         headerName: '',
         sortable: false,
         disableColumnMenu: true,
-        renderCell: ({ row }: GridRenderCellParams<movininTypes.Booking>) => {
+        renderCell: ({ row }: GridRenderCellParams<darywinTypes.Booking>) => {
           const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation() // don't select this row after clicking
             setSelectedId(row._id || '')
@@ -321,12 +321,12 @@ const BookingList = ({
         field: 'property',
         headerName: strings.PROPERTY,
         flex: 1,
-        renderCell: ({ row, value }: GridRenderCellParams<movininTypes.Booking, string>) => (
+        renderCell: ({ row, value }: GridRenderCellParams<darywinTypes.Booking, string>) => (
           <Tooltip title={value} placement="left">
-            <Link href={`/property-bookings?p=${(row.property as movininTypes.Property)._id}`}>{value}</Link>
+            <Link href={`/property-bookings?p=${(row.property as darywinTypes.Property)._id}`}>{value}</Link>
           </Tooltip>
         ),
-        valueGetter: (value: movininTypes.Property) => value?.name,
+        valueGetter: (value: darywinTypes.Property) => value?.name,
       })
     }
 
@@ -335,12 +335,12 @@ const BookingList = ({
         field: 'agency',
         headerName: commonStrings.AGENCY,
         flex: 1,
-        renderCell: ({ row, value }: GridRenderCellParams<movininTypes.Booking, string>) => (
-          <Link href={`/agency?c=${(row.agency as movininTypes.User)._id}`} className="cell-agency">
-            <img src={movininHelper.joinURL(env.CDN_USERS, (row.agency as movininTypes.User).avatar)} alt={value} />
+        renderCell: ({ row, value }: GridRenderCellParams<darywinTypes.Booking, string>) => (
+          <Link href={`/agency?c=${(row.agency as darywinTypes.User)._id}`} className="cell-agency">
+            <img src={darywinHelper.joinURL(env.CDN_USERS, (row.agency as darywinTypes.User).avatar)} alt={value} />
           </Link>
         ),
-        valueGetter: (value: movininTypes.User) => value?.fullName,
+        valueGetter: (value: darywinTypes.User) => value?.fullName,
       })
     }
 
@@ -355,7 +355,7 @@ const BookingList = ({
       if (page === 0) {
         fetchData(0, user)
       } else {
-        const _paginationModel = movininHelper.clone(paginationModel)
+        const _paginationModel = darywinHelper.clone(paginationModel)
         _paginationModel.page = 0
         setPaginationModel(_paginationModel)
       }
@@ -397,7 +397,7 @@ const BookingList = ({
     setOpenUpdateDialog(false)
   }
 
-  const handleStatusChange = (_status: movininTypes.BookingStatus) => {
+  const handleStatusChange = (_status: darywinTypes.BookingStatus) => {
     setStatus(_status)
   }
 
@@ -408,17 +408,17 @@ const BookingList = ({
         return
       }
 
-      const data: movininTypes.UpdateStatusPayload = { ids: selectedIds, status }
+      const data: darywinTypes.UpdateStatusPayload = { ids: selectedIds, status }
 
       const _status = await BookingService.updateStatus(data)
 
       if (_status === 200) {
-        rows.forEach((row: movininTypes.Booking) => {
+        rows.forEach((row: darywinTypes.Booking) => {
           if (row._id && selectedIds.includes(row._id)) {
             row.status = status
           }
         })
-        setRows(movininHelper.clone(rows))
+        setRows(darywinHelper.clone(rows))
       } else {
         helper.error()
       }
@@ -507,33 +507,33 @@ const BookingList = ({
                     <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                       <span className="booking-detail-title">{strings.PROPERTY}</span>
                       <div className="booking-detail-value">
-                        <Link href={`property/?p=${(booking.property as movininTypes.Property)._id}`}>{(booking.property as movininTypes.Property).name}</Link>
+                        <Link href={`property/?p=${(booking.property as darywinTypes.Property)._id}`}>{(booking.property as darywinTypes.Property).name}</Link>
                       </div>
                     </div>
                     <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                       <span className="booking-detail-title">{strings.RENTER}</span>
                       <div className="booking-detail-value">
-                        <Link href={`user/?u=${(booking.renter as movininTypes.User)._id}`}>{(booking.renter as movininTypes.User).fullName}</Link>
+                        <Link href={`user/?u=${(booking.renter as darywinTypes.User)._id}`}>{(booking.renter as darywinTypes.User).fullName}</Link>
                       </div>
                     </div>
                     <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                       <span className="booking-detail-title">{strings.DAYS}</span>
                       <div className="booking-detail-value">
-                        {`${helper.getDaysShort(movininHelper.days(from, to))} (${movininHelper.capitalize(
+                        {`${helper.getDaysShort(darywinHelper.days(from, to))} (${darywinHelper.capitalize(
                           format(from, _format, { locale: _locale }),
-                        )} - ${movininHelper.capitalize(format(to, _format, { locale: _locale }))})`}
+                        )} - ${darywinHelper.capitalize(format(to, _format, { locale: _locale }))})`}
                       </div>
                     </div>
                     <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                       <span className="booking-detail-title">{commonStrings.LOCATION}</span>
-                      <div className="booking-detail-value">{((booking.property as movininTypes.Property).location as movininTypes.Location).name}</div>
+                      <div className="booking-detail-value">{((booking.property as darywinTypes.Property).location as darywinTypes.Location).name}</div>
                     </div>
                     <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                       <span className="booking-detail-title">{commonStrings.AGENCY}</span>
                       <div className="booking-detail-value">
                         <div className="property-agency">
-                          <img src={movininHelper.joinURL(env.CDN_USERS, (booking.agency as movininTypes.User).avatar)} alt={(booking.agency as movininTypes.User).fullName} />
-                          <span className="property-agency-name">{(booking.agency as movininTypes.User).fullName}</span>
+                          <img src={darywinHelper.joinURL(env.CDN_USERS, (booking.agency as darywinTypes.User).avatar)} alt={(booking.agency as darywinTypes.User).fullName} />
+                          <span className="property-agency-name">{(booking.agency as darywinTypes.User).fullName}</span>
                         </div>
                       </div>
                     </div>
@@ -546,7 +546,7 @@ const BookingList = ({
                             <div className="extra">
                               <CheckIcon className="extra-icon" />
                               <span className="extra-title">{csStrings.CANCELLATION}</span>
-                              <span className="extra-text">{helper.getCancellationOption((booking.property as movininTypes.Property).cancellation, language as string, true)}</span>
+                              <span className="extra-text">{helper.getCancellationOption((booking.property as darywinTypes.Property).cancellation, language as string, true)}</span>
                             </div>
                           )}
 
@@ -556,7 +556,7 @@ const BookingList = ({
 
                     <div className="booking-detail" style={{ height: bookingDetailHeight }}>
                       <span className="booking-detail-title">{strings.COST}</span>
-                      <div className="booking-detail-value booking-price">{movininHelper.formatPrice(booking.price as number, commonStrings.CURRENCY, language as string)}</div>
+                      <div className="booking-detail-value booking-price">{darywinHelper.formatPrice(booking.price as number, commonStrings.CURRENCY, language as string)}</div>
                     </div>
 
                     <div className="bs-buttons">
@@ -586,7 +586,7 @@ const BookingList = ({
           ) : (
             <DataGrid
               checkboxSelection={checkboxSelection}
-              getRowId={(row: movininTypes.Booking): GridRowId => row._id as GridRowId}
+              getRowId={(row: darywinTypes.Booking): GridRowId => row._id as GridRowId}
               columns={columns}
               rows={rows}
               rowCount={rowCount}

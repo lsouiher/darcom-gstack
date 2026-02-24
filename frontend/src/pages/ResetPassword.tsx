@@ -4,7 +4,7 @@ import {
   Paper
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as UserService from '@/services/UserService'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
@@ -104,7 +104,7 @@ const ResetPassword = () => {
     }
   }
 
-  const onLoad = async (user?: movininTypes.User) => {
+  const onLoad = async (user?: darywinTypes.User) => {
     if (user) {
       setNoMatch(true)
     } else {

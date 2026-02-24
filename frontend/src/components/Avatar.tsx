@@ -14,22 +14,22 @@ import {
   PhotoCamera as PhotoCameraIcon,
   BrokenImageTwoTone as DeleteIcon
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as helper from '@/utils/helper'
 import { strings as commonStrings } from '@/lang/common'
 import * as UserService from '@/services/UserService'
 
 interface AvatarProps {
-  loggedUser?: movininTypes.User
-  user?: movininTypes.User
+  loggedUser?: darywinTypes.User
+  user?: darywinTypes.User
   size: 'small' | 'medium' | 'large',
   readonly?: boolean,
   color?: 'disabled' | 'action' | 'inherit' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning',
   className?: string,
   onBeforeUpload?: () => void,
-  onChange?: (user: movininTypes.User) => void,
+  onChange?: (user: darywinTypes.User) => void,
 }
 
 const Avatar = ({
@@ -44,7 +44,7 @@ const Avatar = ({
 }: AvatarProps) => {
   const [error, setError] = useState(false)
   const [open, setOpen] = useState(false)
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !user) {
@@ -167,7 +167,7 @@ const Avatar = ({
   }, [avatarUser])
 
   const avatarUrl = user?.avatar
-    ? (user.avatar?.startsWith('http') ? user.avatar : movininHelper.joinURL(env.CDN_USERS, user.avatar))
+    ? (user.avatar?.startsWith('http') ? user.avatar : darywinHelper.joinURL(env.CDN_USERS, user.avatar))
     : ''
 
   return !error && loggedUser && user ? (

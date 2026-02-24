@@ -20,7 +20,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import Const from '@/config/const'
 import { strings as commonStrings } from '@/lang/common'
@@ -35,7 +35,7 @@ import '@/assets/css/location-list.css'
 
 interface LocationListProps {
   keyword?: string
-  onLoad: movininTypes.DataEvent<movininTypes.Location>
+  onLoad: darywinTypes.DataEvent<darywinTypes.Location>
   onDelete: (rowCount: number) => void
 }
 
@@ -50,7 +50,7 @@ const LocationList = ({
   const [init, setInit] = useState(true)
   const [loading, setLoading] = useState(false)
   const [fetch, setFetch] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Location[]>([])
+  const [rows, setRows] = useState<darywinTypes.Location[]>([])
   const [rowCount, setRowCount] = useState(0)
   const [totalRecords, setTotalRecords] = useState(0)
   const [page, setPage] = useState(1)
@@ -235,7 +235,7 @@ const LocationList = ({
               >
                 <ListItemAvatar>
                   <Avatar
-                    type={movininTypes.RecordType.Location}
+                    type={darywinTypes.RecordType.Location}
                     mode="update"
                     record={location}
                     size="medium"

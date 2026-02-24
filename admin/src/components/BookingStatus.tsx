@@ -5,7 +5,7 @@ import {
   PauseCircle as PendingIcon,
   Cancel as CancelledIcon,
 } from '@mui/icons-material'
-import * as ohmjetTypes from ':movinin-types'
+import * as ohmjetTypes from ':darywin-types'
 import * as helper from '@/utils/helper'
 
 import '@/assets/css/booking-status.css'

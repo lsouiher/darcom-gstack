@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { TextFieldVariants } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as LocationService from '@/services/LocationService'
 import * as helper from '@/utils/helper'
 import MultipleSelect from './MultipleSelect'
 
 interface LocationSelectListProps {
-  value?: movininTypes.Location | movininTypes.Location[]
+  value?: darywinTypes.Location | darywinTypes.Location[]
   multiple?: boolean
   label?: string
   required?: boolean
@@ -17,7 +17,7 @@ interface LocationSelectListProps {
   customOpen?: boolean
   readOnly?: boolean
   init?: boolean
-  onChange?: (values: movininTypes.Option[]) => void
+  onChange?: (values: darywinTypes.Option[]) => void
 }
 
 const LocationSelectList = ({
@@ -34,20 +34,20 @@ const LocationSelectList = ({
 }: LocationSelectListProps) => {
   const [init, setInit] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Location[]>([])
+  const [rows, setRows] = useState<darywinTypes.Location[]>([])
   const [fetch, setFetch] = useState(true)
   const [page, setPage] = useState(1)
   const [keyword, setKeyword] = useState('')
-  const [selectedOptions, setSelectedOptions] = useState<movininTypes.Location[]>([])
+  const [selectedOptions, setSelectedOptions] = useState<darywinTypes.Location[]>([])
 
   useEffect(() => {
-    const _value = multiple ? value as movininTypes.Location[] : [value as movininTypes.Location]
-    if (value && !movininHelper.arrayEqual(selectedOptions, _value)) {
+    const _value = multiple ? value as darywinTypes.Location[] : [value as darywinTypes.Location]
+    if (value && !darywinHelper.arrayEqual(selectedOptions, _value)) {
       setSelectedOptions(_value)
     }
   }, [value, multiple, selectedOptions])
 
-  const fetchData = async (_page: number, _keyword: string, onFetch?: movininTypes.DataEvent<movininTypes.Location>) => {
+  const fetchData = async (_page: number, _keyword: string, onFetch?: darywinTypes.DataEvent<darywinTypes.Location>) => {
     try {
       if (fetch || _page === 1) {
         setLoading(true)
@@ -73,7 +73,7 @@ const LocationSelectList = ({
     }
   }
 
-  const handleChange = (values: movininTypes.Option[]) => {
+  const handleChange = (values: darywinTypes.Option[]) => {
     if (onChange) {
       onChange(values)
     }
@@ -88,7 +88,7 @@ const LocationSelectList = ({
       selectedOptions={selectedOptions}
       required={required || false}
       multiple={multiple}
-      type={movininTypes.RecordType.Location}
+      type={darywinTypes.RecordType.Location}
       variant={variant || 'standard'}
       hidePopupIcon={hidePopupIcon}
       customOpen={customOpen}

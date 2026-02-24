@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Layout from '@/components/Layout'
 import NotificationList from '@/components/NotificationList'
 
 const Notifications = () => {
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     setUser(_user)
   }
 

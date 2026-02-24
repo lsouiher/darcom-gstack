@@ -5,7 +5,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { format } from 'date-fns'
 import { enUS, fr, es } from 'date-fns/locale'
 import { MaterialIcons } from '@expo/vector-icons'
-import * as movininHelper from ':movinin-helper'
+import * as darywinHelper from ':darywin-helper'
 import * as helper from '@/utils/helper'
 
 interface DateTimePickerProps {
@@ -58,7 +58,7 @@ const CustomDateTimePicker: React.FC<DateTimePickerProps> = ({
 
   useEffect(() => {
     if (selectedDate) {
-      setFormattedLabel(movininHelper.capitalize(format(selectedDate, dateFormat, { locale: dateLocale })))
+      setFormattedLabel(darywinHelper.capitalize(format(selectedDate, dateFormat, { locale: dateLocale })))
     } else {
       setFormattedLabel(label)
     }

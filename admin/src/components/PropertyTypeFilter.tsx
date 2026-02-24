@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as cpStrings } from '@/lang/create-property'
 import { strings } from '@/lang/properties'
@@ -10,17 +10,17 @@ import '@/assets/css/property-type-filter.css'
 
 interface PropertyTypeFilterProps {
   className?: string
-  onChange?: (values: movininTypes.PropertyType[]) => void
+  onChange?: (values: darywinTypes.PropertyType[]) => void
 }
 
-const allPropertyTypes = movininHelper.getAllPropertyTypes()
+const allPropertyTypes = darywinHelper.getAllPropertyTypes()
 
 const PropertyTypeFilter = ({
   className,
   onChange
 }: PropertyTypeFilterProps) => {
   const [allChecked, setAllChecked] = useState(false)
-  const [values, setValues] = useState<movininTypes.PropertyType[]>([])
+  const [values, setValues] = useState<darywinTypes.PropertyType[]>([])
 
   const apartmentRef = useRef<HTMLInputElement>(null)
   const commercialRef = useRef<HTMLInputElement>(null)
@@ -50,22 +50,22 @@ const PropertyTypeFilter = ({
     }
   }, [allChecked])
 
-  const handleChange = (_values: movininTypes.PropertyType[]) => {
+  const handleChange = (_values: darywinTypes.PropertyType[]) => {
     if (onChange) {
-      onChange(_values.length === 0 ? allPropertyTypes : movininHelper.clone(_values))
+      onChange(_values.length === 0 ? allPropertyTypes : darywinHelper.clone(_values))
     }
   }
 
   const handleCheckApartmentChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.PropertyType.Apartment)
+      values.push(darywinTypes.PropertyType.Apartment)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Apartment),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Apartment),
         1,
       )
 
@@ -89,14 +89,14 @@ const PropertyTypeFilter = ({
 
   const handleCheckCommercialChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.PropertyType.Commercial)
+      values.push(darywinTypes.PropertyType.Commercial)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Commercial),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Commercial),
         1,
       )
 
@@ -120,14 +120,14 @@ const PropertyTypeFilter = ({
 
   const handleCheckFarmChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.PropertyType.Farm)
+      values.push(darywinTypes.PropertyType.Farm)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Farm),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Farm),
         1,
       )
 
@@ -151,14 +151,14 @@ const PropertyTypeFilter = ({
 
   const handleCheckHouseChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.PropertyType.House)
+      values.push(darywinTypes.PropertyType.House)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.House),
+        values.findIndex((v) => v === darywinTypes.PropertyType.House),
         1,
       )
 
@@ -182,14 +182,14 @@ const PropertyTypeFilter = ({
 
   const handleCheckIndustrialChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.PropertyType.Industrial)
+      values.push(darywinTypes.PropertyType.Industrial)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Industrial),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Industrial),
         1,
       )
 
@@ -213,14 +213,14 @@ const PropertyTypeFilter = ({
 
   const handleCheckPlotChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.PropertyType.Plot)
+      values.push(darywinTypes.PropertyType.Plot)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Plot),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Plot),
         1,
       )
 
@@ -244,14 +244,14 @@ const PropertyTypeFilter = ({
 
   const handleCheckTownhouseChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.PropertyType.Townhouse)
+      values.push(darywinTypes.PropertyType.Townhouse)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Townhouse),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Townhouse),
         1,
       )
 

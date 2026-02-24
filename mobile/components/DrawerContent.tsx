@@ -23,7 +23,7 @@ import i18n from '@/lang/i18n'
 import * as env from '@/config/env.config'
 import * as helper from '@/utils/helper'
 import * as UserService from '@/services/UserService'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 interface DrawerContentProps {
   language: string
@@ -77,7 +77,7 @@ const DrawerContent = ({
 
       const currentUser = await UserService.getCurrentUser()
       if (currentUser && currentUser._id) {
-        const data: movininTypes.UpdateLanguagePayload = {
+        const data: darywinTypes.UpdateLanguagePayload = {
           id: currentUser._id,
           language: _language,
         }

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { TextFieldVariants } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as AgencyService from '@/services/AgencyService'
 import * as helper from '@/utils/helper'
 import MultipleSelect from './MultipleSelect'
 
 interface AgencySelectListProps {
-  value?: movininTypes.Option | movininTypes.Option[]
+  value?: darywinTypes.Option | darywinTypes.Option[]
   multiple?: boolean
   label?: string
   required?: boolean
   readOnly?: boolean
   variant?: TextFieldVariants
-  onChange?: (values: movininTypes.Option[]) => void
+  onChange?: (values: darywinTypes.Option[]) => void
 }
 
 const AgencySelectList = ({
@@ -28,20 +28,20 @@ const AgencySelectList = ({
 }: AgencySelectListProps) => {
   const [init, setInit] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Option[]>([])
+  const [rows, setRows] = useState<darywinTypes.Option[]>([])
   const [fetch, setFetch] = useState(true)
   const [page, setPage] = useState(1)
   const [keyword, setKeyword] = useState('')
-  const [selectedOptions, setSelectedOptions] = useState<movininTypes.Option[]>([])
+  const [selectedOptions, setSelectedOptions] = useState<darywinTypes.Option[]>([])
 
   useEffect(() => {
     const _value = multiple ? value : [value]
-    if (value && !movininHelper.arrayEqual(selectedOptions, _value)) {
-      setSelectedOptions(_value as movininTypes.Option[])
+    if (value && !darywinHelper.arrayEqual(selectedOptions, _value)) {
+      setSelectedOptions(_value as darywinTypes.Option[])
     }
   }, [value, multiple, selectedOptions])
 
-  const getAgencies = (agencies: movininTypes.User[]): movininTypes.Option[] =>
+  const getAgencies = (agencies: darywinTypes.User[]): darywinTypes.Option[] =>
     agencies.map((agency) => {
       const { _id, fullName, avatar } = agency
       return { _id: _id as string, name: fullName, image: avatar }
@@ -72,7 +72,7 @@ const AgencySelectList = ({
     }
   }
 
-  const handleChange = (values: movininTypes.Option[]) => {
+  const handleChange = (values: darywinTypes.Option[]) => {
     if (onChange) {
       onChange(values)
     }
@@ -88,7 +88,7 @@ const AgencySelectList = ({
       required={required || false}
       readOnly={readOnly}
       multiple={multiple}
-      type={movininTypes.RecordType.Agency}
+      type={darywinTypes.RecordType.Agency}
       variant={variant || 'standard'}
       ListboxProps={{
         onScroll: (event) => {

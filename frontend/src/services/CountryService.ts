@@ -1,4 +1,4 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
@@ -8,9 +8,9 @@ import * as UserService from './UserService'
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Country>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Country>>}
  */
-export const getCountriesWithLocations = (keyword: string, imageRequired: boolean, minLocations: number): Promise<movininTypes.CountryInfo[]> =>
+export const getCountriesWithLocations = (keyword: string, imageRequired: boolean, minLocations: number): Promise<darywinTypes.CountryInfo[]> =>
   axiosInstance
     .get(
       `/api/countries-with-locations/${UserService.getLanguage()}/${imageRequired}/${minLocations}/?s=${encodeURIComponent(keyword)}`

@@ -1,4 +1,4 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import CurrencyConverter, { currencies } from ':currency-converter'
 
 /**
@@ -167,11 +167,11 @@ export const cloneArray = <T>(arr: T[]): T[] | undefined | null => {
 /**
  * Check if two filters are equal.
  *
- * @param {?(movininTypes.Filter | null)} [a]
- * @param {?(movininTypes.Filter | null)} [b]
+ * @param {?(darywinTypes.Filter | null)} [a]
+ * @param {?(darywinTypes.Filter | null)} [b]
  * @returns {boolean}
  */
-export const filterEqual = (a?: movininTypes.Filter | null, b?: movininTypes.Filter | null) => {
+export const filterEqual = (a?: darywinTypes.Filter | null, b?: darywinTypes.Filter | null) => {
   if (a === b) {
     return true
   }
@@ -195,10 +195,10 @@ export const filterEqual = (a?: movininTypes.Filter | null, b?: movininTypes.Fil
 /**
  * Flatten Agency array.
  *
- * @param {movininTypes.User[]} companies
+ * @param {darywinTypes.User[]} companies
  * @returns {string[]}
  */
-export const flattenAgencies = (companies: movininTypes.User[]): string[] =>
+export const flattenAgencies = (companies: darywinTypes.User[]): string[] =>
   companies.map((agency) => agency._id ?? '')
 
 /**
@@ -214,10 +214,10 @@ export const days = (from?: Date, to?: Date) =>
 /**
  * Check if User's language is French.
  *
- * @param {?movininTypes.User} [user]
+ * @param {?darywinTypes.User} [user]
  * @returns {boolean}
  */
-export const fr = (user?: movininTypes.User) =>
+export const fr = (user?: darywinTypes.User) =>
   (user && user.language === 'fr') || false
 
 /**
@@ -276,30 +276,30 @@ export const daysInYear = (year: number) =>
 /**
  * Get all PropertyTypes.
  *
- * @returns {movininTypes.PropertyType[]}
+ * @returns {darywinTypes.PropertyType[]}
  */
 export const getAllPropertyTypes = () =>
   [
-    movininTypes.PropertyType.Apartment,
-    movininTypes.PropertyType.Commercial,
-    movininTypes.PropertyType.Farm,
-    movininTypes.PropertyType.House,
-    movininTypes.PropertyType.Industrial,
-    movininTypes.PropertyType.Plot,
-    movininTypes.PropertyType.Townhouse
+    darywinTypes.PropertyType.Apartment,
+    darywinTypes.PropertyType.Commercial,
+    darywinTypes.PropertyType.Farm,
+    darywinTypes.PropertyType.House,
+    darywinTypes.PropertyType.Industrial,
+    darywinTypes.PropertyType.Plot,
+    darywinTypes.PropertyType.Townhouse
   ]
 
 /**
  * Get all RentalTerms.
  *
- * @returns {movininTypes.RentalTerm}
+ * @returns {darywinTypes.RentalTerm}
  */
 export const getAllRentalTerms = () =>
   [
-    movininTypes.RentalTerm.Monthly,
-    movininTypes.RentalTerm.Weekly,
-    movininTypes.RentalTerm.Daily,
-    movininTypes.RentalTerm.Yearly,
+    darywinTypes.RentalTerm.Monthly,
+    darywinTypes.RentalTerm.Weekly,
+    darywinTypes.RentalTerm.Daily,
+    darywinTypes.RentalTerm.Yearly,
   ]
 
 /**
@@ -313,25 +313,25 @@ export const isFrench = (language?: string) => language === 'fr'
 /**
  * Calculate total price.
  *
- * @param {movininTypes.Property} property
+ * @param {darywinTypes.Property} property
  * @param {Date} from
  * @param {Date} to
- * @param {?movininTypes.PropertyOptions} [options]
+ * @param {?darywinTypes.PropertyOptions} [options]
  * @returns {number}
  */
-export const calculateTotalPrice = (property: movininTypes.Property, from: Date, to: Date, options?: movininTypes.PropertyOptions) => {
+export const calculateTotalPrice = (property: darywinTypes.Property, from: Date, to: Date, options?: darywinTypes.PropertyOptions) => {
   const now = new Date()
   const _days = days(from, to)
 
   let _price = 0
 
-  if (property.rentalTerm === movininTypes.RentalTerm.Monthly) {
+  if (property.rentalTerm === darywinTypes.RentalTerm.Monthly) {
     _price = (property.price * _days) / daysInMonth(now.getMonth(), now.getFullYear())
-  } else if (property.rentalTerm === movininTypes.RentalTerm.Weekly) {
+  } else if (property.rentalTerm === darywinTypes.RentalTerm.Weekly) {
     _price = (property.price * _days) / 7
-  } else if (property.rentalTerm === movininTypes.RentalTerm.Daily) {
+  } else if (property.rentalTerm === darywinTypes.RentalTerm.Daily) {
     _price = property.price * _days
-  } else if (property.rentalTerm === movininTypes.RentalTerm.Yearly) {
+  } else if (property.rentalTerm === darywinTypes.RentalTerm.Yearly) {
     _price = (property.price * _days) / daysInYear(now.getFullYear())
   }
 

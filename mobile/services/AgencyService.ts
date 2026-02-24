@@ -1,15 +1,15 @@
 import axiosInstance from './axiosInstance'
 import * as axiosHelper from '@/utils/axiosHelper'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 axiosHelper.init(axiosInstance)
 
 /**
  * Get all agencies.
  *
- * @returns {Promise<movininTypes.User[]>}
+ * @returns {Promise<darywinTypes.User[]>}
  */
-export const getAllAgencies = (): Promise<movininTypes.User[]> =>
+export const getAllAgencies = (): Promise<darywinTypes.User[]> =>
   axiosInstance
     .get(
       '/api/all-agencies'

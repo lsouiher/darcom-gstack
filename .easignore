@@ -72,10 +72,10 @@ dist/
 !google-services.json
 !/**/google-services.json
 
-!/movinin-types/index.js
-!/movinin-types/index.d.ts
-!/movinin-helper/index.js
-!/movinin-helper/index.d.ts
+!/darywin-types/index.js
+!/darywin-types/index.d.ts
+!/darywin-helper/index.js
+!/darywin-helper/index.d.ts
 
 # @end expo-cli
 

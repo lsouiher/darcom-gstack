@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { jest } from '@jest/globals'
 import request from 'supertest'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import app from '../src/app'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as testHelper from './testHelper'
@@ -71,14 +71,14 @@ describe('POST /api/create-checkout-session', () => {
 
     // test success (create checkout session with non existant user)
     let receiptEmail = testHelper.GetRandomEmail()
-    let payload: movininTypes.CreatePaymentPayload = {
+    let payload: darywinTypes.CreatePaymentPayload = {
       amount: 234,
       currency: 'usd',
       receiptEmail,
       customerName: 'John Doe',
       locale: 'en',
       name: 'BMW X1',
-      description: 'movinin Testing Service',
+      description: 'darywin Testing Service',
     }
     let res = await request(app)
       .post('/api/create-checkout-session')
@@ -215,19 +215,19 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
     to.setDate(to.getDate() + 3)
 
     const agencyName = nanoid()
-    const agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.ma`, agencyName)
+    const agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.ma`, agencyName)
     const renter = new User({
       fullName: 'renter',
       email: testHelper.GetRandomEmail(),
       language: testHelper.LANGUAGE,
-      type: movininTypes.UserType.User,
+      type: darywinTypes.UserType.User,
     })
     await renter.save()
 
     const property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: 'image.png',
       images: ['image.png'],
@@ -246,7 +246,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
 
@@ -259,7 +259,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
       location: locationId,
       from: new Date(2024, 2, 1),
       to: new Date(2024, 2, 4),
-      status: movininTypes.BookingStatus.Void,
+      status: darywinTypes.BookingStatus.Void,
       sessionId,
       expireAt,
       cancellation: true,
@@ -311,7 +311,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Deposit,
+        status: darywinTypes.BookingStatus.Deposit,
         sessionId,
         expireAt,
         cancellation: true,
@@ -337,7 +337,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         sessionId,
         expireAt,
         cancellation: true,
@@ -389,7 +389,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         sessionId: sessionId2,
         expireAt,
         cancellation: true,
@@ -434,7 +434,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         sessionId: sessionId3,
         expireAt,
         cancellation: true,
@@ -475,7 +475,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         sessionId: sessionId3,
         expireAt,
         cancellation: true,
@@ -499,7 +499,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
         location: locationId,
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         sessionId: sessionId3,
         expireAt,
         cancellation: true,
@@ -523,7 +523,7 @@ describe('POST /api/check-checkout-session/:sessionId', () => {
         location: testHelper.GetRandromObjectId(),
         from: new Date(2024, 2, 1),
         to: new Date(2024, 2, 4),
-        status: movininTypes.BookingStatus.Void,
+        status: darywinTypes.BookingStatus.Void,
         sessionId: sessionId3,
         expireAt,
         cancellation: true,
@@ -617,13 +617,13 @@ describe('POST /api/create-payment-intent', () => {
     //
     // Test create payment intent with non existant user
     //
-    const payload: movininTypes.CreatePaymentPayload = {
+    const payload: darywinTypes.CreatePaymentPayload = {
       amount: 234,
       currency: 'usd',
       receiptEmail,
       customerName: 'John Doe',
       locale: 'en',
-      name: 'movinin Testing Service',
+      name: 'darywin Testing Service',
       description: '',
     }
     let res = await request(app)

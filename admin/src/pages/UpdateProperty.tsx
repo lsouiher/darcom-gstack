@@ -15,8 +15,8 @@ import { Editor } from 'react-draft-wysiwyg'
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
 import htmlToDraft from 'html-to-draftjs'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
@@ -37,7 +37,7 @@ import '@/assets/css/create-property.css'
 
 const UpdateProperty = () => {
   const navigate = useNavigate()
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [loading, setLoading] = useState(false)
   const [noMatch, setNoMatch] = useState(false)
   const [error, setError] = useState(false)
@@ -50,10 +50,10 @@ const UpdateProperty = () => {
   const [imageRequired, setImageRequired] = useState(false)
   const [imageUpdated, setImageUpdated] = useState(false)
 
-  const [property, setProperty] = useState<movininTypes.Property>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
   const [name, setName] = useState('')
-  const [agency, setAgency] = useState<movininTypes.Option>()
-  const [location, setLocation] = useState<movininTypes.Option>()
+  const [agency, setAgency] = useState<darywinTypes.Option>()
+  const [location, setLocation] = useState<darywinTypes.Option>()
   const [address, setAddress] = useState('')
   const [type, setType] = useState('')
   const [price, setPrice] = useState('')
@@ -96,11 +96,11 @@ const UpdateProperty = () => {
     setName(e.target.value)
   }
 
-  const handleAgencyChange = (values: movininTypes.Option[]) => {
+  const handleAgencyChange = (values: darywinTypes.Option[]) => {
     setAgency(values.length > 0 ? values[0] : undefined)
   }
 
-  const handleLocationChange = (locations: movininTypes.Option[]) => {
+  const handleLocationChange = (locations: darywinTypes.Option[]) => {
     setLocation(locations[0])
   }
 
@@ -154,7 +154,7 @@ const UpdateProperty = () => {
   const handleEditorStateChange = (state: EditorState) => {
     setEditorState(state)
     const content = draftToHtml(convertToRaw(state.getCurrentContent()))
-    const desc = movininHelper.trimCarriageReturn(content).trim() === '<p></p>' ? '' : content
+    const desc = darywinHelper.trimCarriageReturn(content).trim() === '<p></p>' ? '' : content
     setDescription(desc)
     if (desc) {
       setDescriptionError(false)
@@ -257,7 +257,7 @@ const UpdateProperty = () => {
         longitude: longitude ? Number(longitude) : undefined,
         price: Number(price),
         hidden,
-        cancellation: movininHelper.extraToNumber(cancellation),
+        cancellation: darywinHelper.extraToNumber(cancellation),
         available,
         rentalTerm,
         blockOnPay,
@@ -275,7 +275,7 @@ const UpdateProperty = () => {
     }
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     if (_user && _user.verified) {
       setLoading(true)
       setUser(_user)
@@ -288,7 +288,7 @@ const UpdateProperty = () => {
             const _property = await PropertyService.getProperty(id)
 
             if (_property) {
-              if (_user.type === movininTypes.RecordType.Agency && _user._id !== _property.agency._id) {
+              if (_user.type === darywinTypes.RecordType.Agency && _user._id !== _property.agency._id) {
                 setLoading(false)
                 setNoMatch(true)
                 return
@@ -329,7 +329,7 @@ const UpdateProperty = () => {
               setLongitude((_property.longitude && _property.longitude.toString()) || '')
               setPrice(_property.price.toString())
               setHidden(_property.hidden)
-              setCancellation(movininHelper.extraToString(_property.cancellation))
+              setCancellation(darywinHelper.extraToString(_property.cancellation))
               setAvailable(_property.available)
               setBlockOnPay(_property.blockOnPay || false)
 
@@ -477,7 +477,7 @@ const UpdateProperty = () => {
 
               <FormControl fullWidth margin="dense">
                 <TextField
-                  label={`${strings.PRICE} ${`(${commonStrings.CURRENCY}/${helper.rentalTermUnit(rentalTerm as movininTypes.RentalTerm)})`}`}
+                  label={`${strings.PRICE} ${`(${commonStrings.CURRENCY}/${helper.rentalTermUnit(rentalTerm as darywinTypes.RentalTerm)})`}`}
                   slotProps={{
                     htmlInput: { inputMode: 'numeric', pattern: '^\\d+(\\.\\d+)?$' }
                   }}

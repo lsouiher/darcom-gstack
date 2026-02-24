@@ -1,7 +1,7 @@
 import process from 'node:process'
 import { Document, Types } from 'mongoose'
 import { CookieOptions } from 'express'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as helper from '../utils/helper'
 
 /**
@@ -49,14 +49,14 @@ export const expireAt = 'expireAt'
  *
  * @type {string}
  */
-export const WEBSITE_NAME = __env__('MI_WEBSITE_NAME', false, "Movin' In")
+export const WEBSITE_NAME = __env__('DW_WEBSITE_NAME', false, "DaryWin")
 
 /**
  * Indicate whether we are in CI environment or not.
  *
  * @type {boolean}
  */
-export const CI = helper.StringToBoolean(__env__('MI_CI', false, 'false'))
+export const CI = helper.StringToBoolean(__env__('DW_CI', false, 'false'))
 
 /**
  * Number of documents to process per batch when deleting obsolete language values.
@@ -65,84 +65,84 @@ export const CI = helper.StringToBoolean(__env__('MI_CI', false, 'false'))
  *
  * @type {number}
  */
-export const BATCH_SIZE = Number.parseInt(__env__('MI_BATCH_SIZE', false, '1000'), 10)
+export const BATCH_SIZE = Number.parseInt(__env__('DW_BATCH_SIZE', false, '1000'), 10)
 
 /**
  * Server Port. Default is 4004.
  *
  * @type {number}
  */
-export const PORT = Number.parseInt(__env__('MI_PORT', false, '4004'), 10)
+export const PORT = Number.parseInt(__env__('DW_PORT', false, '4004'), 10)
 
 /**
  * Indicate whether HTTPS is enabled or not.
  *
  * @type {boolean}
  */
-export const HTTPS = helper.StringToBoolean(__env__('MI_HTTPS'))
+export const HTTPS = helper.StringToBoolean(__env__('DW_HTTPS'))
 
 /**
  * Private SSL key filepath.
  *
  * @type {string}
  */
-export const PRIVATE_KEY = __env__('MI_PRIVATE_KEY', HTTPS)
+export const PRIVATE_KEY = __env__('DW_PRIVATE_KEY', HTTPS)
 
 /**
  * Private SSL certificate filepath.
  *
  * @type {string}
  */
-export const CERTIFICATE = __env__('MI_CERTIFICATE', HTTPS)
+export const CERTIFICATE = __env__('DW_CERTIFICATE', HTTPS)
 
 /**
- * MongoDB database URI. Default is: mongodb://127.0.0.1:27017/movinin?authSource=admin&appName=movinin
+ * MongoDB database URI. Default is: mongodb://127.0.0.1:27017/darywin?authSource=admin&appName=darywin
  *
  * @type {string}
  */
-export const DB_URI = __env__('MI_DB_URI', false, 'mongodb://127.0.0.1:27017/movinin?authSource=admin&appName=movinin')
+export const DB_URI = __env__('DW_DB_URI', false, 'mongodb://127.0.0.1:27017/darywin?authSource=admin&appName=darywin')
 
 /**
  * Indicate whether MongoDB SSL is enabled or not.
  *
  * @type {boolean}
  */
-export const DB_SSL = helper.StringToBoolean(__env__('MI_DB_SSL', false, 'false'))
+export const DB_SSL = helper.StringToBoolean(__env__('DW_DB_SSL', false, 'false'))
 
 /**
  * MongoDB SSL certificate filepath.
  *
  * @type {string}
  */
-export const DB_SSL_CERT = __env__('MI_DB_SSL_CERT', DB_SSL)
+export const DB_SSL_CERT = __env__('DW_DB_SSL_CERT', DB_SSL)
 
 /**
  * MongoDB SSL CA certificate filepath.
  *
  * @type {string}
  */
-export const DB_SSL_CA = __env__('MI_DB_SSL_CA', DB_SSL)
+export const DB_SSL_CA = __env__('DW_DB_SSL_CA', DB_SSL)
 
 /**
  * Indicate whether MongoDB debug is enabled or not.
  *
  * @type {boolean}
  */
-export const DB_DEBUG = helper.StringToBoolean(__env__('MI_DB_DEBUG', false, 'false'))
+export const DB_DEBUG = helper.StringToBoolean(__env__('DW_DB_DEBUG', false, 'false'))
 
 /**
  * Indicate whether server-side JavaScript, such as $where, $function, $accumulator and map-reduce are supported.
  *
  * @type {boolean}
  */
-export const DB_SERVER_SIDE_JAVASCRIPT = helper.StringToBoolean(__env__('MI_DB_SERVER_SIDE_JAVASCRIPT', false, 'false'))
+export const DB_SERVER_SIDE_JAVASCRIPT = helper.StringToBoolean(__env__('DW_DB_SERVER_SIDE_JAVASCRIPT', false, 'false'))
 
 /**
  * Cookie secret. It should at least be 32 characters long, but the longer the better.
  *
  * @type {string}
  */
-export const COOKIE_SECRET = __env__('MI_COOKIE_SECRET', false, 'Movinin')
+export const COOKIE_SECRET = __env__('DW_COOKIE_SECRET', false, 'Darywin')
 
 /**
  * Authentication cookie domain.
@@ -150,7 +150,7 @@ export const COOKIE_SECRET = __env__('MI_COOKIE_SECRET', false, 'Movinin')
  *
  * @type {string}
  */
-export const AUTH_COOKIE_DOMAIN = __env__('MI_AUTH_COOKIE_DOMAIN', false, 'localhost')
+export const AUTH_COOKIE_DOMAIN = __env__('DW_AUTH_COOKIE_DOMAIN', false, 'localhost')
 
 /**
  * Cookie options.
@@ -191,140 +191,140 @@ export const X_ACCESS_TOKEN = 'x-access-token'
  *
  * @type {string}
  */
-export const JWT_SECRET = __env__('MI_JWT_SECRET', false, 'Movinin')
+export const JWT_SECRET = __env__('DW_JWT_SECRET', false, 'Darywin')
 
 /**
  * JWT expiration in seconds. Default is 86400 seconds.
  *
  * @type {number}
  */
-export const JWT_EXPIRE_AT = Number.parseInt(__env__('MI_JWT_EXPIRE_AT', false, '86400'), 10) // in seconds (default: 1d)
+export const JWT_EXPIRE_AT = Number.parseInt(__env__('DW_JWT_EXPIRE_AT', false, '86400'), 10) // in seconds (default: 1d)
 
 /**
  * Validation Token expiration in seconds. Default is 86400 seconds.
  *
  * @type {number}
  */
-export const TOKEN_EXPIRE_AT = Number.parseInt(__env__('MI_TOKEN_EXPIRE_AT', false, '86400'), 10) // in seconds (default: 1d)
+export const TOKEN_EXPIRE_AT = Number.parseInt(__env__('DW_TOKEN_EXPIRE_AT', false, '86400'), 10) // in seconds (default: 1d)
 
 /**
  * SMTP host.
  *
  * @type {string}
  */
-export const SMTP_HOST = __env__('MI_SMTP_HOST', true)
+export const SMTP_HOST = __env__('DW_SMTP_HOST', true)
 
 /**
  * SMTP port.
  *
  * @type {number}
  */
-export const SMTP_PORT = Number.parseInt(__env__('MI_SMTP_PORT', true), 10)
+export const SMTP_PORT = Number.parseInt(__env__('DW_SMTP_PORT', true), 10)
 
 /**
  * SMTP username.
  *
  * @type {string}
  */
-export const SMTP_USER = __env__('MI_SMTP_USER', true)
+export const SMTP_USER = __env__('DW_SMTP_USER', true)
 
 /**
  * SMTP password.
  *
  * @type {string}
  */
-export const SMTP_PASS = __env__('MI_SMTP_PASS', true)
+export const SMTP_PASS = __env__('DW_SMTP_PASS', true)
 
 /**
  * SMTP from email.
  *
  * @type {string}
  */
-export const SMTP_FROM = __env__('MI_SMTP_FROM', true)
+export const SMTP_FROM = __env__('DW_SMTP_FROM', true)
 
 /**
  * CDN root folder path.
  *
  * @type {string}
  */
-export const CDN_ROOT = __env__('MI_CDN_ROOT', false, '/var/www/cdn')
+export const CDN_ROOT = __env__('DW_CDN_ROOT', false, '/var/www/cdn')
 
 /**
  * Users' cdn folder path.
  *
  * @type {string}
  */
-export const CDN_USERS = __env__('MI_CDN_USERS', true)
+export const CDN_USERS = __env__('DW_CDN_USERS', true)
 
 /**
  * Users' temp cdn folder path.
  *
  * @type {string}
  */
-export const CDN_TEMP_USERS = __env__('MI_CDN_TEMP_USERS', true)
+export const CDN_TEMP_USERS = __env__('DW_CDN_TEMP_USERS', true)
 
 /**
  * Properties' cdn folder path.
  *
  * @type {string}
  */
-export const CDN_PROPERTIES = __env__('MI_CDN_PROPERTIES', true)
+export const CDN_PROPERTIES = __env__('DW_CDN_PROPERTIES', true)
 
 /**
  * Properties' temp cdn folder path.
  *
  * @type {string}
  */
-export const CDN_TEMP_PROPERTIES = __env__('MI_CDN_TEMP_PROPERTIES', true)
+export const CDN_TEMP_PROPERTIES = __env__('DW_CDN_TEMP_PROPERTIES', true)
 
 /**
  * Locations' cdn folder path.
  *
  * @type {string}
  */
-export const CDN_LOCATIONS = __env__('MI_CDN_LOCATIONS', true)
+export const CDN_LOCATIONS = __env__('DW_CDN_LOCATIONS', true)
 
 /**
  * Locations' temp cdn folder path.
  *
  * @type {string}
  */
-export const CDN_TEMP_LOCATIONS = __env__('MI_CDN_TEMP_LOCATIONS', true)
+export const CDN_TEMP_LOCATIONS = __env__('DW_CDN_TEMP_LOCATIONS', true)
 
 /**
  * Admin host.
  *
  * @type {string}
  */
-export const ADMIN_HOST = __env__('MI_ADMIN_HOST', true)
+export const ADMIN_HOST = __env__('DW_ADMIN_HOST', true)
 
 /**
  * Frontend host.
  *
  * @type {string}
  */
-export const FRONTEND_HOST = __env__('MI_FRONTEND_HOST', true)
+export const FRONTEND_HOST = __env__('DW_FRONTEND_HOST', true)
 
 /**
  * Default language. Default is en. Available options: en, fr.
  *
  * @type {string}
  */
-export const DEFAULT_LANGUAGE = __env__('MI_DEFAULT_LANGUAGE', false, 'en')
+export const DEFAULT_LANGUAGE = __env__('DW_DEFAULT_LANGUAGE', false, 'en')
 
 /**
  * Default Minimum age for rental. Default is 21 years.
  *
  * @type {number}
  */
-export const MINIMUM_AGE = Number.parseInt(__env__('MI_MINIMUM_AGE', false, '21'), 10)
+export const MINIMUM_AGE = Number.parseInt(__env__('DW_MINIMUM_AGE', false, '21'), 10)
 
 /**
  * Expo push access token.
  *
  * @type {string}
  */
-export const EXPO_ACCESS_TOKEN = __env__('MI_EXPO_ACCESS_TOKEN', false)
+export const EXPO_ACCESS_TOKEN = __env__('DW_EXPO_ACCESS_TOKEN', false)
 
 /**
  * Timezone for cenverting dates from UTC to local time.
@@ -333,15 +333,15 @@ export const EXPO_ACCESS_TOKEN = __env__('MI_EXPO_ACCESS_TOKEN', false)
  *
  * @type {string}
  */
-export const TIMEZONE = __env__('MI_TIMEZONE', false, 'UTC')
+export const TIMEZONE = __env__('DW_TIMEZONE', false, 'UTC')
 
 /**
  * Stripe secret key.
  *
  * @type {string}
  */
-export const STRIPE_SECRET_KEY = __env__('MI_STRIPE_SECRET_KEY', false, 'STRIPE_SECRET_KEY')
-let stripeSessionExpireAt = Number.parseInt(__env__('MI_STRIPE_SESSION_EXPIRE_AT', false, '82800'), 10)
+export const STRIPE_SECRET_KEY = __env__('DW_STRIPE_SECRET_KEY', false, 'STRIPE_SECRET_KEY')
+let stripeSessionExpireAt = Number.parseInt(__env__('DW_STRIPE_SESSION_EXPIRE_AT', false, '82800'), 10)
 stripeSessionExpireAt = stripeSessionExpireAt < 1800 ? 1800 : stripeSessionExpireAt
 stripeSessionExpireAt = stripeSessionExpireAt <= 82800 ? stripeSessionExpireAt : 82800
 
@@ -359,21 +359,21 @@ export const STRIPE_SESSION_EXPIRE_AT = stripeSessionExpireAt
  *
  * @type {boolean}
  */
-export const PAYPAL_SANDBOX = helper.StringToBoolean(__env__('MI_PAYPAL_SANDBOX', false, 'true'))
+export const PAYPAL_SANDBOX = helper.StringToBoolean(__env__('DW_PAYPAL_SANDBOX', false, 'true'))
 
 /**
  * PayPal client ID.
  *
  * @type {string}
  */
-export const PAYPAL_CLIENT_ID = __env__('MI_PAYPAL_CLIENT_ID', false, 'PAYPAL_CLIENT_ID')
+export const PAYPAL_CLIENT_ID = __env__('DW_PAYPAL_CLIENT_ID', false, 'PAYPAL_CLIENT_ID')
 
 /**
  * PayPal client secret.
  *
  * @type {string}
  */
-export const PAYPAL_CLIENT_SECRET = __env__('MI_PAYPAL_CLIENT_SECRET', false, 'PAYPAL_CLIENT_SECRET')
+export const PAYPAL_CLIENT_SECRET = __env__('DW_PAYPAL_CLIENT_SECRET', false, 'PAYPAL_CLIENT_SECRET')
 
 /**
  * Booking expiration in seconds.
@@ -397,14 +397,14 @@ export const USER_EXPIRE_AT = BOOKING_EXPIRE_AT
  *
  * @type {string}
  */
-export const ADMIN_EMAIL = __env__('MI_ADMIN_EMAIL', false)
+export const ADMIN_EMAIL = __env__('DW_ADMIN_EMAIL', false)
 
 /**
  * Google reCAPTCHA v3 secret key.
  *
  * @type {string}
  */
-export const RECAPTCHA_SECRET = __env__('MI_RECAPTCHA_SECRET', false)
+export const RECAPTCHA_SECRET = __env__('DW_RECAPTCHA_SECRET', false)
 
 /**
  * ipinfo.io API key.
@@ -412,28 +412,28 @@ export const RECAPTCHA_SECRET = __env__('MI_RECAPTCHA_SECRET', false)
  *
  * @type {string}
  */
-export const IPINFO_API_KEY = __env__('MI_IPINFO_API_KEY', false)
+export const IPINFO_API_KEY = __env__('DW_IPINFO_API_KEY', false)
 
 /**
  * Default ISO 2 country code ipinfo.io.
  *
  * @type {string}
  */
-export const IPINFO_DEFAULT_COUNTRY = __env__('MI_IPINFO_DEFAULT_COUNTRY', false, 'US')
+export const IPINFO_DEFAULT_COUNTRY = __env__('DW_IPINFO_DEFAULT_COUNTRY', false, 'US')
 
 /**
  * Enables or disables Sentry error reporting. Set to true to enable.
  *
  * @type {boolean}
  */
-export const ENABLE_SENTRY = helper.StringToBoolean(__env__('MI_ENABLE_SENTRY', false, 'false'))
+export const ENABLE_SENTRY = helper.StringToBoolean(__env__('DW_ENABLE_SENTRY', false, 'false'))
 
 /**
  * The Sentry DSN (Data Source Name) used to identify your backend project.
  *
  * @type {string}
  */
-export const SENTRY_DSN_BACKEND = __env__('MI_SENTRY_DSN_BACKEND', ENABLE_SENTRY)
+export const SENTRY_DSN_BACKEND = __env__('DW_SENTRY_DSN_BACKEND', ENABLE_SENTRY)
 
 /**
  * Sentry traces sample rate.
@@ -447,7 +447,7 @@ export const SENTRY_DSN_BACKEND = __env__('MI_SENTRY_DSN_BACKEND', ENABLE_SENTRY
  * 
  * @type {number}
  */
-export const SENTRY_TRACES_SAMPLE_RATE = Number.parseFloat(__env__('MI_SENTRY_TRACES_SAMPLE_RATE', false, '1.0'))
+export const SENTRY_TRACES_SAMPLE_RATE = Number.parseFloat(__env__('DW_SENTRY_TRACES_SAMPLE_RATE', false, '1.0'))
 
 /**
  * User Document.
@@ -472,7 +472,7 @@ export interface User extends Document {
   avatar?: string
   bio?: string
   location?: string
-  type?: movininTypes.UserType
+  type?: darywinTypes.UserType
   blacklisted?: boolean
   payLater?: boolean
   customerId?: string
@@ -522,7 +522,7 @@ export interface Booking extends Document {
   renter: Types.ObjectId
   from: Date
   to: Date
-  status: movininTypes.BookingStatus
+  status: darywinTypes.BookingStatus
   cancellation?: boolean
   cancelRequest?: boolean
   price: number
@@ -547,7 +547,7 @@ export interface BookingInfo {
   renter: UserInfo
   from: Date
   to: Date
-  status: movininTypes.BookingStatus
+  status: darywinTypes.BookingStatus
   cancellation?: boolean
   cancelRequest?: boolean
   price: number
@@ -665,7 +665,7 @@ export interface NotificationCounter extends Document {
  */
 export interface Property extends Document {
   name: string
-  type: movininTypes.PropertyType
+  type: darywinTypes.PropertyType
   agency: Types.ObjectId
   description: string
   image: string
@@ -687,7 +687,7 @@ export interface Property extends Document {
   cancellation?: number
   aircon?: boolean
   available?: boolean
-  rentalTerm: movininTypes.RentalTerm
+  rentalTerm: darywinTypes.RentalTerm
   blockOnPay?: boolean
 }
 
@@ -701,7 +701,7 @@ export interface Property extends Document {
  */
 export interface PropertyInfo extends Document {
   name: string
-  type: movininTypes.PropertyType
+  type: darywinTypes.PropertyType
   agency: UserInfo
   description: string
   image: string
@@ -719,7 +719,7 @@ export interface PropertyInfo extends Document {
   price: number
   hidden?: boolean
   cancellation?: boolean
-  rentalTerm: movininTypes.RentalTerm
+  rentalTerm: darywinTypes.RentalTerm
 }
 
 /**

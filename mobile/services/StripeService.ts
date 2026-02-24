@@ -1,5 +1,5 @@
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import axiosInstance from './axiosInstance'
 import * as env from '@/config/env.config'
 import * as AsyncStorage from '@/utils/AsyncStorage'
@@ -23,10 +23,10 @@ export const ORDER_DESCRIPTION_MAX_LENGTH = 500
 /**
  * Create Payment Intent
  *
- * @param {movininTypes.CreatePaymentPayload} payload
- * @returns {Promise<movininTypes.CreatePaymentResult>}
+ * @param {darywinTypes.CreatePaymentPayload} payload
+ * @returns {Promise<darywinTypes.CreatePaymentResult>}
  */
-export const createPaymentIntent = (payload: movininTypes.CreatePaymentPayload): Promise<movininTypes.PaymentResult> =>
+export const createPaymentIntent = (payload: darywinTypes.CreatePaymentPayload): Promise<darywinTypes.PaymentResult> =>
   axiosInstance
     .post(
       '/api/create-payment-intent',
@@ -40,7 +40,7 @@ export const createPaymentIntent = (payload: movininTypes.CreatePaymentPayload):
 * @param {string} currency
 */
 export const setCurrency = async (currency: string) => {
-  if (currency && movininHelper.checkCurrency(currency.toUpperCase())) {
+  if (currency && darywinHelper.checkCurrency(currency.toUpperCase())) {
     await AsyncStorage.storeString('bc-currency', currency.toUpperCase())
   }
 }
@@ -52,7 +52,7 @@ export const setCurrency = async (currency: string) => {
  */
 export const getCurrency = async () => {
   const currency = await AsyncStorage.getString('bc-currency')
-  if (currency && movininHelper.checkCurrency(currency.toUpperCase())) {
+  if (currency && darywinHelper.checkCurrency(currency.toUpperCase())) {
     return currency.toUpperCase()
   }
   return env.BASE_CURRENCY
@@ -82,7 +82,7 @@ export const convertPrice = async (amount: number) => {
   const to = await getCurrency()
 
   if (to !== env.BASE_CURRENCY) {
-    const res = await movininHelper.convertPrice(amount, env.BASE_CURRENCY, to)
+    const res = await darywinHelper.convertPrice(amount, env.BASE_CURRENCY, to)
     return res
   }
 
@@ -96,6 +96,6 @@ export const convertPrice = async (amount: number) => {
  */
 export const currencyRTL = async () => {
   const currencySymbol = await getCurrencySymbol()
-  const isRTL = movininHelper.currencyRTL(currencySymbol)
+  const isRTL = darywinHelper.currencyRTL(currencySymbol)
   return isRTL
 }

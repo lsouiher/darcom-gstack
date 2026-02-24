@@ -1,5 +1,5 @@
 {
-  "name": "movinin",
+  "name": "darywin",
   "version": "6.7.0",
   "description": "Rental Property Booking System",
   "keywords": [
@@ -12,7 +12,7 @@
     "property-management",
     "real-estate",
     "landlord",
-    "movinin"
+    "darywin"
   ],
   "homepage": "https://github.com/aelassas/movinin#readme",
   "bugs": {

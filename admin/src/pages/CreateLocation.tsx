@@ -8,8 +8,8 @@ import {
   Button,
   Paper
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/create-location'
@@ -28,20 +28,20 @@ const CreateLocation = () => {
   // const navigate = useNavigate()
 
   const [visible, setVisible] = useState(false)
-  const [names, setNames] = useState<movininTypes.LocationName[]>([])
+  const [names, setNames] = useState<darywinTypes.LocationName[]>([])
   const [nameErrors, setNameErrors] = useState<boolean[]>([])
-  const [country, setCountry] = useState<movininTypes.Country | null>()
+  const [country, setCountry] = useState<darywinTypes.Country | null>()
   const [loading, setLoading] = useState(false)
   const [image, setImage] = useState<string>()
   const [longitude, setLongitude] = useState('')
   const [latitude, setLatitude] = useState('')
-  const [parentLocation, setParentLocation] = useState<movininTypes.Location>()
+  const [parentLocation, setParentLocation] = useState<darywinTypes.Location>()
 
   const handleBeforeUpload = () => {
     setLoading(true)
   }
 
-  const handleImageChange = (_image: movininTypes.Location | string | null) => {
+  const handleImageChange = (_image: darywinTypes.Location | string | null) => {
     setLoading(false)
     setImage(_image as string)
   }
@@ -57,7 +57,7 @@ const CreateLocation = () => {
 
       let isValid = true
 
-      const _nameErrors = movininHelper.clone(nameErrors) as boolean[]
+      const _nameErrors = darywinHelper.clone(nameErrors) as boolean[]
       for (let i = 0; i < nameErrors.length; i += 1) {
         _nameErrors[i] = false
       }
@@ -74,7 +74,7 @@ const CreateLocation = () => {
       setNameErrors(_nameErrors)
 
       if (isValid) {
-        const payload: movininTypes.UpsertLocationPayload = {
+        const payload: darywinTypes.UpsertLocationPayload = {
           country: country?._id,
           latitude: latitude ? Number(latitude) : undefined,
           longitude: longitude ? Number(longitude) : undefined,
@@ -85,7 +85,7 @@ const CreateLocation = () => {
         const status = await LocationService.create(payload)
 
         if (status === 200) {
-          const _names = movininHelper.clone(names) as movininTypes.LocationName[]
+          const _names = darywinHelper.clone(names) as darywinTypes.LocationName[]
           for (let i = 0; i < names.length; i += 1) {
             _names[i].name = ''
           }
@@ -120,7 +120,7 @@ const CreateLocation = () => {
           </h1>
           <form onSubmit={handleSubmit}>
             <Avatar
-              type={movininTypes.RecordType.Location}
+              type={darywinTypes.RecordType.Location}
               avatar={image}
               mode="create"
               record={null}
@@ -136,8 +136,8 @@ const CreateLocation = () => {
               <CountrySelectList
                 label={strings.COUNTRY}
                 variant="standard"
-                onChange={(countries: movininTypes.Option[]) => {
-                  setCountry(countries.length > 0 ? countries[0] as movininTypes.Country : null)
+                onChange={(countries: darywinTypes.Option[]) => {
+                  setCountry(countries.length > 0 ? countries[0] as darywinTypes.Country : null)
                 }}
                 value={country}
                 required
@@ -148,7 +148,7 @@ const CreateLocation = () => {
               label={strings.PARENT_LOCATION}
               variant="standard"
               value={parentLocation}
-              onChange={(locations: movininTypes.Option[]) => {
+              onChange={(locations: darywinTypes.Option[]) => {
                 setParentLocation(locations.length > 0 ? locations[0] : undefined)
               }}
             />
@@ -162,14 +162,14 @@ const CreateLocation = () => {
                   error={nameErrors[index]}
                   required
                   onChange={(e) => {
-                    const _names = movininHelper.clone(names) as movininTypes.LocationName[]
+                    const _names = darywinHelper.clone(names) as darywinTypes.LocationName[]
                     _names[index] = {
                       language: language.code,
                       name: e.target.value,
                     }
                     setNames(_names)
 
-                    const _nameErrors = movininHelper.clone(nameErrors) as boolean[]
+                    const _nameErrors = darywinHelper.clone(nameErrors) as boolean[]
                     _nameErrors[index] = false
                     setNameErrors(_nameErrors)
                   }}

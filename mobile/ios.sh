@@ -28,14 +28,14 @@ echo 'export PATH="/usr/local/lib/ruby/gems/3.1.0/bin:$PATH"' >> ~/.zshrc # chec
 source ~/.zshrc
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
-# 6. clone movinin source code down to ~/dev folder
+# 6. clone darywin source code down to ~/dev folder
 cd ~/dev
-git clone https://github.com/aelassas/movinin.git movinin
+git clone https://github.com/aelassas/movinin.git darywin
 
 # 7. add .env, google-services.json and GoogleService-Info.plist to mobile/ folder
 
 # 8. prebuild ios app
-cd ~/dev/movinin/mobile/
+cd ~/dev/darywin/mobile/
 npm install
 npm run prebuild
 

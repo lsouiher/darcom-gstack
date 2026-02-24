@@ -1,6 +1,6 @@
 import React, { useState, useEffect, CSSProperties, ReactNode } from 'react'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import { strings } from '@/lang/master'
 import * as UserService from '@/services/UserService'
 import Unauthorized from './Unauthorized'
@@ -12,7 +12,7 @@ interface LayoutProps {
   admin?: boolean
   style?: CSSProperties
   children: ReactNode
-  onLoad?: (user?: movininTypes.User) => void
+  onLoad?: (user?: darywinTypes.User) => void
 }
 
 const Layout = ({
@@ -40,7 +40,7 @@ const Layout = ({
   }, [user, userLoaded, strict]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (admin && user && user.type !== movininTypes.RecordType.Admin) {
+    if (admin && user && user.type !== darywinTypes.RecordType.Admin) {
       setUnauthorized(true)
       setLoading(false)
     }

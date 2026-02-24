@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import i18n from '@/lang/i18n'
 import Accordion from './Accordion'
@@ -11,17 +11,17 @@ import Switch from './Switch'
 interface PropertyTypeFilterProps {
   visible?: boolean
   style?: object
-  onChange?: (values: movininTypes.PropertyType[]) => void
+  onChange?: (values: darywinTypes.PropertyType[]) => void
 }
 
-const allPropertyTypes = movininHelper.getAllPropertyTypes()
+const allPropertyTypes = darywinHelper.getAllPropertyTypes()
 
 const PropertyTypeFilter = ({
   visible,
   style,
   onChange
 }: PropertyTypeFilterProps) => {
-  const [values, setValues] = useState<movininTypes.PropertyType[]>([])
+  const [values, setValues] = useState<darywinTypes.PropertyType[]>([])
   const [house, setHouse] = useState(false)
   const [apartment, setApartment] = useState(false)
   const [plot, setPlot] = useState(false)
@@ -32,22 +32,22 @@ const PropertyTypeFilter = ({
 
   const [allChecked, setAllChecked] = useState(false)
 
-  const handleOnChange = (_values: movininTypes.PropertyType[]) => {
+  const handleOnChange = (_values: darywinTypes.PropertyType[]) => {
     if (onChange) {
-      onChange(_values.length === 0 ? allPropertyTypes : movininHelper.clone(_values))
+      onChange(_values.length === 0 ? allPropertyTypes : darywinHelper.clone(_values))
     }
   }
 
   const onValueChangeHouse = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.PropertyType.House)
+      values.push(darywinTypes.PropertyType.House)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.House),
+        values.findIndex((v) => v === darywinTypes.PropertyType.House),
         1,
       )
 
@@ -63,14 +63,14 @@ const PropertyTypeFilter = ({
 
   const onValueChangeApartment = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.PropertyType.Apartment)
+      values.push(darywinTypes.PropertyType.Apartment)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Apartment),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Apartment),
         1,
       )
 
@@ -86,14 +86,14 @@ const PropertyTypeFilter = ({
 
   const onValueChangePlot = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.PropertyType.Plot)
+      values.push(darywinTypes.PropertyType.Plot)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Plot),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Plot),
         1,
       )
 
@@ -109,14 +109,14 @@ const PropertyTypeFilter = ({
 
   const onValueChangeFarm = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.PropertyType.Farm)
+      values.push(darywinTypes.PropertyType.Farm)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Farm),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Farm),
         1,
       )
 
@@ -132,14 +132,14 @@ const PropertyTypeFilter = ({
 
   const onValueChangeCommercial = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.PropertyType.Commercial)
+      values.push(darywinTypes.PropertyType.Commercial)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Commercial),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Commercial),
         1,
       )
 
@@ -155,14 +155,14 @@ const PropertyTypeFilter = ({
 
   const onValueChangeIndustrial = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.PropertyType.Industrial)
+      values.push(darywinTypes.PropertyType.Industrial)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Industrial),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Industrial),
         1,
       )
 
@@ -178,14 +178,14 @@ const PropertyTypeFilter = ({
 
   const onValueChangeTownHouse = (checked: boolean) => {
     if (checked) {
-      values.push(movininTypes.PropertyType.Townhouse)
+      values.push(darywinTypes.PropertyType.Townhouse)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.PropertyType.Townhouse),
+        values.findIndex((v) => v === darywinTypes.PropertyType.Townhouse),
         1,
       )
 
@@ -280,7 +280,7 @@ const PropertyTypeFilter = ({
                 setValues(allPropertyTypes)
                 setAllChecked(true)
                 if (onChange) {
-                  onChange(movininHelper.clone(allPropertyTypes))
+                  onChange(darywinHelper.clone(allPropertyTypes))
                 }
               }
             }}

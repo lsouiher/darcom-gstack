@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../config/env.config'
 import * as databaseHelper from '../utils/databaseHelper'
 import User from '../models/User'
@@ -97,7 +97,7 @@ try {
       email: env.ADMIN_EMAIL,
       password: passwordHash,
       language: env.DEFAULT_LANGUAGE,
-      type: movininTypes.UserType.Admin,
+      type: darywinTypes.UserType.Admin,
       active: true,
       verified: true,
     })

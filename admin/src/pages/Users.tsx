@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings } from '@/lang/users'
@@ -15,12 +15,12 @@ import '@/assets/css/users.css'
 const Users = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [admin, setAdmin] = useState(false)
-  const [types, setTypes] = useState<movininTypes.UserType[]>([])
+  const [types, setTypes] = useState<darywinTypes.UserType[]>([])
   const [keyword, setKeyword] = useState('')
 
-  const handleUserTypeFilterChange = (newTypes: movininTypes.UserType[]) => {
+  const handleUserTypeFilterChange = (newTypes: darywinTypes.UserType[]) => {
     setTypes(newTypes)
   }
 
@@ -28,11 +28,11 @@ const Users = () => {
     setKeyword(newKeyword)
   }
 
-  const onLoad = (_user?: movininTypes.User) => {
+  const onLoad = (_user?: darywinTypes.User) => {
     const _admin = helper.admin(_user)
     const _types = _admin
       ? helper.getUserTypes().map((userType) => userType.value)
-      : [movininTypes.UserType.Agency, movininTypes.UserType.User]
+      : [darywinTypes.UserType.Agency, darywinTypes.UserType.User]
 
     setUser(_user)
     setAdmin(_admin)

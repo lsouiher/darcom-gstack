@@ -1,8 +1,8 @@
 # Contribution Guide
 
-Welcome to the **Movin' In** Contribution Guide!  
+Welcome to the **DaryWin** Contribution Guide!  
 
-We appreciate your interest in contributing to Movin' In. This guide will help you get started, follow best practices, and make your contributions smooth and effective.
+We appreciate your interest in contributing to DaryWin. This guide will help you get started, follow best practices, and make your contributions smooth and effective.
 
 
 
@@ -24,7 +24,7 @@ We appreciate your interest in contributing to Movin' In. This guide will help y
 - **Fork the repository** to your own GitHub account.  
 - **Clone your fork** locally:
   ```bash
-  git clone https://github.com/your-username/movinin.git
+  git clone https://github.com/your-username/darywin.git
   ```
 - **Install dependencies**:
   ```bash
@@ -69,7 +69,7 @@ We appreciate your interest in contributing to Movin' In. This guide will help y
 
 ## Code Style and Guidelines
 
-- Movin' In uses **TypeScript** across the stack.  
+- DaryWin uses **TypeScript** across the stack.  
 - Follow **ESLint** rules.  
 - Use descriptive variable and function names.  
 - Write modular and reusable code whenever possible.  
@@ -102,7 +102,7 @@ We appreciate your interest in contributing to Movin' In. This guide will help y
   git push origin feature/your-feature-name
   ```
 
-- Open a **Pull Request** (PR) against the Movin' In `main` branch.  
+- Open a **Pull Request** (PR) against the DaryWin `main` branch.  
 - Provide a clear description of the changes and link any related issues.  
 - Include screenshots or logs if your change affects UI or fixes bugs.  
 - Ensure all tests pass and pre-commit checks are green before requesting review.
@@ -120,7 +120,7 @@ See the [Testing Wiki](https://github.com/aelassas/movinin/wiki/Testing) for mor
 
 ## Pre-commit Checks
 
-- Movin' In uses **Husky** to run pre-commit hooks: linting, type checking, and file size checks.  
+- DaryWin uses **Husky** to run pre-commit hooks: linting, type checking, and file size checks.  
 - These hooks run automatically when you commit code, helping maintain quality.  
 - If any pre-commit check fails, fix the reported issues before proceeding.
 
@@ -136,6 +136,6 @@ See the [Testing Wiki](https://github.com/aelassas/movinin/wiki/Testing) for mor
 - Follow the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/).  
 - Report any issues or harassment to the repository maintainers.
 
-Thank you for helping make Movin' In better! Your contributions are valued and make a difference.
+Thank you for helping make DaryWin better! Your contributions are valued and make a difference.
 
 Happy coding! 🏢✨

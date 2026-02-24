@@ -1,14 +1,14 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
 /**
  * Complete the checkout process and create the booking.
  *
- * @param {movininTypes.CheckoutPayload} data
+ * @param {darywinTypes.CheckoutPayload} data
  * @returns {Promise<number>}
  */
-export const checkout = (data: movininTypes.CheckoutPayload): Promise<{ status: number, bookingId: string }> =>
+export const checkout = (data: darywinTypes.CheckoutPayload): Promise<{ status: number, bookingId: string }> =>
   axiosInstance
     .post(
       '/api/checkout',
@@ -18,12 +18,12 @@ export const checkout = (data: movininTypes.CheckoutPayload): Promise<{ status: 
 /**
  * Get bookings.
  *
- * @param {movininTypes.GetBookingsPayload} payload
+ * @param {darywinTypes.GetBookingsPayload} payload
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Booking>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Booking>>}
  */
-export const getBookings = (payload: movininTypes.GetBookingsPayload, page: number, size: number): Promise<movininTypes.Result<movininTypes.Booking>> =>
+export const getBookings = (payload: darywinTypes.GetBookingsPayload, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Booking>> =>
   axiosInstance
     .post(
       `/api/bookings/${page}/${size}/${UserService.getLanguage()}`,
@@ -36,9 +36,9 @@ export const getBookings = (payload: movininTypes.GetBookingsPayload, page: numb
  * Get a Booking by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.Booking>}
+ * @returns {Promise<darywinTypes.Booking>}
  */
-export const getBooking = (id: string): Promise<movininTypes.Booking> =>
+export const getBooking = (id: string): Promise<darywinTypes.Booking> =>
   axiosInstance
     .get(
       `/api/booking/${encodeURIComponent(id)}/${UserService.getLanguage()}`,

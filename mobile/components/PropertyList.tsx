@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { CommonActions, NavigationRoute, RouteProp } from '@react-navigation/native'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import * as helper from '@/utils/helper'
 import * as env from '@/config/env.config'
@@ -25,15 +25,15 @@ interface PropertyListProps {
   to?: Date
   location?: string
   agencies?: string[]
-  types?: movininTypes.PropertyType[]
-  rentalTerms?: movininTypes.RentalTerm[]
+  types?: darywinTypes.PropertyType[]
+  rentalTerms?: darywinTypes.RentalTerm[]
   header?: React.ReactElement
-  properties?: movininTypes.Property[]
+  properties?: darywinTypes.Property[]
   hidePrice?: boolean
   footerComponent?: React.ReactElement
   route: RouteProp<StackParams, keyof StackParams>
   routeName?: 'Properties' | 'Checkout'
-  onLoad?: movininTypes.DataEvent<movininTypes.Property>
+  onLoad?: darywinTypes.DataEvent<darywinTypes.Property>
 }
 
 const PropertyList = ({
@@ -56,7 +56,7 @@ const PropertyList = ({
   const [onScrollEnd, setOnScrollEnd] = useState(false)
   const [loading, setLoading] = useState(true)
   const [fetch, setFetch] = useState(false)
-  const [rows, setRows] = useState<movininTypes.Property[]>([])
+  const [rows, setRows] = useState<darywinTypes.Property[]>([])
   const [page, setPage] = useState(1)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -78,15 +78,15 @@ const PropertyList = ({
     _page: number,
     _location: string,
     _agencies: string[],
-    _types: movininTypes.PropertyType[],
-    _rentalTerms: movininTypes.RentalTerm[]
+    _types: darywinTypes.PropertyType[],
+    _rentalTerms: darywinTypes.RentalTerm[]
   ) => {
     try {
       if (_agencies && _agencies.length > 0) {
         setLoading(true)
         setFetch(true)
 
-        const payload: movininTypes.GetPropertiesPayload = {
+        const payload: darywinTypes.GetPropertiesPayload = {
           location: _location,
           agencies: _agencies,
           types: _types,
@@ -213,7 +213,7 @@ const PropertyList = ({
 
                 navigation.dispatch((state) => {
                   const { routes } = state
-                  const _routes = movininHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
+                  const _routes = darywinHelper.cloneArray(routes) as NavigationRoute<StackParams, keyof StackParams>[]
                   let index = 0
                   if (routeName === 'Properties') {
                     index = routes.findIndex((r) => r.name === 'Properties')

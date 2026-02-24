@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as env from '../config/env.config'
 
 const propertySchema = new Schema<env.Property>(
@@ -11,13 +11,13 @@ const propertySchema = new Schema<env.Property>(
     type: {
       type: String,
       enum: [
-        movininTypes.PropertyType.House,
-        movininTypes.PropertyType.Apartment,
-        movininTypes.PropertyType.Townhouse,
-        movininTypes.PropertyType.Plot,
-        movininTypes.PropertyType.Farm,
-        movininTypes.PropertyType.Commercial,
-        movininTypes.PropertyType.Industrial,
+        darywinTypes.PropertyType.House,
+        darywinTypes.PropertyType.Apartment,
+        darywinTypes.PropertyType.Townhouse,
+        darywinTypes.PropertyType.Plot,
+        darywinTypes.PropertyType.Farm,
+        darywinTypes.PropertyType.Commercial,
+        darywinTypes.PropertyType.Industrial,
       ],
       required: [true, "can't be blank"],
     },
@@ -123,10 +123,10 @@ const propertySchema = new Schema<env.Property>(
     rentalTerm: {
       type: String,
       enum: [
-        movininTypes.RentalTerm.Monthly,
-        movininTypes.RentalTerm.Weekly,
-        movininTypes.RentalTerm.Daily,
-        movininTypes.RentalTerm.Yearly,
+        darywinTypes.RentalTerm.Monthly,
+        darywinTypes.RentalTerm.Weekly,
+        darywinTypes.RentalTerm.Daily,
+        darywinTypes.RentalTerm.Yearly,
       ],
       required: [true, "can't be blank"],
     },

@@ -16,8 +16,8 @@ import { Info as InfoIcon } from '@mui/icons-material'
 import validator from 'validator'
 import { intervalToDuration } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
@@ -35,7 +35,7 @@ import '@/assets/css/create-user.css'
 
 const CreateUser = () => {
   const navigate = useNavigate()
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [admin, setAdmin] = useState(false)
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -85,7 +85,7 @@ const CreateUser = () => {
 
     setType(_type)
 
-    if (_type === movininTypes.RecordType.Agency) {
+    if (_type === darywinTypes.RecordType.Agency) {
       await validateFullName(fullName)
     } else {
       setFullNameError(false)
@@ -101,7 +101,7 @@ const CreateUser = () => {
   }
 
   const handleFullNameBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    if (type === movininTypes.RecordType.Agency) {
+    if (type === darywinTypes.RecordType.Agency) {
       await validateFullName(e.target.value)
     } else {
       setFullNameError(false)
@@ -177,7 +177,7 @@ const CreateUser = () => {
   }
 
   const validateBirthDate = (date?: Date) => {
-    if (date && movininHelper.isDate(date) && type === movininTypes.RecordType.User) {
+    if (date && darywinHelper.isDate(date) && type === darywinTypes.RecordType.User) {
       const now = new Date()
       const sub = intervalToDuration({ start: date, end: now }).years ?? 0
       const _birthDateValid = sub >= env.MINIMUM_AGE
@@ -205,7 +205,7 @@ const CreateUser = () => {
     setLoading(false)
     setAvatar(_avatar)
 
-    if (_avatar !== null && type === movininTypes.RecordType.Agency) {
+    if (_avatar !== null && type === darywinTypes.RecordType.Agency) {
       setAvatarError(false)
     }
   }
@@ -223,12 +223,12 @@ const CreateUser = () => {
     }
   }
 
-  const onLoad = (_user?: movininTypes.User) => {
+  const onLoad = (_user?: darywinTypes.User) => {
     if (_user && _user.verified) {
       const _admin = helper.admin(_user)
       setUser(_user)
       setAdmin(_admin)
-      setType(_admin ? '' : movininTypes.RecordType.User)
+      setType(_admin ? '' : darywinTypes.RecordType.User)
       setVisible(true)
     }
   }
@@ -242,7 +242,7 @@ const CreateUser = () => {
         return
       }
 
-      if (type === movininTypes.RecordType.Agency) {
+      if (type === darywinTypes.RecordType.Agency) {
         const fullNameValid = await validateFullName(fullName)
 
         if (!fullNameValid) {
@@ -267,7 +267,7 @@ const CreateUser = () => {
         return
       }
 
-      if (type === movininTypes.RecordType.Agency && !avatar) {
+      if (type === darywinTypes.RecordType.Agency && !avatar) {
         setAvatarError(true)
         setError(false)
         return
@@ -276,7 +276,7 @@ const CreateUser = () => {
       const language = UserService.getLanguage()
       const agency = admin ? undefined : user._id
 
-      const data: movininTypes.CreateUserPayload = {
+      const data: darywinTypes.CreateUserPayload = {
         email,
         phone,
         location,
@@ -289,7 +289,7 @@ const CreateUser = () => {
         agency,
       }
 
-      if (type === movininTypes.RecordType.Agency) {
+      if (type === darywinTypes.RecordType.Agency) {
         data.payLater = payLater
       }
 
@@ -305,8 +305,8 @@ const CreateUser = () => {
     }
   }
 
-  const agency = type === movininTypes.RecordType.Agency
-  const renter = type === movininTypes.RecordType.User
+  const agency = type === darywinTypes.RecordType.Agency
+  const renter = type === darywinTypes.RecordType.User
 
   return (
     <Layout onLoad={onLoad} strict>
@@ -342,9 +342,9 @@ const CreateUser = () => {
                 <FormControl fullWidth margin="dense" style={{ marginTop: agency ? 0 : 39 }}>
                   <InputLabel className="required">{commonStrings.TYPE}</InputLabel>
                   <Select label={commonStrings.TYPE} value={type} onChange={handleUserTypeChange} variant="standard" required fullWidth>
-                    <MenuItem value={movininTypes.RecordType.Admin}>{helper.getUserType(movininTypes.UserType.Admin)}</MenuItem>
-                    <MenuItem value={movininTypes.RecordType.Agency}>{helper.getUserType(movininTypes.UserType.Agency)}</MenuItem>
-                    <MenuItem value={movininTypes.RecordType.User}>{helper.getUserType(movininTypes.UserType.User)}</MenuItem>
+                    <MenuItem value={darywinTypes.RecordType.Admin}>{helper.getUserType(darywinTypes.UserType.Admin)}</MenuItem>
+                    <MenuItem value={darywinTypes.RecordType.Agency}>{helper.getUserType(darywinTypes.UserType.Agency)}</MenuItem>
+                    <MenuItem value={darywinTypes.RecordType.User}>{helper.getUserType(darywinTypes.UserType.User)}</MenuItem>
                   </Select>
                 </FormControl>
               )}

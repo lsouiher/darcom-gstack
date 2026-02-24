@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 import * as UserService from '@/services/UserService'
 import * as PaymentService from '@/services/PaymentService'
@@ -15,7 +15,7 @@ import AgencyBadge from '@/components/AgencyBadge'
 import '@/assets/css/property-component.css'
 
 interface PropertyProps {
-  property: movininTypes.Property
+  property: darywinTypes.Property
   location?: string
   from?: Date
   to?: Date
@@ -49,9 +49,9 @@ const Property = ({
   useEffect(() => {
     const fetchPrice = async () => {
       if (from && to) {
-        const _totalPrice = await PaymentService.convertPrice(movininHelper.calculateTotalPrice(property, from as Date, to as Date))
+        const _totalPrice = await PaymentService.convertPrice(darywinHelper.calculateTotalPrice(property, from as Date, to as Date))
         setTotalPrice(_totalPrice)
-        setDays(movininHelper.days(from, to))
+        setDays(darywinHelper.days(from, to))
       }
       setLoading(false)
     }
@@ -68,7 +68,7 @@ const Property = ({
 
       <div className="left-panel">
         <img
-          src={movininHelper.joinURL(env.CDN_PROPERTIES, property.image)}
+          src={darywinHelper.joinURL(env.CDN_PROPERTIES, property.image)}
           alt={property.name}
           className="property-img"
         />
@@ -92,8 +92,8 @@ const Property = ({
         {!hidePrice && from && to && (
           <div className="price">
             <span className="price-days">{helper.getDays(days)}</span>
-            <span className="price-main">{movininHelper.formatPrice(totalPrice, commonStrings.CURRENCY, language)}</span>
-            <span className="price-day">{`${strings.PRICE_PER_DAY} ${movininHelper.formatPrice(totalPrice / days, commonStrings.CURRENCY, language)}`}</span>
+            <span className="price-main">{darywinHelper.formatPrice(totalPrice, commonStrings.CURRENCY, language)}</span>
+            <span className="price-day">{`${strings.PRICE_PER_DAY} ${darywinHelper.formatPrice(totalPrice / days, commonStrings.CURRENCY, language)}`}</span>
           </div>
         )}
         {hidePrice && !hideActions && <span />}

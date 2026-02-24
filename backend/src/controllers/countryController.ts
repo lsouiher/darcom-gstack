@@ -1,7 +1,7 @@
 import escapeStringRegexp from 'escape-string-regexp'
 import mongoose from 'mongoose'
 import { Request, Response } from 'express'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as helper from '../utils/helper'
 import * as env from '../config/env.config'
 import i18n from '../lang/i18n'
@@ -20,7 +20,7 @@ import * as logger from '../utils/logger'
  * @returns {unknown}
  */
 export const validate = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.ValidateCountryPayload } = req
+  const { body }: { body: darywinTypes.ValidateCountryPayload } = req
   const { language, name } = body
 
   try {
@@ -76,7 +76,7 @@ export const validate = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const create = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.CountryName[] } = req
+  const { body }: { body: darywinTypes.CountryName[] } = req
   const names = body
 
   try {
@@ -115,7 +115,7 @@ export const update = async (req: Request, res: Response) => {
     const country = await Country.findById(id).populate<{ values: env.LocationValue[] }>('values')
 
     if (country) {
-      const names: movininTypes.CountryName[] = req.body
+      const names: darywinTypes.CountryName[] = req.body
 
       for (const name of names) {
         const countryValue = country.values.filter((value) => value.language === name.language)[0]

@@ -4,8 +4,8 @@ import {
   Button,
   FormControl,
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
@@ -32,7 +32,7 @@ const Property = () => {
 
   const [loading, setLoading] = useState(false)
   const [noMatch, setNoMatch] = useState(false)
-  const [property, setProperty] = useState<movininTypes.Property>()
+  const [property, setProperty] = useState<darywinTypes.Property>()
   const [image, setImage] = useState('')
   const [images, setImages] = useState<string[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -46,7 +46,7 @@ const Property = () => {
   const [priceLabel, setPriceLabel] = useState('')
 
   useEffect(() => {
-    const src = (_image: string) => movininHelper.joinURL(env.CDN_PROPERTIES, _image)
+    const src = (_image: string) => darywinHelper.joinURL(env.CDN_PROPERTIES, _image)
 
     if (property) {
       const _image = src(property.image)

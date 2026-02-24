@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid'
 import escapeStringRegexp from 'escape-string-regexp'
 import mongoose from 'mongoose'
 import { Request, Response } from 'express'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Booking from '../models/Booking'
 import Property from '../models/Property'
 import i18n from '../lang/i18n'
@@ -23,7 +23,7 @@ import Location from '../models/Location'
  * @returns {unknown}
  */
 export const create = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.CreatePropertyPayload } = req
+  const { body }: { body: darywinTypes.CreatePropertyPayload } = req
 
   try {
     const {
@@ -136,7 +136,7 @@ export const create = async (req: Request, res: Response) => {
  * @returns {unknown}
  */
 export const update = async (req: Request, res: Response) => {
-  const { body }: { body: movininTypes.UpdatePropertyPayload } = req
+  const { body }: { body: darywinTypes.UpdatePropertyPayload } = req
   const { _id } = body
 
   try {
@@ -175,7 +175,7 @@ export const update = async (req: Request, res: Response) => {
       } = body
 
       property.name = name
-      property.type = type as movininTypes.PropertyType
+      property.type = type as darywinTypes.PropertyType
       property.agency = new mongoose.Types.ObjectId(agency)
       property.description = description
       property.available = available
@@ -195,7 +195,7 @@ export const update = async (req: Request, res: Response) => {
       property.hidden = hidden
       property.cancellation = cancellation
       property.aircon = aircon
-      property.rentalTerm = rentalTerm as movininTypes.RentalTerm
+      property.rentalTerm = rentalTerm as darywinTypes.RentalTerm
       property.blockOnPay = blockOnPay
 
       if (image && image !== property.image) {
@@ -499,7 +499,7 @@ export const getProperty = async (req: Request, res: Response) => {
  */
 export const getProperties = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.GetPropertiesPayload } = req
+    const { body }: { body: darywinTypes.GetPropertiesPayload } = req
     const page = Number.parseInt(req.params.page, 10)
     const size = Number.parseInt(req.params.size, 10)
     const agencies = body.agencies.map((id) => new mongoose.Types.ObjectId(id))
@@ -510,7 +510,7 @@ export const getProperties = async (req: Request, res: Response) => {
     const options = 'i'
     // const language = body.language || env.DEFAULT_LANGUAGE
 
-    const $match: mongoose.QueryFilter<movininTypes.Property> = {
+    const $match: mongoose.QueryFilter<darywinTypes.Property> = {
       $and: [
         { agency: { $in: agencies } },
         { type: { $in: types } },
@@ -519,9 +519,9 @@ export const getProperties = async (req: Request, res: Response) => {
     }
 
     if (availability) {
-      if (availability.length === 1 && availability[0] === movininTypes.Availablity.Available) {
+      if (availability.length === 1 && availability[0] === darywinTypes.Availablity.Available) {
         $match.$and!.push({ available: true })
-      } else if (availability.length === 1 && availability[0] === movininTypes.Availablity.Unavailable) {
+      } else if (availability.length === 1 && availability[0] === darywinTypes.Availablity.Unavailable) {
         $match.$and!.push({ available: false })
       } else if (availability.length === 0) {
         res.json([{ resultData: [], pageInfo: [] }])
@@ -633,7 +633,7 @@ export const getProperties = async (req: Request, res: Response) => {
  */
 export const getBookingProperties = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.GetBookingPropertiesPayload } = req
+    const { body }: { body: darywinTypes.GetBookingPropertiesPayload } = req
     const agency = new mongoose.Types.ObjectId(body.agency)
     const location = new mongoose.Types.ObjectId(body.location)
     const keyword = escapeStringRegexp(String(req.query.s || ''))
@@ -676,7 +676,7 @@ export const getBookingProperties = async (req: Request, res: Response) => {
  */
 export const getFrontendProperties = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.GetPropertiesPayload } = req
+    const { body }: { body: darywinTypes.GetPropertiesPayload } = req
     const page = Number.parseInt(req.params.page, 10)
     const size = Number.parseInt(req.params.size, 10)
     const agencies = body.agencies.map((id) => new mongoose.Types.ObjectId(id))
@@ -703,7 +703,7 @@ export const getFrontendProperties = async (req: Request, res: Response) => {
 
     const locationIds = locIds.map((loc) => loc._id)
 
-    const $match: mongoose.QueryFilter<movininTypes.Property> = {
+    const $match: mongoose.QueryFilter<darywinTypes.Property> = {
       $and: [
         { agency: { $in: agencies } },
         // { location },
@@ -803,9 +803,9 @@ export const getFrontendProperties = async (req: Request, res: Response) => {
                       {
                         // include Paid, Reserved and Deposit bookings
                         $in: ['$status', [
-                          movininTypes.BookingStatus.Paid,
-                          movininTypes.BookingStatus.Reserved,
-                          movininTypes.BookingStatus.Deposit,
+                          darywinTypes.BookingStatus.Paid,
+                          darywinTypes.BookingStatus.Reserved,
+                          darywinTypes.BookingStatus.Deposit,
                         ]]
                       },
                     ]

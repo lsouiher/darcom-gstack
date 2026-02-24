@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 import * as helper from '@/utils/helper'
 
 interface BookingStatusProps {
   style: object
-  status: movininTypes.BookingStatus
+  status: darywinTypes.BookingStatus
 }
 
 const BookingStatus = ({
@@ -21,17 +21,17 @@ const BookingStatus = ({
       borderRadius: 18,
     },
     text: {
-      color: status === movininTypes.BookingStatus.Void
+      color: status === darywinTypes.BookingStatus.Void
         ? '#6E7C86'
-        : status === movininTypes.BookingStatus.Pending
+        : status === darywinTypes.BookingStatus.Pending
           ? '#EF6C00'
-          : status === movininTypes.BookingStatus.Deposit
+          : status === darywinTypes.BookingStatus.Deposit
             ? '#3CB371'
-            : status === movininTypes.BookingStatus.Paid
+            : status === darywinTypes.BookingStatus.Paid
               ? '#77BC23'
-              : status === movininTypes.BookingStatus.Reserved
+              : status === darywinTypes.BookingStatus.Reserved
                 ? '#1E88E5'
-                : status === movininTypes.BookingStatus.Cancelled
+                : status === darywinTypes.BookingStatus.Cancelled
                   ? '#E53935'
                   : 'transparent',
       fontSize: 13,
@@ -45,17 +45,17 @@ const BookingStatus = ({
         ...styles.container,
         ...style,
         backgroundColor:
-          status === movininTypes.BookingStatus.Void
+          status === darywinTypes.BookingStatus.Void
             ? '#D9D9D9'
-            : status === movininTypes.BookingStatus.Pending
+            : status === darywinTypes.BookingStatus.Pending
               ? '#FBDCC2'
-              : status === movininTypes.BookingStatus.Deposit
+              : status === darywinTypes.BookingStatus.Deposit
                 ? '#CDECDA'
-                : status === movininTypes.BookingStatus.Paid
+                : status === darywinTypes.BookingStatus.Paid
                   ? '#D1F9D1'
-                  : status === movininTypes.BookingStatus.Reserved
+                  : status === darywinTypes.BookingStatus.Reserved
                     ? '#D9E7F4'
-                    : status === movininTypes.BookingStatus.Cancelled
+                    : status === darywinTypes.BookingStatus.Cancelled
                       ? '#FBDFDE'
                       : 'transparent',
       }}

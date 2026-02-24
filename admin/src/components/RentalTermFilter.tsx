@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as propertyStrings } from '@/lang/create-property'
 import { strings } from '@/lang/rental-term'
@@ -10,17 +10,17 @@ import '@/assets/css/rental-term-filter.css'
 
 interface RentalTermFilterProps {
   className?: string
-  onChange?: (values: movininTypes.RentalTerm[]) => void
+  onChange?: (values: darywinTypes.RentalTerm[]) => void
 }
 
-const allRentalTerms = movininHelper.getAllRentalTerms()
+const allRentalTerms = darywinHelper.getAllRentalTerms()
 
 const RentalTermFilter = ({
   className,
   onChange
 }: RentalTermFilterProps) => {
   const [allChecked, setAllChecked] = useState(false)
-  const [values, setValues] = useState<movininTypes.RentalTerm[]>([])
+  const [values, setValues] = useState<darywinTypes.RentalTerm[]>([])
 
   const monthlyRef = useRef<HTMLInputElement>(null)
   const weeklyRef = useRef<HTMLInputElement>(null)
@@ -41,22 +41,22 @@ const RentalTermFilter = ({
     }
   }, [allChecked])
 
-  const handleChange = (_values: movininTypes.RentalTerm[]) => {
+  const handleChange = (_values: darywinTypes.RentalTerm[]) => {
     if (onChange) {
-      onChange(_values.length === 0 ? allRentalTerms : movininHelper.clone(_values))
+      onChange(_values.length === 0 ? allRentalTerms : darywinHelper.clone(_values))
     }
   }
 
   const handleCheckMonthlyChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.RentalTerm.Monthly)
+      values.push(darywinTypes.RentalTerm.Monthly)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Monthly),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Monthly),
         1,
       )
 
@@ -80,14 +80,14 @@ const RentalTermFilter = ({
 
   const handleCheckWeeklyChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.RentalTerm.Weekly)
+      values.push(darywinTypes.RentalTerm.Weekly)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Weekly),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Weekly),
         1,
       )
 
@@ -111,14 +111,14 @@ const RentalTermFilter = ({
 
   const handleCheckDailyChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.RentalTerm.Daily)
+      values.push(darywinTypes.RentalTerm.Daily)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Daily),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Daily),
         1,
       )
 
@@ -142,14 +142,14 @@ const RentalTermFilter = ({
 
   const handleCheckYearlyChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
-      values.push(movininTypes.RentalTerm.Yearly)
+      values.push(darywinTypes.RentalTerm.Yearly)
 
       if (values.length === 7) {
         setAllChecked(true)
       }
     } else {
       values.splice(
-        values.findIndex((v) => v === movininTypes.RentalTerm.Yearly),
+        values.findIndex((v) => v === darywinTypes.RentalTerm.Yearly),
         1,
       )
 

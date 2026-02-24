@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import * as helper from '@/utils/helper'
 
@@ -8,7 +8,7 @@ import '@/assets/css/user-type-filter.css'
 
 interface UserTypeFilterProps {
   className?: string
-  onChange?: (types: movininTypes.UserType[]) => void
+  onChange?: (types: darywinTypes.UserType[]) => void
 }
 
 const UserTypeFilter = ({
@@ -16,7 +16,7 @@ const UserTypeFilter = ({
   onChange
 }: UserTypeFilterProps) => {
   const userTypes = helper.getUserTypes()
-  const [checkedUserTypes, setCheckedUserTypes] = useState<movininTypes.UserType[]>(userTypes.map((user) => user.value))
+  const [checkedUserTypes, setCheckedUserTypes] = useState<darywinTypes.UserType[]>(userTypes.map((user) => user.value))
   const [allChecked, setAllChecked] = useState(true)
   const refs = useRef<(HTMLInputElement)[]>([])
 
@@ -27,7 +27,7 @@ const UserTypeFilter = ({
   }, [])
 
   const handleUserTypeChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
-    const userType = e.currentTarget.getAttribute('data-value') as movininTypes.UserType
+    const userType = e.currentTarget.getAttribute('data-value') as darywinTypes.UserType
     const checkbox = e.currentTarget as HTMLInputElement
 
     if (checkbox.checked) {
@@ -48,7 +48,7 @@ const UserTypeFilter = ({
     setCheckedUserTypes(checkedUserTypes)
 
     if (onChange) {
-      onChange(movininHelper.clone(checkedUserTypes))
+      onChange(darywinHelper.clone(checkedUserTypes))
     }
   }
 
@@ -80,7 +80,7 @@ const UserTypeFilter = ({
       setCheckedUserTypes(_userTypes)
 
       if (onChange) {
-        onChange(movininHelper.clone(_userTypes))
+        onChange(darywinHelper.clone(_userTypes))
       }
     }
   }

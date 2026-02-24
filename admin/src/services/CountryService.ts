@@ -1,14 +1,14 @@
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import axiosInstance from './axiosInstance'
 import * as UserService from './UserService'
 
 /**
  * Validate a Country name.
  *
- * @param {movininTypes.ValidateCountryPayload} data
+ * @param {darywinTypes.ValidateCountryPayload} data
  * @returns {Promise<number>}
  */
-export const validate = (data: movininTypes.ValidateCountryPayload): Promise<number> =>
+export const validate = (data: darywinTypes.ValidateCountryPayload): Promise<number> =>
   axiosInstance
     .post(
       '/api/validate-country',
@@ -20,10 +20,10 @@ export const validate = (data: movininTypes.ValidateCountryPayload): Promise<num
 /**
  * Create a Country.
  *
- * @param {movininTypes.CountryName[]} data
+ * @param {darywinTypes.CountryName[]} data
  * @returns {Promise<number>}
  */
-export const create = (data: movininTypes.CountryName[]): Promise<number> =>
+export const create = (data: darywinTypes.CountryName[]): Promise<number> =>
   axiosInstance
     .post(
       '/api/create-country',
@@ -36,10 +36,10 @@ export const create = (data: movininTypes.CountryName[]): Promise<number> =>
  * Update a Country.
  *
  * @param {string} id
- * @param {movininTypes.CountryName[]} data
+ * @param {darywinTypes.CountryName[]} data
  * @returns {Promise<number>}
  */
-export const update = (id: string, data: movininTypes.CountryName[]): Promise<number> =>
+export const update = (id: string, data: darywinTypes.CountryName[]): Promise<number> =>
   axiosInstance
     .put(
       `/api/update-country/${id}`,
@@ -66,9 +66,9 @@ export const deleteCountry = (id: string): Promise<number> =>
  * Get a Country by ID.
  *
  * @param {string} id
- * @returns {Promise<movininTypes.Country>}
+ * @returns {Promise<darywinTypes.Country>}
  */
-export const getCountry = (id: string): Promise<movininTypes.Country> =>
+export const getCountry = (id: string): Promise<darywinTypes.Country> =>
   axiosInstance
     .get(
       `/api/country/${encodeURIComponent(id)}/${UserService.getLanguage()}`,
@@ -82,9 +82,9 @@ export const getCountry = (id: string): Promise<movininTypes.Country> =>
  * @param {string} keyword
  * @param {number} page
  * @param {number} size
- * @returns {Promise<movininTypes.Result<movininTypes.Country>>}
+ * @returns {Promise<darywinTypes.Result<darywinTypes.Country>>}
  */
-export const getCountries = (keyword: string, page: number, size: number): Promise<movininTypes.Result<movininTypes.Country>> =>
+export const getCountries = (keyword: string, page: number, size: number): Promise<darywinTypes.Result<darywinTypes.Country>> =>
   axiosInstance
     .get(
       `/api/countries/${page}/${size}/${UserService.getLanguage()}/?s=${encodeURIComponent(keyword)}`,

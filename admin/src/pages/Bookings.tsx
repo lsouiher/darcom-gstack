@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import env from '@/config/env.config'
 import { strings } from '@/lang/bookings'
@@ -18,13 +18,13 @@ import '@/assets/css/bookings.css'
 const Bookings = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [leftPanel, setLeftPanel] = useState(false)
   const [admin, setAdmin] = useState(false)
-  const [allAgencies, setAllAgencies] = useState<movininTypes.User[]>([])
+  const [allAgencies, setAllAgencies] = useState<darywinTypes.User[]>([])
   const [agencies, setAgencies] = useState<string[]>()
   const [statuses, setStatuses] = useState(helper.getBookingStatuses().map((status) => status.value))
-  const [filter, setFilter] = useState<movininTypes.Filter | null>()
+  const [filter, setFilter] = useState<darywinTypes.Filter | null>()
   const [loadingAgencies, setLoadingAgencies] = useState(true)
   const [offset, setOffset] = useState(0)
 
@@ -41,15 +41,15 @@ const Bookings = () => {
     setAgencies(_agencies)
   }
 
-  const handleStatusFilterChange = (_statuses: movininTypes.BookingStatus[]) => {
+  const handleStatusFilterChange = (_statuses: darywinTypes.BookingStatus[]) => {
     setStatuses(_statuses)
   }
 
-  const handleBookingFilterSubmit = (_filter: movininTypes.Filter | null) => {
+  const handleBookingFilterSubmit = (_filter: darywinTypes.Filter | null) => {
     setFilter(_filter)
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     if (_user) {
       const _admin = helper.admin(_user)
       setUser(_user)
@@ -58,7 +58,7 @@ const Bookings = () => {
       setLoadingAgencies(_admin)
 
       const _allAgencies = await AgencyService.getAllAgencies()
-      const _agencies = _admin ? movininHelper.flattenAgencies(_allAgencies) : [_user._id ?? '']
+      const _agencies = _admin ? darywinHelper.flattenAgencies(_allAgencies) : [_user._id ?? '']
       setAllAgencies(_allAgencies)
       setAgencies(_agencies)
       setLeftPanel(true)

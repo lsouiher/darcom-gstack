@@ -6,15 +6,15 @@ import {
   RemoteQuery,
   SchedulerRef,
 } from '@/components/scheduler/types'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as helper from '@/utils/helper'
 import * as BookingService from '@/services/BookingService'
 
 interface PropertySchedulerProps {
   agencies: string[]
   statuses: string[]
-  filter?: movininTypes.Filter
-  user?: movininTypes.User
+  filter?: darywinTypes.Filter
+  user?: darywinTypes.User
   language: string
 }
 
@@ -27,7 +27,7 @@ const PropertyScheduler = (
     language,
   }: PropertySchedulerProps
 ) => {
-  const [filter, setFilter] = useState<movininTypes.Filter>()
+  const [filter, setFilter] = useState<darywinTypes.Filter>()
   const [init, setInit] = useState(true)
 
   const schedulerRef = React.useRef<SchedulerRef>(null)
@@ -49,7 +49,7 @@ const PropertyScheduler = (
     const dateBetween = new Date(query.end.getTime() - Math.ceil(query.end.getTime() - query.start.getTime()) / 2)
     dateBetween.setHours(10, 0, 0, 0)
 
-    const payload: movininTypes.GetBookingsPayload = {
+    const payload: darywinTypes.GetBookingsPayload = {
       agencies,
       statuses,
       filter: {
@@ -72,7 +72,7 @@ const PropertyScheduler = (
 
     const events = bookings.map((booking): ProcessedEvent => ({
       event_id: booking._id as string,
-      title: `${(booking.property as movininTypes.Property).name} / ${(booking.agency as movininTypes.User).fullName} / ${helper.getBookingStatus(booking.status)}`,
+      title: `${(booking.property as darywinTypes.Property).name} / ${(booking.agency as darywinTypes.User).fullName} / ${helper.getBookingStatus(booking.status)}`,
       start: new Date(booking.from),
       end: new Date(booking.to),
       color: helper.getBookingStatusBackgroundColor(booking.status),

@@ -5,7 +5,7 @@ import url from 'url'
 import path from 'path'
 import asyncFs from 'node:fs/promises'
 import { nanoid } from 'nanoid'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import app from '../src/app'
 import * as databaseHelper from '../src/utils/databaseHelper'
 import * as testHelper from './testHelper'
@@ -30,10 +30,10 @@ let USER1_ID: string
 let USER2_ID: string
 let ADMIN_ID: string
 
-const USER1_EMAIL = `${testHelper.getName('user1')}@test.movinin.io`
+const USER1_EMAIL = `${testHelper.getName('user1')}@test.darywin.com`
 const USER1_PASSWORD = testHelper.PASSWORD
-const USER2_EMAIL = `${testHelper.getName('user2')}@test.movinin.io`
-const ADMIN_EMAIL = `${testHelper.getName('admin')}@test.movinin.io`
+const USER2_EMAIL = `${testHelper.getName('user2')}@test.darywin.com`
+const ADMIN_EMAIL = `${testHelper.getName('admin')}@test.darywin.com`
 
 //
 // Connecting and initializing the database before running the test suite
@@ -72,7 +72,7 @@ describe('POST /api/sign-up', () => {
     if (!(await helper.pathExists(tempAvatar))) {
       await asyncFs.copyFile(AVATAR1_PATH, tempAvatar)
     }
-    const payload: movininTypes.SignUpPayload = {
+    const payload: darywinTypes.SignUpPayload = {
       email: USER1_EMAIL,
       password: USER1_PASSWORD,
       fullName: 'user1',
@@ -88,7 +88,7 @@ describe('POST /api/sign-up', () => {
     let user = await User.findOne({ email: USER1_EMAIL })
     expect(user).not.toBeNull()
     USER1_ID = user?._id.toString() || ''
-    expect(user?.type).toBe(movininTypes.UserType.User)
+    expect(user?.type).toBe(darywinTypes.UserType.User)
     expect(user?.email).toBe(payload.email)
     expect(user?.fullName).toBe(payload.fullName)
     expect(user?.language).toBe(payload.language)
@@ -190,7 +190,7 @@ describe('POST /api/sign-up', () => {
 
 describe('POST /api/admin-sign-up', () => {
   it('should create an admin user', async () => {
-    const payload: movininTypes.SignUpPayload = {
+    const payload: darywinTypes.SignUpPayload = {
       email: ADMIN_EMAIL,
       password: testHelper.PASSWORD,
       fullName: 'admin',
@@ -208,7 +208,7 @@ describe('POST /api/admin-sign-up', () => {
     const user = await User.findOne({ email: ADMIN_EMAIL })
     expect(user).not.toBeNull()
     ADMIN_ID = user?._id.toString() || ''
-    expect(user?.type).toBe(movininTypes.UserType.Admin)
+    expect(user?.type).toBe(darywinTypes.UserType.Admin)
     expect(user?.email).toBe(payload.email)
     expect(user?.fullName).toBe(payload.fullName)
     expect(user?.language).toBe(payload.language)
@@ -229,7 +229,7 @@ describe('POST /api/create-user', () => {
       await asyncFs.copyFile(AVATAR1_PATH, tempAvatar)
     }
 
-    let payload: movininTypes.CreateUserPayload = {
+    let payload: darywinTypes.CreateUserPayload = {
       email: USER2_EMAIL,
       fullName: 'user2',
       language: testHelper.LANGUAGE,
@@ -248,7 +248,7 @@ describe('POST /api/create-user', () => {
     let user = await User.findOne({ email: USER2_EMAIL })
     expect(user).not.toBeNull()
     USER2_ID = user?._id.toString() || ''
-    expect(user?.type).toBe(movininTypes.UserType.User)
+    expect(user?.type).toBe(darywinTypes.UserType.User)
     expect(user?.email).toBe(payload.email)
     expect(user?.fullName).toBe(payload.fullName)
     expect(user?.language).toBe(payload.language)
@@ -270,7 +270,7 @@ describe('POST /api/create-user', () => {
       location: 'location',
       bio: 'bio',
       avatar: AVATAR1,
-      type: movininTypes.UserType.Admin,
+      type: darywinTypes.UserType.Admin,
     }
     res = await request(app)
       .post('/api/create-user')
@@ -350,27 +350,27 @@ describe('GET /api/check-token/:type/:userId/:email/:token', () => {
     expect(token?.length).toBeGreaterThan(1)
 
     let res = await request(app)
-      .get(`/api/check-token/${movininTypes.AppType.Frontend}/${USER1_ID}/${USER1_EMAIL}/${token}`)
+      .get(`/api/check-token/${darywinTypes.AppType.Frontend}/${USER1_ID}/${USER1_EMAIL}/${token}`)
     expect(res.statusCode).toBe(200)
 
     res = await request(app)
-      .get(`/api/check-token/${movininTypes.AppType.Admin}/${USER1_ID}/${USER1_EMAIL}/${token}`)
+      .get(`/api/check-token/${darywinTypes.AppType.Admin}/${USER1_ID}/${USER1_EMAIL}/${token}`)
     expect(res.statusCode).toBe(204)
 
     res = await request(app)
-      .get(`/api/check-token/${movininTypes.AppType.Frontend}/${USER2_ID}/${USER1_EMAIL}/${token}`)
+      .get(`/api/check-token/${darywinTypes.AppType.Frontend}/${USER2_ID}/${USER1_EMAIL}/${token}`)
     expect(res.statusCode).toBe(204)
 
     res = await request(app)
-      .get(`/api/check-token/${movininTypes.AppType.Frontend}/${testHelper.GetRandromObjectIdAsString()}/${USER1_EMAIL}/${token}`)
+      .get(`/api/check-token/${darywinTypes.AppType.Frontend}/${testHelper.GetRandromObjectIdAsString()}/${USER1_EMAIL}/${token}`)
     expect(res.statusCode).toBe(204)
 
     res = await request(app)
-      .get(`/api/check-token/${movininTypes.AppType.Frontend}/${USER1_ID}/${USER1_EMAIL}/${nanoid()}`)
+      .get(`/api/check-token/${darywinTypes.AppType.Frontend}/${USER1_ID}/${USER1_EMAIL}/${nanoid()}`)
     expect(res.statusCode).toBe(204)
 
     res = await request(app)
-      .get(`/api/check-token/${movininTypes.AppType.Frontend}/0/${USER1_EMAIL}/${token}`)
+      .get(`/api/check-token/${darywinTypes.AppType.Frontend}/0/${USER1_EMAIL}/${token}`)
     expect(res.statusCode).toBe(400)
   })
 })
@@ -381,7 +381,7 @@ describe('POST /api/activate', () => {
     expect(userToken).not.toBeNull()
     const token = userToken?.token
     expect(token?.length).toBeGreaterThan(1)
-    const payload: movininTypes.ActivatePayload = {
+    const payload: darywinTypes.ActivatePayload = {
       userId: USER1_ID,
       password: testHelper.PASSWORD,
       token: token!,
@@ -463,12 +463,12 @@ describe('POST /api/resend/:type/:email/:reset', () => {
     await user!.save()
     let reset = true
     let res = await request(app)
-      .post(`/api/resend/${movininTypes.AppType.Frontend}/${USER1_EMAIL}/${reset}`)
+      .post(`/api/resend/${darywinTypes.AppType.Frontend}/${USER1_EMAIL}/${reset}`)
     expect(res.statusCode).toBe(200)
 
     reset = false
     res = await request(app)
-      .post(`/api/resend/${movininTypes.AppType.Admin}/${ADMIN_EMAIL}/${reset}`)
+      .post(`/api/resend/${darywinTypes.AppType.Admin}/${ADMIN_EMAIL}/${reset}`)
     expect(res.statusCode).toBe(200)
     user = await User.findById(ADMIN_ID)
     expect(user).not.toBeNull()
@@ -479,15 +479,15 @@ describe('POST /api/resend/:type/:email/:reset', () => {
     expect(user?.active).toBeFalsy()
 
     res = await request(app)
-      .post(`/api/resend/${movininTypes.AppType.Admin}/${USER1_EMAIL}/${reset}`)
+      .post(`/api/resend/${darywinTypes.AppType.Admin}/${USER1_EMAIL}/${reset}`)
     expect(res.statusCode).toBe(403)
 
     res = await request(app)
-      .post(`/api/resend/${movininTypes.AppType.Frontend}/${testHelper.GetRandomEmail()}/${reset}`)
+      .post(`/api/resend/${darywinTypes.AppType.Frontend}/${testHelper.GetRandomEmail()}/${reset}`)
     expect(res.statusCode).toBe(204)
 
     res = await request(app)
-      .post(`/api/resend/${movininTypes.AppType.Frontend}/unknown/${reset}`)
+      .post(`/api/resend/${darywinTypes.AppType.Frontend}/unknown/${reset}`)
     expect(res.statusCode).toBe(400)
   })
 })
@@ -496,7 +496,7 @@ describe('POST /api/resend-link', () => {
   it('should resend activation link', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.ResendLinkPayload = {
+    const payload: darywinTypes.ResendLinkPayload = {
       email: USER1_EMAIL,
     }
 
@@ -567,13 +567,13 @@ describe('DELETE /api/delete-tokens/:userId', () => {
 
 describe('POST /api/sign-in/:type', () => {
   it('should sign in', async () => {
-    const payload: movininTypes.SignInPayload = {
+    const payload: darywinTypes.SignInPayload = {
       email: USER1_EMAIL,
       password: USER1_PASSWORD,
     }
 
     let res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(200)
     const cookies = res.headers['set-cookie'] as unknown as string[]
@@ -583,38 +583,38 @@ describe('POST /api/sign-in/:type', () => {
 
     payload.password = 'wrong-password'
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(204)
 
     payload.password = USER1_PASSWORD
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Admin}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Admin}`)
       .send(payload)
     expect(res.statusCode).toBe(204)
 
     payload.stayConnected = true
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(200)
 
     payload.stayConnected = false
     payload.mobile = true
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(200)
 
     payload.email = 'unknown'
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(400)
 
     payload.email = undefined
     res = await request(app)
-      .post(`/api/sign-in/${movininTypes.AppType.Frontend}`)
+      .post(`/api/sign-in/${darywinTypes.AppType.Frontend}`)
       .send(payload)
     expect(res.statusCode).toBe(400)
   })
@@ -623,9 +623,9 @@ describe('POST /api/sign-in/:type', () => {
 describe('POST /api/social-sign-in/:type', () => {
   it('should sign in', async () => {
     // test failure (google)
-    const payload: movininTypes.SignInPayload = {
+    const payload: darywinTypes.SignInPayload = {
       email: USER1_EMAIL,
-      socialSignInType: movininTypes.SocialSignInType.Google,
+      socialSignInType: darywinTypes.SocialSignInType.Google,
       accessToken: testHelper.GetRandromObjectIdAsString(),
     }
     let res = await request(app)
@@ -634,14 +634,14 @@ describe('POST /api/social-sign-in/:type', () => {
     expect(res.statusCode).toBe(400)
 
     // test failure (facebook)
-    payload.socialSignInType = movininTypes.SocialSignInType.Facebook
+    payload.socialSignInType = darywinTypes.SocialSignInType.Facebook
     res = await request(app)
       .post('/api/social-sign-in')
       .send(payload)
     expect(res.statusCode).toBe(400)
 
     // test failure (apple)
-    payload.socialSignInType = movininTypes.SocialSignInType.Apple
+    payload.socialSignInType = darywinTypes.SocialSignInType.Apple
     res = await request(app)
       .post('/api/social-sign-in')
       .send(payload)
@@ -693,7 +693,7 @@ describe('POST /api/social-sign-in/:type', () => {
       .post('/api/social-sign-in')
       .send(payload)
     expect(res.statusCode).toBe(400)
-    payload.socialSignInType = movininTypes.SocialSignInType.Google
+    payload.socialSignInType = darywinTypes.SocialSignInType.Google
 
     // test failure (no accessToken)
     payload.accessToken = undefined
@@ -734,9 +734,9 @@ describe('POST /api/social-sign-in/:type', () => {
       await dbh.close()
       await dbh.connect(env.DB_URI, false, false)
 
-      const payload: movininTypes.SignInPayload = {
+      const payload: darywinTypes.SignInPayload = {
         email: USER1_EMAIL,
-        socialSignInType: movininTypes.SocialSignInType.Google,
+        socialSignInType: darywinTypes.SocialSignInType.Google,
         accessToken: testHelper.GetRandromObjectIdAsString(),
       }
 
@@ -842,7 +842,7 @@ describe('POST /api/delete-push-token/:userId', () => {
 
 describe('POST /api/validate-email', () => {
   it('should validate email', async () => {
-    const payload: movininTypes.ValidateEmailPayload = {
+    const payload: darywinTypes.ValidateEmailPayload = {
       email: USER1_EMAIL,
     }
     let res = await request(app)
@@ -901,14 +901,14 @@ describe('POST /api/update-user', () => {
   it('should update user', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.UpdateUserPayload = {
+    const payload: darywinTypes.UpdateUserPayload = {
       _id: USER1_ID,
       fullName: 'user1-1',
       birthDate: new Date(1993, 5, 25),
       phone: '09090908',
       location: 'location1-1',
       bio: 'bio1-1',
-      type: movininTypes.UserType.Agency,
+      type: darywinTypes.UserType.Agency,
       payLater: false,
     }
     let res = await request(app)
@@ -918,7 +918,7 @@ describe('POST /api/update-user', () => {
     expect(res.statusCode).toBe(200)
     let user = await User.findById(USER1_ID)
     expect(user).not.toBeNull()
-    expect(user?.type).toBe(movininTypes.UserType.Agency)
+    expect(user?.type).toBe(darywinTypes.UserType.Agency)
     expect(user?.fullName).toBe(payload.fullName)
     expect(user?.birthDate).toStrictEqual(payload.birthDate)
     expect(user?.phone).toBe(payload.phone)
@@ -938,7 +938,7 @@ describe('POST /api/update-user', () => {
     expect(res.statusCode).toBe(200)
     user = await User.findById(USER1_ID)
     expect(user).not.toBeNull()
-    expect(user?.type).toBe(movininTypes.UserType.Agency)
+    expect(user?.type).toBe(darywinTypes.UserType.Agency)
     expect(user?.fullName).toBe(fullName)
     expect(user?.birthDate).toBeUndefined()
     expect(user?.phone).toBe(payload.phone)
@@ -982,7 +982,7 @@ describe('POST /api/update-email-notifications', () => {
     let user = await User.findById(USER1_ID)
     expect(user).not.toBeNull()
     expect(user?.enableEmailNotifications).toBeFalsy()
-    const payload: movininTypes.UpdateEmailNotificationsPayload = {
+    const payload: darywinTypes.UpdateEmailNotificationsPayload = {
       _id: USER1_ID,
       enableEmailNotifications: true,
     }
@@ -1020,7 +1020,7 @@ describe('POST /api/update-language', () => {
     let user = await User.findById(USER1_ID)
     expect(user).not.toBeNull()
     expect(user?.language).toBe(testHelper.LANGUAGE)
-    const payload: movininTypes.UpdateLanguagePayload = {
+    const payload: darywinTypes.UpdateLanguagePayload = {
       id: USER1_ID,
       language: 'fr',
     }
@@ -1236,7 +1236,7 @@ describe('POST /api/change-password', () => {
 
     const newPassword = `#${testHelper.PASSWORD}#`
 
-    const payload: movininTypes.ChangePasswordPayload = {
+    const payload: darywinTypes.ChangePasswordPayload = {
       _id: USER1_ID,
       password: USER1_PASSWORD,
       newPassword,
@@ -1346,9 +1346,9 @@ describe('POST /api/users/:page/:size', () => {
   it('should get users', async () => {
     const token = await testHelper.signinAsAdmin()
 
-    const payload: movininTypes.GetUsersBody = {
+    const payload: darywinTypes.GetUsersBody = {
       user: testHelper.getAdminUserId(),
-      types: [movininTypes.UserType.Admin, movininTypes.UserType.Agency, movininTypes.UserType.User],
+      types: [darywinTypes.UserType.Admin, darywinTypes.UserType.Agency, darywinTypes.UserType.User],
     }
     let res = await request(app)
       .post(`/api/users/${testHelper.PAGE}/${testHelper.SIZE}`)
@@ -1427,7 +1427,7 @@ describe('POST /api/delete-users', () => {
     expect(res.statusCode).toBe(200)
 
     const agencyName = testHelper.getAgencyName()
-    const agencyId = await testHelper.createAgency(`${agencyName}@test.movinin.io`, agencyName)
+    const agencyId = await testHelper.createAgency(`${agencyName}@test.darywin.com`, agencyName)
     const locationId = await testHelper.createLocation('Location 1 EN', 'Location 1 FR')
     const mainImageName = 'main1.jpg'
     const mainImagePath = path.resolve(__dirname, `./img/${mainImageName}`)
@@ -1450,7 +1450,7 @@ describe('POST /api/delete-users', () => {
     let property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: mainImageName,
       images: [additionalImage1Name, additionalImage2Name],
@@ -1469,13 +1469,13 @@ describe('POST /api/delete-users', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
     property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: null,
       images: null,
@@ -1494,13 +1494,13 @@ describe('POST /api/delete-users', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
     property = new Property({
       name: 'Beautiful House in Detroit',
       agency: agencyId,
-      type: movininTypes.PropertyType.House,
+      type: darywinTypes.PropertyType.House,
       description: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium rem aperiam, veritatis et quasi.</p>',
       image: `${nanoid()}.jpg`,
       images: [`${nanoid()}.jpg`],
@@ -1519,7 +1519,7 @@ describe('POST /api/delete-users', () => {
       hidden: true,
       cancellation: 0,
       available: false,
-      rentalTerm: movininTypes.RentalTerm.Monthly,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
     })
     await property.save()
     const booking = new Booking({
@@ -1529,7 +1529,7 @@ describe('POST /api/delete-users', () => {
       location: locationId,
       from: new Date(2024, 2, 1),
       to: new Date(1990, 2, 4),
-      status: movininTypes.BookingStatus.Pending,
+      status: darywinTypes.BookingStatus.Pending,
       cancellation: true,
       price: 4000,
     })
@@ -1618,8 +1618,8 @@ describe('POST /api/verify-recaptcha/:token/:ip', () => {
 describe('POST /api/send-email', () => {
   it('should send an email', async () => {
     // test success (contact form)
-    const payload: movininTypes.SendEmailPayload = {
-      from: 'no-reply@movinin.ma',
+    const payload: darywinTypes.SendEmailPayload = {
+      from: 'no-reply@darywin.ma',
       to: 'test@test.com',
       subject: 'test',
       message: 'test message',

@@ -9,7 +9,7 @@ import {
   Paper,
 } from '@mui/material'
 import validator from 'validator'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import * as UserService from '@/services/UserService'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
@@ -106,7 +106,7 @@ const ForgotPassword = () => {
     }
   }
 
-  const onLoad = (user?: movininTypes.User) => {
+  const onLoad = (user?: darywinTypes.User) => {
     if (user) {
       setNoMatch(true)
       setVisible(false)

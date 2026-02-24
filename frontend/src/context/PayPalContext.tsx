@@ -1,6 +1,6 @@
 import React from 'react'
 import { PayPalScriptProvider } from '@paypal/react-paypal-js'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import * as PaymentService from '@/services/PaymentService'
 import * as PayPalService from '@/services/PayPalService'
@@ -10,7 +10,7 @@ interface PayPalProviderProps {
 }
 
 const PayPalProvider = ({ children }: PayPalProviderProps) => (
-  env.PAYMENT_GATEWAY === movininTypes.PaymentGateway.PayPal ? (
+  env.PAYMENT_GATEWAY === darywinTypes.PaymentGateway.PayPal ? (
     <PayPalScriptProvider
       options={{
         clientId: env.PAYPAL_CLIENT_ID,

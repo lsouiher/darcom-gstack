@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings } from '@/lang/bookings'
 import env from '@/config/env.config'
 import * as helper from '@/utils/helper'
@@ -19,27 +19,27 @@ import '@/assets/css/scheduler.css'
 const Scheduler = () => {
   const navigate = useNavigate()
 
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [leftPanel, setLeftPanel] = useState(false)
   const [admin, setAdmin] = useState(false)
-  const [allAgencies, setAllAgencies] = useState<movininTypes.User[]>([])
+  const [allAgencies, setAllAgencies] = useState<darywinTypes.User[]>([])
   const [agencies, setAgencies] = useState<string[]>()
   const [statuses, setStatuses] = useState(helper.getBookingStatuses().map((status) => status.value))
-  const [filter, setFilter] = useState<movininTypes.Filter | null>()
+  const [filter, setFilter] = useState<darywinTypes.Filter | null>()
 
   const handleAgencyFilterChange = (_agencies: string[]) => {
     setAgencies(_agencies)
   }
 
-  const handleStatusFilterChange = (_statuses: movininTypes.BookingStatus[]) => {
+  const handleStatusFilterChange = (_statuses: darywinTypes.BookingStatus[]) => {
     setStatuses(_statuses)
   }
 
-  const handlePropertySchedulerFilterSubmit = (_filter: movininTypes.Filter | null) => {
+  const handlePropertySchedulerFilterSubmit = (_filter: darywinTypes.Filter | null) => {
     setFilter(_filter)
   }
 
-  const onLoad = async (_user?: movininTypes.User) => {
+  const onLoad = async (_user?: darywinTypes.User) => {
     if (_user) {
       const _admin = helper.admin(_user)
       setUser(_user)
@@ -47,7 +47,7 @@ const Scheduler = () => {
       setLeftPanel(!_admin)
 
       const _allAgencies = await AgencyService.getAllAgencies()
-      const _agencies = _admin ? movininHelper.flattenAgencies(_allAgencies) : [_user._id ?? '']
+      const _agencies = _admin ? darywinHelper.flattenAgencies(_allAgencies) : [_user._id ?? '']
       setAllAgencies(_allAgencies)
       setAgencies(_agencies)
       setLeftPanel(true)

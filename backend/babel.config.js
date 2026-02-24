@@ -6,7 +6,7 @@ const babel = (api) => {
       'module-resolver',
       {
         alias: {
-          ':movinin-types': '../packages/movinin-types',
+          ':darywin-types': '../packages/darywin-types',
         },
       },
     ],

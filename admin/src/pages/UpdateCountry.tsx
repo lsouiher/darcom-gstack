@@ -8,8 +8,8 @@ import {
   Button,
   Paper
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as clStrings } from '@/lang/create-country'
@@ -28,11 +28,11 @@ const UpdateCountry = () => {
 
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [names, setNames] = useState<movininTypes.CountryName[]>([])
+  const [names, setNames] = useState<darywinTypes.CountryName[]>([])
   const [nameErrors, setNameErrors] = useState<boolean[]>([])
   const [noMatch, setNoMatch] = useState(false)
   const [error, setError] = useState(false)
-  const [country, setCountry] = useState<movininTypes.Country>()
+  const [country, setCountry] = useState<darywinTypes.Country>()
   const [nameChanged, setNameChanged] = useState(false)
 
   const _error = () => {
@@ -77,7 +77,7 @@ const UpdateCountry = () => {
 
       let isValid = true
 
-      const _nameErrors = movininHelper.clone(nameErrors) as boolean[]
+      const _nameErrors = darywinHelper.clone(nameErrors) as boolean[]
       for (let i = 0; i < nameErrors.length; i += 1) {
         _nameErrors[i] = false
       }
@@ -99,7 +99,7 @@ const UpdateCountry = () => {
         const status = await CountryService.update(country._id, names)
 
         if (status === 200) {
-          const _country = movininHelper.clone(country) as movininTypes.Country
+          const _country = darywinHelper.clone(country) as darywinTypes.Country
           for (let i = 0; i < names.length; i += 1) {
             const name = names[i]
             _country.values![i].value = name.name
@@ -116,7 +116,7 @@ const UpdateCountry = () => {
     }
   }
 
-  const onLoad = async (user?: movininTypes.User) => {
+  const onLoad = async (user?: darywinTypes.User) => {
     if (user && user.verified) {
       setLoading(true)
 
@@ -134,7 +134,7 @@ const UpdateCountry = () => {
                 }
               })
 
-              const _names: movininTypes.CountryName[] = _country.values.map((value) => ({
+              const _names: darywinTypes.CountryName[] = _country.values.map((value) => ({
                 language: value.language || '',
                 name: value.value || '',
               }))
@@ -184,9 +184,9 @@ const UpdateCountry = () => {
                     error={nameErrors[index]}
                     required
                     onChange={(e) => {
-                      const _names = movininHelper.clone(names) as movininTypes.CountryName[]
+                      const _names = darywinHelper.clone(names) as darywinTypes.CountryName[]
                       _names[index].name = e.target.value
-                      const _nameErrors = movininHelper.cloneArray(nameErrors) as boolean[]
+                      const _nameErrors = darywinHelper.cloneArray(nameErrors) as boolean[]
                       _nameErrors[index] = false
                       checkName()
                       setNames(_names)

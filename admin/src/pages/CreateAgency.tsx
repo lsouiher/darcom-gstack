@@ -12,7 +12,7 @@ import {
 import { Info as InfoIcon } from '@mui/icons-material'
 import validator from 'validator'
 import { useNavigate } from 'react-router-dom'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/create-agency'
@@ -179,7 +179,7 @@ const CreateAgency = () => {
     }
   }
 
-  const onLoad = (user?: movininTypes.User) => {
+  const onLoad = (user?: darywinTypes.User) => {
     if (user && user.verified) {
       setVisible(true)
     }
@@ -212,14 +212,14 @@ const CreateAgency = () => {
 
       setLoading(true)
 
-      const data: movininTypes.CreateUserPayload = {
+      const data: darywinTypes.CreateUserPayload = {
         email,
         fullName,
         phone,
         location,
         bio,
         language: UserService.getLanguage(),
-        type: movininTypes.RecordType.Agency,
+        type: darywinTypes.RecordType.Agency,
         avatar,
         payLater,
       }
@@ -249,7 +249,7 @@ const CreateAgency = () => {
           </h1>
           <form onSubmit={handleSubmit}>
             <Avatar
-              type={movininTypes.RecordType.Agency}
+              type={darywinTypes.RecordType.Agency}
               mode="create"
               record={null}
               size="large"

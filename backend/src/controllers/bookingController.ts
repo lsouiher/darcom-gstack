@@ -3,7 +3,7 @@ import escapeStringRegexp from 'escape-string-regexp'
 import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk'
 import { Request, Response } from 'express'
 import nodemailer from 'nodemailer'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import i18n from '../lang/i18n'
 import Booking from '../models/Booking'
 import User from '../models/User'
@@ -30,7 +30,7 @@ import stripeAPI from '../payment/stripe'
  */
 export const create = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.Booking } = req
+    const { body }: { body: darywinTypes.Booking } = req
     const booking = new Booking(body)
 
     await booking.save()
@@ -162,7 +162,7 @@ export const confirm = async (user: env.User, booking: env.Booking, payLater: bo
 export const checkout = async (req: Request, res: Response) => {
   try {
     let user: env.User | null
-    const { body }: { body: movininTypes.CheckoutPayload } = req
+    const { body }: { body: darywinTypes.CheckoutPayload } = req
     const { renter } = body
 
     if (!body.booking) {
@@ -224,7 +224,7 @@ export const checkout = async (req: Request, res: Response) => {
         }
 
         body.booking.paymentIntentId = paymentIntentId
-        body.booking.status = movininTypes.BookingStatus.Paid
+        body.booking.status = darywinTypes.BookingStatus.Paid
       } else {
         //
         // Bookings created from checkout with Stripe are temporary
@@ -234,7 +234,7 @@ export const checkout = async (req: Request, res: Response) => {
         expireAt.setSeconds(expireAt.getSeconds() + env.BOOKING_EXPIRE_AT)
 
         body.booking.sessionId = !payPal ? body.sessionId : undefined
-        body.booking.status = movininTypes.BookingStatus.Void
+        body.booking.status = darywinTypes.BookingStatus.Void
         body.booking.expireAt = expireAt
 
         //
@@ -264,7 +264,7 @@ export const checkout = async (req: Request, res: Response) => {
 
     await booking.save()
 
-    if (body.payLater || (booking.status === movininTypes.BookingStatus.Paid && body.paymentIntentId && body.customerId)) {
+    if (body.payLater || (booking.status === darywinTypes.BookingStatus.Paid && body.paymentIntentId && body.customerId)) {
       // Mark property as unavailable
       // if (env.MARK_PROPERTY_AS_UNAVAILABLE_ON_CHECKOUT) {
       //   await Property.updateOne({ _id: booking.property }, { available: false })
@@ -288,7 +288,7 @@ export const checkout = async (req: Request, res: Response) => {
       await notify(user, booking._id.toString(), agency, message)
 
       // Notify admin
-      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: movininTypes.UserType.Admin }))
+      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: darywinTypes.UserType.Admin }))
       if (admin) {
         i18n.locale = admin.language
         message = body.payLater ? i18n.t('BOOKING_PAY_LATER_NOTIFICATION') : i18n.t('BOOKING_PAID_NOTIFICATION')
@@ -423,7 +423,7 @@ const notifyRenter = async (booking: env.Booking) => {
  */
 export const update = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.Booking } = req
+    const { body }: { body: darywinTypes.Booking } = req
     if (!body._id) {
       throw new Error('body._id not found')
     }
@@ -484,7 +484,7 @@ export const update = async (req: Request, res: Response) => {
  */
 export const updateStatus = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.UpdateStatusPayload } = req
+    const { body }: { body: darywinTypes.UpdateStatusPayload } = req
     const { ids: _ids, status } = body
     const ids = _ids.map((id) => new mongoose.Types.ObjectId(id))
     const bulk = Booking.collection.initializeOrderedBulkOp()
@@ -541,7 +541,7 @@ export const deleteTempBooking = async (req: Request, res: Response) => {
   const { bookingId, sessionId } = req.params
 
   try {
-    const booking = await Booking.findOne({ _id: bookingId, sessionId, status: movininTypes.BookingStatus.Void, expireAt: { $ne: null } })
+    const booking = await Booking.findOne({ _id: bookingId, sessionId, status: darywinTypes.BookingStatus.Void, expireAt: { $ne: null } })
     if (booking) {
       const user = await User.findOne({ _id: booking.renter, verified: false, expireAt: { $ne: null } })
       await user?.deleteOne()
@@ -654,7 +654,7 @@ export const getBookingId = async (req: Request, res: Response) => {
  */
 export const getBookings = async (req: Request, res: Response) => {
   try {
-    const { body }: { body: movininTypes.GetBookingsPayload } = req
+    const { body }: { body: darywinTypes.GetBookingsPayload } = req
     const page = Number.parseInt(req.params.page, 10)
     const size = Number.parseInt(req.params.size, 10)
     const agencies = body.agencies.map((id: string) => new mongoose.Types.ObjectId(id))
@@ -910,7 +910,7 @@ export const cancelBooking = async (req: Request, res: Response) => {
       await notify(booking.renter, booking._id.toString().toString(), agency, i18n.t('CANCEL_BOOKING_NOTIFICATION'))
 
       // Notify admin
-      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: movininTypes.UserType.Admin }))
+      const admin = !!env.ADMIN_EMAIL && (await User.findOne({ email: env.ADMIN_EMAIL, type: darywinTypes.UserType.Admin }))
       if (admin) {
         i18n.locale = admin.language
         await notify(booking.renter, booking._id.toString().toString(), admin, i18n.t('CANCEL_BOOKING_NOTIFICATION'))

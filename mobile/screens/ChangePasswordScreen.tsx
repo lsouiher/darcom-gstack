@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 import Layout from '@/components/Layout'
 import i18n from '@/lang/i18n'
@@ -20,7 +20,7 @@ const ChangePasswordScreen = ({ navigation, route }: NativeStackScreenProps<Stac
   const isFocused = useIsFocused()
   const [reload, setReload] = useState(false)
   const [visible, setVisible] = useState(false)
-  const [user, setUser] = useState<movininTypes.User>()
+  const [user, setUser] = useState<darywinTypes.User>()
   const [currentPassword, setCurrentPassword] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -173,7 +173,7 @@ const ChangePasswordScreen = ({ navigation, route }: NativeStackScreenProps<Stac
         return
       }
 
-      const data: movininTypes.ChangePasswordPayload = {
+      const data: darywinTypes.ChangePasswordPayload = {
         _id: user._id,
         password: currentPassword,
         newPassword: password,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RouteProp } from '@react-navigation/native'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 
 import * as UserService from '@/services/UserService'
 import Button from './Button'
@@ -21,7 +21,7 @@ interface LayoutProps {
   hideTitle?: boolean
   avatar?: string | null
   children: React.ReactNode
-  onLoad: (user?: movininTypes.User) => void
+  onLoad: (user?: darywinTypes.User) => void
 }
 
 const Layout = ({
@@ -37,7 +37,7 @@ const Layout = ({
   onLoad
 }: LayoutProps) => {
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<movininTypes.User | null>(null)
+  const [user, setUser] = useState<darywinTypes.User | null>(null)
   const { loggedIn, refresh } = useAuth()
 
   const exit = async (_reload = false) => {

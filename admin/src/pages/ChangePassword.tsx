@@ -4,7 +4,7 @@ import {
   Paper,
   Button
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings } from '@/lang/change-password'
@@ -18,7 +18,7 @@ import '@/assets/css/change-password.css'
 const ChangePassword = () => {
   const navigate = useNavigate()
 
-  const [loggedUser, setLoggedUser] = useState<movininTypes.User>()
+  const [loggedUser, setLoggedUser] = useState<darywinTypes.User>()
   const [userId, setUserId] = useState<string>()
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -73,7 +73,7 @@ const ChangePassword = () => {
         setConfirmPasswordError(false)
         setNewPasswordError(false)
 
-        const data: movininTypes.ChangePasswordPayload = {
+        const data: darywinTypes.ChangePasswordPayload = {
           _id: userId || loggedUser?._id as string,
           password: currentPassword,
           newPassword,
@@ -114,7 +114,7 @@ const ChangePassword = () => {
     }
   }
 
-  const onLoad = (user?: movininTypes.User) => {
+  const onLoad = (user?: darywinTypes.User) => {
     const params = new URLSearchParams(window.location.search)
     if (params.has('u')) {
       const _userId = params.get('u') || undefined

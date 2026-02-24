@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import { strings as commonStrings } from '@/lang/common'
 import * as helper from '@/utils/helper'
 import Accordion from '@/components/Accordion'
@@ -11,7 +11,7 @@ import '@/assets/css/status-filter.css'
 interface StatusFilterProps {
   className?: string
   collapse?: boolean
-  onChange?: (value: movininTypes.BookingStatus[]) => void
+  onChange?: (value: darywinTypes.BookingStatus[]) => void
 }
 
 const statuses = helper.getBookingStatuses()
@@ -22,19 +22,19 @@ const StatusFilter = ({
   collapse,
   onChange
 }: StatusFilterProps) => {
-  const [checkedStatuses, setCheckedStatuses] = useState<movininTypes.BookingStatus[]>([])
+  const [checkedStatuses, setCheckedStatuses] = useState<darywinTypes.BookingStatus[]>([])
   const [allChecked, setAllChecked] = useState(false)
 
   const refs = useRef<(HTMLInputElement | null)[]>([])
 
-  const handleChange = (_checkedStatuses: movininTypes.BookingStatus[]) => {
+  const handleChange = (_checkedStatuses: darywinTypes.BookingStatus[]) => {
     if (onChange) {
-      onChange(_checkedStatuses.length === 0 ? allStatuses : movininHelper.clone(_checkedStatuses))
+      onChange(_checkedStatuses.length === 0 ? allStatuses : darywinHelper.clone(_checkedStatuses))
     }
   }
 
   const handleCheckStatusChange = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
-    const status = e.currentTarget.getAttribute('data-value') as movininTypes.BookingStatus
+    const status = e.currentTarget.getAttribute('data-value') as darywinTypes.BookingStatus
 
     if ('checked' in e.currentTarget && e.currentTarget.checked) {
       checkedStatuses.push(status)

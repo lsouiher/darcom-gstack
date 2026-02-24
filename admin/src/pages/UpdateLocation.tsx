@@ -8,8 +8,8 @@ import {
   Button,
   Paper
 } from '@mui/material'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import Layout from '@/components/Layout'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as clStrings } from '@/lang/create-location'
@@ -32,16 +32,16 @@ const UpdateLocation = () => {
 
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [names, setNames] = useState<movininTypes.LocationName[]>([])
+  const [names, setNames] = useState<darywinTypes.LocationName[]>([])
   const [nameErrors, setNameErrors] = useState<boolean[]>([])
   const [noMatch, setNoMatch] = useState(false)
   const [error, setError] = useState(false)
-  const [location, setLocation] = useState<movininTypes.Location>()
-  const [country, setCountry] = useState<movininTypes.Country>()
+  const [location, setLocation] = useState<darywinTypes.Location>()
+  const [country, setCountry] = useState<darywinTypes.Country>()
   const [image, setImage] = useState('')
   const [longitude, setLongitude] = useState('')
   const [latitude, setLatitude] = useState('')
-  const [parentLocation, setParentLocation] = useState<movininTypes.Location>()
+  const [parentLocation, setParentLocation] = useState<darywinTypes.Location>()
 
   const handleBeforeUpload = () => {
     setLoading(true)
@@ -87,7 +87,7 @@ const UpdateLocation = () => {
 
       let isValid = true
 
-      const _nameErrors = movininHelper.clone(nameErrors) as boolean[]
+      const _nameErrors = darywinHelper.clone(nameErrors) as boolean[]
       for (let i = 0; i < nameErrors.length; i += 1) {
         _nameErrors[i] = false
       }
@@ -106,7 +106,7 @@ const UpdateLocation = () => {
       setNameErrors(_nameErrors)
 
       if (isValid) {
-        const payload: movininTypes.UpsertLocationPayload = {
+        const payload: darywinTypes.UpsertLocationPayload = {
           country: country._id,
           latitude: latitude ? Number(latitude) : undefined,
           longitude: longitude ? Number(longitude) : undefined,
@@ -133,7 +133,7 @@ const UpdateLocation = () => {
     }
   }
 
-  const onLoad = async (user?: movininTypes.User) => {
+  const onLoad = async (user?: darywinTypes.User) => {
     if (user && user.verified) {
       setLoading(true)
 
@@ -151,7 +151,7 @@ const UpdateLocation = () => {
                 }
               })
 
-              const _names: movininTypes.LocationName[] = _location.values.map((value) => ({
+              const _names: darywinTypes.LocationName[] = _location.values.map((value) => ({
                 language: value.language || '',
                 name: value.value || '',
               }))
@@ -197,7 +197,7 @@ const UpdateLocation = () => {
             </h1>
             <form onSubmit={handleSubmit}>
               <Avatar
-                type={movininTypes.RecordType.Location}
+                type={darywinTypes.RecordType.Location}
                 mode="update"
                 record={location}
                 size="large"
@@ -213,7 +213,7 @@ const UpdateLocation = () => {
                   label={clStrings.COUNTRY}
                   variant="standard"
                   value={country}
-                  onChange={(countries: movininTypes.Option[]) => {
+                  onChange={(countries: darywinTypes.Option[]) => {
                     if (countries.length > 0) {
                       const opt = countries[0]
                       const _country = { _id: opt._id, name: opt.name }
@@ -231,7 +231,7 @@ const UpdateLocation = () => {
                 variant="standard"
                 value={parentLocation}
                 excludeId={location._id}
-                onChange={(locations: movininTypes.Option[]) => {
+                onChange={(locations: darywinTypes.Option[]) => {
                   setParentLocation(locations.length > 0 ? locations[0] : undefined)
                 }}
               />
@@ -245,9 +245,9 @@ const UpdateLocation = () => {
                     error={nameErrors[index]}
                     required
                     onChange={(e) => {
-                      const _names = movininHelper.clone(names) as movininTypes.LocationName[]
+                      const _names = darywinHelper.clone(names) as darywinTypes.LocationName[]
                       _names[index].name = e.target.value
-                      const _nameErrors = movininHelper.cloneArray(nameErrors) as boolean[]
+                      const _nameErrors = darywinHelper.cloneArray(nameErrors) as boolean[]
                       _nameErrors[index] = false
                       checkName()
                       setNames(_names)

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 
 import Layout from '@/components/Layout'
 import i18n from '@/lang/i18n'
@@ -20,8 +20,8 @@ const SearchScreen = ({ navigation, route }: NativeStackScreenProps<StackParams,
   const [loaded, setLoaded] = useState(false)
   const [visible, setVisible] = useState(false)
   const [agencies, setCompanies] = useState<string[]>([])
-  const [rentalTerms, setRentalTerm] = useState(movininHelper.getAllRentalTerms())
-  const [propertyTypes, setPropertyTypes] = useState(movininHelper.getAllPropertyTypes())
+  const [rentalTerms, setRentalTerm] = useState(darywinHelper.getAllRentalTerms())
+  const [propertyTypes, setPropertyTypes] = useState(darywinHelper.getAllPropertyTypes())
 
   const _init = async () => {
     const language = await UserService.getLanguage()
@@ -51,11 +51,11 @@ const SearchScreen = ({ navigation, route }: NativeStackScreenProps<StackParams,
     setCompanies(_agencies)
   }
 
-  const onChangeRentalTerm = (_rentalTerms: movininTypes.RentalTerm[]) => {
+  const onChangeRentalTerm = (_rentalTerms: darywinTypes.RentalTerm[]) => {
     setRentalTerm(_rentalTerms)
   }
 
-  const onChangePropertyType = (_propertyTypes: movininTypes.PropertyType[]) => {
+  const onChangePropertyType = (_propertyTypes: darywinTypes.PropertyType[]) => {
     setPropertyTypes(_propertyTypes)
   }
 

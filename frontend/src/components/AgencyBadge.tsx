@@ -1,12 +1,12 @@
 import React from 'react'
-import * as movininTypes from ':movinin-types'
-import * as movininHelper from ':movinin-helper'
+import * as darywinTypes from ':darywin-types'
+import * as darywinHelper from ':darywin-helper'
 import env from '@/config/env.config'
 
 import '@/assets/css/agency-badge.css'
 
 interface AgencyBadgeProps {
-  agency: movininTypes.User
+  agency: darywinTypes.User
   style?: React.CSSProperties
 }
 
@@ -15,7 +15,7 @@ const AgencyBadge = ({ agency, style }: AgencyBadgeProps) => (agency
     <div className="agency-badge" style={style || {}}>
       <span className="agency-badge-logo">
         <img
-          src={movininHelper.joinURL(env.CDN_USERS, agency.avatar)}
+          src={darywinHelper.joinURL(env.CDN_USERS, agency.avatar)}
           alt={agency.fullName}
         />
       </span>

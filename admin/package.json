@@ -1,11 +1,11 @@
 {
-  "name": "movinin-admin",
-  "description": "Admin panel for managing Movin' In",
+  "name": "darywin-admin",
+  "description": "Admin panel for managing DaryWin",
   "version": "6.7.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "install:dependencies": "cd ../packages/currency-converter && npm i && cd ../movinin-helper && npm i",
+    "install:dependencies": "cd ../packages/currency-converter && npm i && cd ../darywin-helper && npm i",
     "ts:build": "npm run install:dependencies && tsc --build --verbose",
     "build": "npm run ts:build && cross-env NODE_OPTIONS=--max-old-space-size=1024 vite build",
     "dev": "npm run ts:build && vite",

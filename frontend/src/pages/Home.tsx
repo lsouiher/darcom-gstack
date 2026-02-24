@@ -11,7 +11,7 @@ import {
   CheckBox,
 } from '@mui/icons-material'
 import L from 'leaflet'
-import * as movininTypes from ':movinin-types'
+import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings } from '@/lang/home'
 import * as CountryService from '@/services/CountryService'
@@ -28,10 +28,10 @@ import '@/assets/css/home.css'
 const Home = () => {
   const navigate = useNavigate()
 
-  const [countries, setCountries] = useState<movininTypes.CountryInfo[]>([])
+  const [countries, setCountries] = useState<darywinTypes.CountryInfo[]>([])
   const [tabValue, setTabValue] = useState(0)
   const [openLocationSearchFormDialog, setOpenLocationSearchFormDialog] = useState(false)
-  const [locations, setLocations] = useState<movininTypes.Location[]>([])
+  const [locations, setLocations] = useState<darywinTypes.Location[]>([])
   const [location, setLocation] = useState('')
   const [videoLoaded, setVideoLoaded] = useState(false)
 
