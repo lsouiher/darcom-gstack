@@ -4,7 +4,7 @@ import env from '@/config/env.config'
 
 const strings = new LocalizedStrings({
   fr: {
-    TITLE: "Bienvenue sur l'immobilier",
+    TITLE: 'Bienvenue sur DaryWin',
     COVER: 'Rechercher des biens immobiliers',
     DESTINATIONS_TITLE: 'Parcourir par destinations',
     MAP_TITLE: 'Carte des destinations',
@@ -31,7 +31,7 @@ const strings = new LocalizedStrings({
     CUSTOMER_CARE_SUPPORT: 'Conseils et assistance',
   },
   en: {
-    TITLE: 'Welcome to Real Estate',
+    TITLE: 'Welcome to DaryWin',
     COVER: 'Search for Real Estate, Property & Homes',
     DESTINATIONS_TITLE: 'Browse by Destinations',
     MAP_TITLE: 'Map of Destinations',
@@ -58,7 +58,7 @@ const strings = new LocalizedStrings({
     CUSTOMER_CARE_SUPPORT: 'Advice and Support',
   },
   ar: {
-    TITLE: 'مرحبًا بكم في العقارات',
+    TITLE: 'مرحبًا بكم في DaryWin',
     COVER: 'ابحث عن عقارات ومنازل',
     DESTINATIONS_TITLE: 'تصفح حسب الوجهات',
     MAP_TITLE: 'خريطة الوجهات',
