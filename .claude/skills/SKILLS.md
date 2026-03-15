@@ -94,4 +94,4 @@ If shared packages were modified, also runs `npm run pre-commit` at the root.
 
 ## Adding New Skills
 
-Skills live in `.claude/skills/<skill-name>/SKILL.md`. Each file has YAML frontmatter defining the name, description, and allowed tools, followed by markdown instructions that guide Claude Code's behavior when the skill is invoked.
+Skills live in `.claude/skills/<skill-name>/SKILL.md`. Each file has YAML frontmatter defining the name, description, and allowed tools, followed by markdown instructions that guide Claude Code's behavior when the skill is invoke
