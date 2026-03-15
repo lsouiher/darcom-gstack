@@ -74,6 +74,15 @@ async function seedLocations() {
   await createLocation(ukId, 'Manchester', 'Manchester', 53.4808, -2.2426)
   await createLocation(ukId, 'Birmingham', 'Birmingham', 52.4862, -1.8904)
 
+  // Create Algeria
+  const algeriaId = await createCountry('Algeria', 'Algérie')
+  await createLocation(algeriaId, 'Algiers', 'Alger', 36.7538, 3.0588)
+  await createLocation(algeriaId, 'Oran', 'Oran', 35.6969, -0.6331)
+  await createLocation(algeriaId, 'Constantine', 'Constantine', 36.365, 6.6147)
+  await createLocation(algeriaId, 'Annaba', 'Annaba', 36.9, 7.7667)
+  await createLocation(algeriaId, 'Setif', 'Sétif', 36.191, 5.4117)
+  await createLocation(algeriaId, 'Blida', 'Blida', 36.4722, 2.8278)
+
   logger.info('Countries and locations seeded successfully')
 }
 
