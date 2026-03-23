@@ -1,104 +1,54 @@
-# VPS Deployment Guide
+# Hetzner VPS Deployment Guide
 
-This guide walks you through deploying DaryWin on a VPS (Virtual Private Server) — a remote Linux machine in the cloud that runs your application 24/7. No prior server experience required.
+A step-by-step guide to deploy DaryWin on a Hetzner Cloud server. Written for first-time VPS users.
 
 ---
 
 ## Table of Contents
 
-1. [What is a VPS?](#1-what-is-a-vps)
-2. [Choose a Hosting Provider](#2-choose-a-hosting-provider)
-3. [Create Your Server](#3-create-your-server)
-4. [Connect to Your Server](#4-connect-to-your-server)
-5. [Install Docker](#5-install-docker)
-6. [Clone the Repository](#6-clone-the-repository)
-7. [Configure Environment Files](#7-configure-environment-files)
-8. [Update docker-compose.yml](#8-update-docker-composeyml)
-9. [Start the Application](#9-start-the-application)
-10. [Point a Domain to Your Server](#10-point-a-domain-to-your-server)
-11. [Set Up HTTPS with Caddy](#11-set-up-https-with-caddy)
-12. [Future Deployments](#12-future-deployments)
-13. [Useful Commands](#13-useful-commands)
+1. [Your Setup So Far](#1-your-setup-so-far)
+2. [Find Your Server IP](#2-find-your-server-ip)
+3. [Connect to Your Server (SSH)](#3-connect-to-your-server-ssh)
+4. [Verify Docker is Installed](#4-verify-docker-is-installed)
+5. [Clone the Repository](#5-clone-the-repository)
+6. [Configure Environment Files](#6-configure-environment-files)
+7. [Update docker-compose.yml](#7-update-docker-composeyml)
+8. [Start the Application](#8-start-the-application)
+9. [Point a Domain to Your Server](#9-point-a-domain-to-your-server)
+10. [Set Up HTTPS with Caddy](#10-set-up-https-with-caddy)
+11. [Future Deployments](#11-future-deployments)
+12. [Common Tasks Reference](#12-common-tasks-reference)
+13. [Troubleshooting](#13-troubleshooting)
 
 ---
 
-## 1. What is a VPS?
+## 1. Your Setup So Far
 
-A VPS is a virtual machine rented from a cloud provider. Think of it as a computer in a data center that:
-- Runs Linux 24/7
-- Has a public IP address anyone can reach
-- Costs $5–15/month depending on size
+You already have:
+- A Hetzner Cloud account
+- A project with a server created
+- Docker installed on the server
 
-You control it entirely through a terminal (SSH).
-
----
-
-## 2. Choose a Hosting Provider
-
-Any of these work well. Hetzner is the best value for money:
-
-| Provider | Monthly Cost | Notes |
-|---|---|---|
-| **Hetzner** | ~$4–6/mo | Best price/performance, EU & US regions |
-| DigitalOcean | ~$6–12/mo | Very beginner-friendly UI |
-| Linode (Akamai) | ~$5–10/mo | Reliable, good documentation |
-| AWS EC2 | Varies | More complex, overkill for most setups |
-
-**Recommended specs** for a small-to-medium deployment:
-- **CPU**: 2 vCPUs
-- **RAM**: 4 GB (minimum), 8 GB preferred
-- **Storage**: 40 GB SSD
-- **OS**: Ubuntu 24.04 LTS
+What's left: clone the repo, configure environment files, start Docker containers, and optionally set up a domain with HTTPS.
 
 ---
 
-## 3. Create Your Server
+## 2. Find Your Server IP
 
-### On Hetzner (recommended)
+1. Go to [console.hetzner.cloud](https://console.hetzner.cloud)
+2. Click on your **project**
+3. Click on your **server** name
+4. Your **IPv4 address** is displayed at the top (e.g., `65.21.100.200`)
 
-1. Sign up at [hetzner.com/cloud](https://www.hetzner.com/cloud)
-2. Click **New Project** → give it a name
-3. Click **Add Server**:
-   - **Location**: choose closest to your users
-   - **Image**: Ubuntu 24.04
-   - **Type**: CX22 (2 vCPU / 4 GB RAM) — ~$4.15/mo
-   - **SSH Key**: click "Add SSH key" (see below)
-4. Click **Create & Buy Now**
-
-### On DigitalOcean
-
-1. Sign up at [digitalocean.com](https://www.digitalocean.com)
-2. Click **Create** → **Droplets**
-3. Choose **Ubuntu 24.04**, **Basic** plan, **Regular** CPU, **$6/mo** (1 GB) or **$12/mo** (2 GB)
-4. Add your SSH key (see below)
-5. Click **Create Droplet**
-
-### Generate an SSH Key (do this on your local machine)
-
-Open a terminal (PowerShell on Windows, Terminal on Mac/Linux):
-
-```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-```
-
-Press Enter for all prompts (default file, no passphrase is fine for personal use).
-
-Then copy your public key:
-```bash
-# Windows (PowerShell)
-cat $env:USERPROFILE\.ssh\id_ed25519.pub
-
-# Mac/Linux
-cat ~/.ssh/id_ed25519.pub
-```
-
-Paste this value into the "SSH Key" field on your hosting provider.
+Write this IP down — you'll use it everywhere.
 
 ---
 
-## 4. Connect to Your Server
+## 3. Connect to Your Server (SSH)
 
-Once your server is created, you'll see its **IP address** (e.g., `65.21.100.200`).
+SSH is how you control your server from your local terminal. Every time you want to work on your server, you start here.
+
+### From Windows (PowerShell or WSL)
 
 ```bash
 ssh root@YOUR_SERVER_IP
@@ -109,58 +59,140 @@ Example:
 ssh root@65.21.100.200
 ```
 
-Type `yes` when asked about the fingerprint. You are now inside your server.
+### First time connecting?
+
+You'll see a message like:
+```
+The authenticity of host '65.21.100.200' can't be established.
+Are you sure you want to continue connecting (yes/no)?
+```
+Type `yes` and press Enter. This only happens once per server.
+
+### "Permission denied" or "Connection refused"?
+
+This means SSH can't authenticate you. Here's how to fix it:
+
+**Option A: You already have an SSH key and added it when creating the server**
+
+Your key is probably at `~/.ssh/id_ed25519` or `~/.ssh/id_rsa`. Try:
+```bash
+ssh -i ~/.ssh/id_ed25519 root@YOUR_SERVER_IP
+```
+
+**Option B: You don't have an SSH key or didn't add one**
+
+1. Generate a new key on your local machine:
+   ```bash
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+   Press Enter for all prompts (default location, no passphrase).
+
+2. Copy your public key:
+   ```bash
+   # Windows (PowerShell)
+   cat $env:USERPROFILE\.ssh\id_ed25519.pub
+
+   # WSL / Mac / Linux
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+3. Add it to your Hetzner server:
+   - Go to [console.hetzner.cloud](https://console.hetzner.cloud)
+   - Navigate to your **project** > **Security** > **SSH Keys**
+   - Click **Add SSH Key**, paste your public key, give it a name
+   - **Important**: Adding a key here only applies to *new* servers. For your existing server, use the Hetzner **web console** (see Option C) to add the key manually.
+
+**Option C: Use Hetzner's web console as a fallback**
+
+If SSH isn't working, you can access your server through the browser:
+1. Go to [console.hetzner.cloud](https://console.hetzner.cloud)
+2. Click your **server**
+3. Click the **Console** tab (top-right area, looks like `>_`)
+4. You're now logged in as root — no SSH key needed
+
+From here you can add your SSH key manually:
+```bash
+mkdir -p ~/.ssh
+echo "PASTE_YOUR_PUBLIC_KEY_HERE" >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+```
+
+Then SSH from your local machine should work.
+
+**Option D: Reset root password**
+
+As a last resort, Hetzner lets you reset the root password:
+1. Go to your server in Hetzner Cloud console
+2. Click **Rescue** tab > **Reset Root Password**
+3. Use the password shown to log in: `ssh root@YOUR_SERVER_IP` (it will prompt for the password)
+4. After logging in, add your SSH key as shown in Option C
+
+### You're connected when you see
+
+```
+root@your-server-name:~#
+```
+
+This means you're inside your server. Every command you type now runs on the server, not on your local machine.
+
+### To disconnect
+
+Type `exit` or press `Ctrl+D`. You're back on your local machine.
 
 ---
 
-## 5. Install Docker
+## 4. Verify Docker is Installed
 
-Run these commands on your server one by one:
+Once connected to your server via SSH, verify Docker is working:
 
 ```bash
-# Update package list
-apt update && apt upgrade -y
-
-# Install Docker
-curl -fsSL https://get.docker.com | sh
-
-# Verify Docker is running
 docker --version
 docker compose version
 ```
 
-Both commands should print version numbers. Docker Compose is included with modern Docker installs.
+Both should print version numbers. If `docker compose` doesn't work, try `docker-compose --version` (with a hyphen). If neither works, install Docker:
+
+```bash
+curl -fsSL https://get.docker.com | sh
+```
 
 ---
 
-## 6. Clone the Repository
+## 5. Clone the Repository
 
-Your deploy scripts expect the project at `/opt/darywin`. Clone it there:
+The deploy scripts expect the project at `/opt/darywin`.
 
 ```bash
-# Create the directory
 mkdir -p /opt/darywin
-
-# Clone your GitHub repo (replace with your actual repo URL)
 git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git /opt/darywin
-
-# Go into the project
 cd /opt/darywin
-
-# Make all scripts executable
 chmod +x -R /opt/darywin/__scripts
 ```
 
-> If your repository is **private**, you'll need to authenticate. The easiest way:
-> 1. Go to GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (classic)
+> **Private repo?** You need a GitHub Personal Access Token:
+> 1. Go to GitHub > Settings > Developer Settings > Personal Access Tokens > Tokens (classic)
 > 2. Generate a token with `repo` scope
-> 3. Use it in the clone URL: `https://YOUR_TOKEN@github.com/YOUR_USERNAME/YOUR_REPO.git`
+> 3. Clone with: `git clone https://YOUR_TOKEN@github.com/YOUR_USERNAME/YOUR_REPO.git /opt/darywin`
+
+If the repo is already cloned from a previous session, just pull the latest:
+```bash
+cd /opt/darywin
+git pull
+```
 
 ---
 
-## 7. Configure Environment Files
+## 6. Configure Environment Files
 
-You need to create three `.env.docker` files from the provided examples.
+You need three `.env.docker` files. Create them from the examples, then edit each one.
+
+### How to edit files on the server
+
+Use `nano` (a simple text editor):
+- **Arrow keys** to move around
+- **Type normally** to edit
+- **Ctrl+O** then **Enter** to save
+- **Ctrl+X** to exit
 
 ### Backend
 
@@ -169,57 +201,49 @@ cp /opt/darywin/backend/.env.docker.example /opt/darywin/backend/.env.docker
 nano /opt/darywin/backend/.env.docker
 ```
 
-Key values to change (use `nano` to edit, `Ctrl+O` to save, `Ctrl+X` to exit):
+Key values to set:
 
 ```env
-# Set to production
 NODE_ENV=production
 
-# Replace with your actual domain once you have one
+# Your domain (or use http://YOUR_SERVER_IP:PORT if no domain yet)
 DW_ADMIN_HOST=https://admin.yourdomain.com/
 DW_FRONTEND_HOST=https://yourdomain.com/
 DW_AUTH_COOKIE_DOMAIN=yourdomain.com
 
-# Generate a strong random secret (run: openssl rand -hex 32)
-DW_COOKIE_SECRET=REPLACE_WITH_RANDOM_STRING
-DW_JWT_SECRET=REPLACE_WITH_ANOTHER_RANDOM_STRING
+# Generate secrets — run this command twice on the server: openssl rand -hex 32
+DW_COOKIE_SECRET=PASTE_FIRST_RANDOM_STRING
+DW_JWT_SECRET=PASTE_SECOND_RANDOM_STRING
 
-# Your SMTP email provider (e.g., SendGrid, Mailgun, Gmail)
+# Email (SMTP) — e.g., SendGrid, Mailgun, or Gmail app password
 DW_SMTP_HOST=smtp.sendgrid.net
 DW_SMTP_PORT=587
 DW_SMTP_USER=apikey
 DW_SMTP_PASS=YOUR_SMTP_PASSWORD
 DW_SMTP_FROM=no-reply@yourdomain.com
 
-# Stripe (get from stripe.com dashboard)
+# Stripe (from stripe.com dashboard > Developers > API keys)
 DW_STRIPE_SECRET_KEY=sk_live_...
 
-# PayPal (get from developer.paypal.com)
+# PayPal (from developer.paypal.com)
 DW_PAYPAL_SANDBOX=false
 DW_PAYPAL_CLIENT_ID=YOUR_PAYPAL_CLIENT_ID
 DW_PAYPAL_CLIENT_SECRET=YOUR_PAYPAL_CLIENT_SECRET
 
-# Google reCAPTCHA (get from google.com/recaptcha)
+# reCAPTCHA (from google.com/recaptcha — use the SECRET key here)
 DW_RECAPTCHA_SECRET=YOUR_RECAPTCHA_SECRET
 
-# IPInfo (optional, for geo lookup - get from ipinfo.io)
-DW_IPINFO_API_KEY=YOUR_IPINFO_KEY
-
-# Admin account email
+# Admin email and site name
 DW_ADMIN_EMAIL=admin@yourdomain.com
-
-# Your website name
 DW_WEBSITE_NAME="Your App Name"
 DW_TIMEZONE=UTC
 ```
 
-To generate strong secrets, run this on the server:
+To generate secrets:
 ```bash
 openssl rand -hex 32
 ```
 Run it twice — once for `DW_COOKIE_SECRET`, once for `DW_JWT_SECRET`.
-
----
 
 ### Frontend
 
@@ -228,12 +252,12 @@ cp /opt/darywin/frontend/.env.docker.example /opt/darywin/frontend/.env.docker
 nano /opt/darywin/frontend/.env.docker
 ```
 
-Key values to change:
+Key values to set:
 
 ```env
 VITE_NODE_ENV=production
 
-# Replace with your actual domain
+# Your domain (or http://YOUR_SERVER_IP:4004 if no domain yet)
 VITE_DW_API_HOST=https://api.yourdomain.com
 VITE_DW_CDN_USERS=https://api.yourdomain.com/cdn/darywin/users
 VITE_DW_CDN_PROPERTIES=https://api.yourdomain.com/cdn/darywin/properties
@@ -245,7 +269,7 @@ VITE_DW_STRIPE_PUBLISHABLE_KEY=pk_live_...
 # PayPal client ID
 VITE_DW_PAYPAL_CLIENT_ID=YOUR_PAYPAL_CLIENT_ID
 
-# Google reCAPTCHA site key (public, not secret)
+# reCAPTCHA (use the SITE key here, not the secret)
 VITE_DW_RECAPTCHA_ENABLED=true
 VITE_DW_RECAPTCHA_SITE_KEY=YOUR_RECAPTCHA_SITE_KEY
 
@@ -259,8 +283,6 @@ VITE_DW_MAP_LONGITUDE=3.0588
 VITE_DW_MAP_ZOOM=6
 ```
 
----
-
 ### Admin Panel
 
 ```bash
@@ -268,12 +290,12 @@ cp /opt/darywin/admin/.env.docker.example /opt/darywin/admin/.env.docker
 nano /opt/darywin/admin/.env.docker
 ```
 
-Key values to change:
+Key values to set:
 
 ```env
 VITE_NODE_ENV=production
 
-# Replace with your actual domain
+# Your domain (or http://YOUR_SERVER_IP:4004 if no domain yet)
 VITE_DW_API_HOST=https://api.yourdomain.com
 VITE_DW_CDN_USERS=https://api.yourdomain.com/cdn/darywin/users
 VITE_DW_CDN_TEMP_USERS=https://api.yourdomain.com/cdn/darywin/temp/users
@@ -288,45 +310,45 @@ VITE_DW_CONTACT_EMAIL=info@yourdomain.com
 
 ---
 
-## 8. Update docker-compose.yml
+## 7. Update docker-compose.yml
 
-Open the production compose file and change the default MongoDB credentials:
+Change the default MongoDB credentials (never use `admin/admin` in production):
 
 ```bash
 nano /opt/darywin/docker-compose.yml
 ```
 
-Change these two lines (pick a strong password):
+Change these values (pick a strong password):
 ```yaml
 MONGO_INITDB_ROOT_USERNAME: admin        # change this
-MONGO_INITDB_ROOT_PASSWORD: admin        # CHANGE THIS - use a strong password
+MONGO_INITDB_ROOT_PASSWORD: admin        # CHANGE THIS — use a strong password
 ```
 
-Also update the connection string in `ME_CONFIG_MONGODB_URL` to match:
+Also update `ME_CONFIG_MONGODB_URL` to match:
 ```yaml
 ME_CONFIG_MONGODB_URL: mongodb://YOUR_NEW_USER:YOUR_NEW_PASS@mongo:27017/
 ```
 
-And update your backend `.env.docker` to match:
+And update your `backend/.env.docker` to match:
 ```env
 DW_DB_URI="mongodb://YOUR_NEW_USER:YOUR_NEW_PASS@mongo:27017/darywin?authSource=admin&appName=darywin"
 ```
 
 ---
 
-## 9. Start the Application
+## 8. Start the Application
 
 ```bash
 cd /opt/darywin
 
-# Build images and start all containers (takes 5–10 minutes first time)
+# Build and start all containers (takes 5-10 minutes the first time)
 docker compose up -d --build
 
-# Watch the logs to make sure everything started correctly
+# Watch logs to verify everything started
 docker compose logs -f
 ```
 
-Press `Ctrl+C` to stop watching logs (containers keep running).
+Press `Ctrl+C` to stop watching logs (containers keep running in the background).
 
 Check that all containers are running:
 ```bash
@@ -340,7 +362,7 @@ You should see all services with status `Up`:
 - `dw-admin`
 - `dw-frontend`
 
-At this point your app is accessible via your server's IP:
+Your app is now accessible at:
 - Frontend: `http://YOUR_SERVER_IP:8081`
 - Admin: `http://YOUR_SERVER_IP:3003`
 - API: `http://YOUR_SERVER_IP:4004`
@@ -348,30 +370,35 @@ At this point your app is accessible via your server's IP:
 
 ---
 
-## 10. Point a Domain to Your Server
+## 9. Point a Domain to Your Server
 
-> Skip this section if you don't have a domain yet. You can use the IP directly for testing.
+> Skip this if you don't have a domain yet. You can test with the IP address.
 
-1. Buy a domain from Namecheap, Cloudflare, or GoDaddy
-2. Go to your domain's **DNS settings**
-3. Add these **A records** (replace `65.21.100.200` with your server IP):
+1. Buy a domain (Namecheap, Cloudflare, GoDaddy, etc.)
+2. Go to the domain's **DNS settings**
+3. Add these **A records** pointing to your Hetzner server IP:
 
 | Type | Name | Value | TTL |
 |---|---|---|---|
-| A | `@` | `65.21.100.200` | Auto |
-| A | `www` | `65.21.100.200` | Auto |
-| A | `api` | `65.21.100.200` | Auto |
-| A | `admin` | `65.21.100.200` | Auto |
+| A | `@` | `YOUR_SERVER_IP` | Auto |
+| A | `www` | `YOUR_SERVER_IP` | Auto |
+| A | `api` | `YOUR_SERVER_IP` | Auto |
+| A | `admin` | `YOUR_SERVER_IP` | Auto |
 
-DNS changes can take a few minutes to a few hours to propagate.
+DNS changes can take a few minutes to a few hours to propagate. You can check with:
+```bash
+# Run this on your local machine
+ping yourdomain.com
+```
+When it shows your server IP, DNS is ready.
 
 ---
 
-## 11. Set Up HTTPS with Caddy
+## 10. Set Up HTTPS with Caddy
 
-Caddy is a web server that automatically obtains and renews SSL certificates. It acts as a reverse proxy sitting in front of your Docker containers.
+Caddy is a web server that automatically gets free SSL certificates. It sits in front of your Docker containers and handles HTTPS.
 
-### Install Caddy
+### Install Caddy (run on your server)
 
 ```bash
 apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
@@ -387,7 +414,7 @@ apt install caddy
 nano /etc/caddy/Caddyfile
 ```
 
-Replace the entire contents with (substituting your real domains):
+Replace the entire contents with (use your real domains):
 
 ```
 yourdomain.com, www.yourdomain.com {
@@ -410,107 +437,146 @@ systemctl reload caddy
 systemctl status caddy
 ```
 
-Caddy will automatically request free SSL certificates from Let's Encrypt. Your app is now live at:
+Caddy automatically requests SSL certificates from Let's Encrypt. Your app is now live at:
 - `https://yourdomain.com` — Customer frontend
 - `https://admin.yourdomain.com` — Admin panel
 - `https://api.yourdomain.com` — Backend API
 
-> **Important**: Go back and update all `DW_*_HOST` and `VITE_DW_API_HOST` values in your `.env.docker` files to use the `https://` URLs, then rebuild:
+> **Important**: After setting up HTTPS, go back and update all `DW_*_HOST` and `VITE_DW_API_HOST` values in your `.env.docker` files to use `https://` URLs, then rebuild:
 > ```bash
 > cd /opt/darywin && docker compose up -d --build
 > ```
 
 ---
 
-## 12. Future Deployments
+## 11. Future Deployments
 
-After making code changes and pushing to GitHub, deploy to your server with:
+After pushing code changes to GitHub, deploy to your server:
 
 ```bash
-# SSH into your server
+# 1. SSH into your server
 ssh root@YOUR_SERVER_IP
 
-# Deploy everything (backend + admin + frontend)
-/opt/darywin/__scripts/dw-deploy.sh all
-
-# Or deploy selectively
-/opt/darywin/__scripts/dw-deploy.sh backend    # backend only
-/opt/darywin/__scripts/dw-deploy.sh ui         # admin + frontend only
-/opt/darywin/__scripts/dw-deploy.sh frontend   # frontend only
-/opt/darywin/__scripts/dw-deploy.sh admin      # admin only
+# 2. Deploy
+/opt/darywin/__scripts/dw-deploy.sh all         # everything
+/opt/darywin/__scripts/dw-deploy.sh backend      # backend only
+/opt/darywin/__scripts/dw-deploy.sh ui           # admin + frontend
+/opt/darywin/__scripts/dw-deploy.sh frontend     # frontend only
+/opt/darywin/__scripts/dw-deploy.sh admin        # admin only
 ```
-
-> Note: The deploy scripts use `git pull` + restart. They expect the repo to be at `/opt/darywin`.
 
 ---
 
-## 13. Useful Commands
+## 12. Common Tasks Reference
 
-### Container management
+### Reconnecting to your server
 ```bash
-# View running containers
-docker compose ps
-
-# View logs (all services)
-docker compose logs -f
-
-# View logs for a specific service
-docker compose logs -f dw-backend
-
-# Restart a single service
-docker compose restart dw-backend
-
-# Stop everything
-docker compose down
-
-# Stop and remove all data (careful — deletes database!)
-docker compose down -v
+ssh root@YOUR_SERVER_IP
 ```
 
-### Disk & memory
+### Checking what's running
 ```bash
-# Check disk usage
+cd /opt/darywin
+docker compose ps
+```
+
+### Viewing logs
+```bash
+# All services
+docker compose logs -f
+
+# Specific service
+docker compose logs -f dw-backend
+```
+
+### Restarting services
+```bash
+# Restart one service
+docker compose restart dw-backend
+
+# Restart everything
+docker compose down && docker compose up -d
+```
+
+### Stopping everything
+```bash
+docker compose down
+```
+
+> **Warning**: `docker compose down -v` deletes all data including the database. Don't use `-v` unless you want a fresh start.
+
+### Checking server resources
+```bash
+# Disk space
 df -h
 
-# Check memory usage
+# Memory
 free -h
 
-# Check Docker disk usage
+# Docker disk usage
 docker system df
 ```
 
-### MongoDB access
+### Accessing MongoDB shell
 ```bash
-# Open MongoDB shell inside the container
-docker exec -it darcom-mongo-1 mongosh -u admin -p YOUR_MONGO_PASSWORD
+docker exec -it darcom-mongo-1 mongosh -u YOUR_MONGO_USER -p YOUR_MONGO_PASSWORD
 ```
 
-### View Caddy logs
+### Adding swap space (if you run out of memory)
+```bash
+/opt/darywin/__scripts/swap.sh
+```
+
+### Viewing Caddy (HTTPS) logs
 ```bash
 journalctl -u caddy -f
 ```
 
+### Updating the server OS
+```bash
+apt update && apt upgrade -y
+```
+
 ---
 
-## Troubleshooting
+## 13. Troubleshooting
+
+**Can't SSH into the server**
+- Double-check the IP at [console.hetzner.cloud](https://console.hetzner.cloud)
+- Use Hetzner's web console as a fallback (server page > Console tab)
+- Reset root password if needed (server page > Rescue tab)
+- Make sure your local firewall isn't blocking port 22
 
 **Containers won't start**
 ```bash
 docker compose logs dw-backend
 ```
-Most issues are missing or wrong values in `.env.docker` files.
+Usually caused by missing or wrong values in `.env.docker` files.
 
 **Frontend shows blank page**
-Check that `VITE_DW_API_HOST` in `frontend/.env.docker` points to the correct API URL and that you rebuilt after changing it.
-
-**Cannot connect via SSH**
-Make sure your SSH key was added correctly. Some providers also have a web console you can use as a fallback.
+Check that `VITE_DW_API_HOST` in `frontend/.env.docker` points to the correct API URL. Rebuild after changing: `docker compose up -d --build`
 
 **SSL certificate not working**
-Ensure your domain's DNS A records are pointing to the correct server IP and have propagated. Check Caddy status with `systemctl status caddy`.
+- Make sure DNS A records point to the right IP
+- Check Caddy status: `systemctl status caddy`
+- Check Caddy logs: `journalctl -u caddy -f`
 
-**Out of memory**
-Add swap space:
+**Out of memory during build**
 ```bash
 /opt/darywin/__scripts/swap.sh
+```
+Then retry the build.
+
+**"Port already in use" error**
+Something else is using the port. Find and stop it:
+```bash
+lsof -i :4004    # replace 4004 with the conflicting port
+kill -9 PID      # replace PID with the process ID shown
+```
+
+**Server rebooted and containers are not running**
+Docker containers with `restart: always` should auto-start. If they didn't:
+```bash
+cd /opt/darywin
+docker compose up -d
 ```
