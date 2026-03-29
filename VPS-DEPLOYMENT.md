@@ -28,8 +28,9 @@ You already have:
 - A Hetzner Cloud account
 - A project with a server created
 - Docker installed on the server
+- The repo cloned at `/opt/darywin`
 
-What's left: clone the repo, configure environment files, start Docker containers, and optionally set up a domain with HTTPS.
+What's left: configure environment files, start Docker containers, and optionally set up a domain with HTTPS.
 
 ---
 
@@ -57,6 +58,21 @@ ssh root@YOUR_SERVER_IP
 Example:
 ```bash
 ssh root@65.21.100.200
+```
+
+### Tip: Set up an SSH alias
+
+To avoid typing the full IP every time, add an alias to your SSH config (`~/.ssh/config`):
+
+```
+Host hetzner
+    HostName YOUR_SERVER_IP
+    User root
+```
+
+Then connect with just:
+```bash
+ssh hetzner
 ```
 
 ### First time connecting?
