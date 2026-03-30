@@ -52,7 +52,7 @@ const Home = () => {
   }
 
   const onLoad = async () => {
-    const _countries = await CountryService.getCountriesWithLocations('', true, env.MIN_LOCATIONS)
+    const _countries = await CountryService.getCountriesWithLocations('', false, env.MIN_LOCATIONS)
     setCountries(_countries)
     const _locations = await LocationService.getLocationsWithPosition()
     setLocations(_locations)

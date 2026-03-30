@@ -419,7 +419,7 @@ export const IPINFO_API_KEY = __env__('DW_IPINFO_API_KEY', false)
  *
  * @type {string}
  */
-export const IPINFO_DEFAULT_COUNTRY = __env__('DW_IPINFO_DEFAULT_COUNTRY', false, 'US')
+export const IPINFO_DEFAULT_COUNTRY = __env__('DW_IPINFO_DEFAULT_COUNTRY', false, 'DZ')
 
 /**
  * Enables or disables Sentry error reporting. Set to true to enable.
