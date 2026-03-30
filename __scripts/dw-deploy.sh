@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
 if [ "$1" == "all" ]; then
-  /bin/bash /opt/darywin/__scripts/dw-deploy-backend.sh
-  /bin/bash /opt/darywin/__scripts/dw-deploy-admin.sh
-  /bin/bash /opt/darywin/__scripts/dw-deploy-frontend.sh
+  cd /opt/darywin
+  git pull
+  chmod +x -R /opt/darywin/__scripts
+  /bin/bash /opt/darywin/__scripts/free-mem.sh
+  docker compose up -d --build
+  docker image prune -f
+  docker compose ps
+  /bin/bash /opt/darywin/__scripts/free-mem.sh
 elif [ "$1" == "ui" ]; then
   /bin/bash /opt/darywin/__scripts/dw-deploy-admin.sh
   /bin/bash /opt/darywin/__scripts/dw-deploy-frontend.sh

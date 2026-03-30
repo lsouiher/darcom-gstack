@@ -9,19 +9,10 @@ sudo chmod +x -R /opt/darywin/__scripts
 
 /bin/bash /opt/darywin/__scripts/free-mem.sh
 
-cd /opt/darywin/admin
-sudo rm -rf build
+docker compose up -d --build dw-admin
+docker image prune -f
 
-npm install --force
-npm run build
-
-sudo rm -rf /var/www/darywin/admin
-sudo mkdir -p /var/www/darywin/admin
-sudo cp -rf build/* /var/www/darywin/admin
-
-sudo rm -rf /var/cache/nginx
-sudo systemctl restart nginx
-sudo systemctl status nginx --no-pager
+docker compose ps
 
 /bin/bash /opt/darywin/__scripts/free-mem.sh
 
@@ -30,5 +21,3 @@ elapsed_time=$((finish_time - start_time))
 ((sec=elapsed_time%60, elapsed_time/=60, min=elapsed_time%60))
 timestamp=$(printf "DaryWin admin deployed in %d minutes and %d seconds." $min $sec)
 echo "$timestamp"
-
-#$SHELL

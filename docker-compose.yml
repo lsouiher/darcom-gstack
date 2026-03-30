@@ -52,7 +52,7 @@ services:
     env_file: ./backend/.env.docker                  # Load environment config
     restart: unless-stopped
     ports:
-      - 4004:4004                                    # API endpoint
+      - 127.0.0.1:4004:4004                          # API endpoint (localhost only, Caddy handles external access)
     depends_on:
       - mongo
     volumes:
@@ -77,8 +77,7 @@ services:
     depends_on:
       - dw-backend
     ports:
-      - 3003:3003                                    # Admin panel URL
-      # NOTE: No volume mounts - production serves pre-built static files
+      - 127.0.0.1:3003:3003                          # Admin panel (localhost only, Caddy handles external access)
 
   # ===========================================================================
   # Frontend Customer App (React) - PRODUCTION BUILD
@@ -91,10 +90,7 @@ services:
     depends_on:
       - dw-backend
     ports:
-      - 8081:80                                      # HTTP (nginx default port 80 mapped to 8081)
-      - 8443:443                                     # HTTPS
-    volumes:
-      - cdn:/var/www/cdn/darywin                     # Access uploaded files for serving images
+      - 127.0.0.1:8081:80                            # Frontend (localhost only, Caddy handles external access)
 
 # =============================================================================
 # Named Volumes - Data persists across container restarts
