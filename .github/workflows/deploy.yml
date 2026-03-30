@@ -1,0 +1,57 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        type: choice
+        required: true
+        description: What to deploy
+        options:
+          - all
+          - backend
+          - frontend
+          - admin
+        default: all
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          command_timeout: 15m
+          script: |
+            set -e
+            cd /opt/darywin
+            echo "==> Pulling latest code..."
+            git pull origin main
+
+            TARGET="${{ github.event.inputs.target }}"
+
+            if [ "$TARGET" = "all" ]; then
+              echo "==> Building and deploying all services..."
+              docker compose up -d --build
+            elif [ "$TARGET" = "backend" ]; then
+              echo "==> Building and deploying backend..."
+              docker compose up -d --build dw-backend
+            elif [ "$TARGET" = "frontend" ]; then
+              echo "==> Building and deploying frontend..."
+              docker compose up -d --build dw-frontend
+            elif [ "$TARGET" = "admin" ]; then
+              echo "==> Building and deploying admin..."
+              docker compose up -d --build dw-admin
+            fi
+
+            echo "==> Cleaning up old images..."
+            docker image prune -f
+
+            echo "==> Current container status:"
+            docker compose ps
+
+            echo "==> Deploy complete!"
