@@ -106,7 +106,7 @@ async function seedAgenciesAndProperties() {
 
   // Find Algeria locations
   const countries = await Country.find().populate('values')
-  const algeria = countries.find((c) => c.values.some((v: env.LocationValue) => v.value === 'Algeria'))
+  const algeria = countries.find((c) => (c.values as unknown as env.LocationValue[]).some((v) => v.value === 'Algeria'))
 
   if (!algeria) {
     logger.info('Algeria not found, skipping agency/property seeding')
