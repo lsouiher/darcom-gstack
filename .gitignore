@@ -7,3 +7,6 @@
 /**/dist
 /node_modules
 .eslintcache
+
+# Root .env file (contains MongoDB credentials for docker-compose)
+/.env

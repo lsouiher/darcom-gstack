@@ -326,29 +326,36 @@ VITE_DW_CONTACT_EMAIL=info@yourdomain.com
 
 ---
 
-## 7. Update docker-compose.yml
+## 7. Set MongoDB Credentials
 
-Change the default MongoDB credentials (never use `admin/admin` in production):
+The `docker-compose.yml` reads MongoDB credentials from a `.env` file in the project root. This file is gitignored and stays only on the server.
 
 ```bash
-nano /opt/darywin/docker-compose.yml
+nano /opt/darywin/.env
 ```
 
-Change these values (pick a strong password):
-```yaml
-MONGO_INITDB_ROOT_USERNAME: admin        # change this
-MONGO_INITDB_ROOT_PASSWORD: admin        # CHANGE THIS — use a strong password
-```
-
-Also update `ME_CONFIG_MONGODB_URL` to match:
-```yaml
-ME_CONFIG_MONGODB_URL: mongodb://YOUR_NEW_USER:YOUR_NEW_PASS@mongo:27017/
-```
-
-And update your `backend/.env.docker` to match:
+Add these two lines (pick a strong password):
 ```env
-DW_DB_URI="mongodb://YOUR_NEW_USER:YOUR_NEW_PASS@mongo:27017/darywin?authSource=admin&appName=darywin"
+MONGO_USER=darywin_admin
+MONGO_PASSWORD=PASTE_RANDOM_STRING_HERE
 ```
+
+Generate a strong password:
+```bash
+openssl rand -hex 24
+```
+
+Now update your `backend/.env.docker` to match these credentials:
+```env
+DW_DB_URI="mongodb://darywin_admin:YOUR_PASSWORD_HERE@mongo:27017/darywin?authSource=admin&appName=darywin"
+```
+
+> **Note**: `mongo-express` (the database web UI) is disabled in production for security. If you need to inspect the database, connect via SSH tunnel:
+> ```bash
+> # From your local machine:
+> ssh -L 27018:localhost:27018 root@YOUR_SERVER_IP
+> # Then connect with any MongoDB client to localhost:27018
+> ```
 
 ---
 
@@ -373,7 +380,6 @@ docker compose ps
 
 You should see all services with status `Up`:
 - `mongo`
-- `mongo-express`
 - `dw-backend`
 - `dw-admin`
 - `dw-frontend`
@@ -382,7 +388,6 @@ Your app is now accessible at:
 - Frontend: `http://YOUR_SERVER_IP:8081`
 - Admin: `http://YOUR_SERVER_IP:3003`
 - API: `http://YOUR_SERVER_IP:4004`
-- MongoDB UI: `http://YOUR_SERVER_IP:8084`
 
 ---
 
@@ -467,18 +472,33 @@ Caddy automatically requests SSL certificates from Let's Encrypt. Your app is no
 
 ## 11. Future Deployments
 
-After pushing code changes to GitHub, deploy to your server:
+### Option A: Deploy from GitHub (recommended)
+
+Go to your repo on GitHub > **Actions** tab > **deploy** workflow > **Run workflow**. Choose what to deploy (all, backend, frontend, or admin). This SSHes into your server automatically.
+
+> **Requires setup**: Add these secrets in GitHub repo Settings > Secrets and variables > Actions:
+> - `VPS_HOST`: Your Hetzner server IP
+> - `VPS_SSH_KEY`: A deploy SSH private key (see below)
+>
+> Generate a deploy key:
+> ```bash
+> # On your local machine
+> ssh-keygen -t ed25519 -f ~/.ssh/hetzner_deploy -C "github-deploy"
+> # Copy the public key to your server
+> ssh-copy-id -i ~/.ssh/hetzner_deploy.pub root@YOUR_SERVER_IP
+> # Paste the contents of ~/.ssh/hetzner_deploy as the VPS_SSH_KEY secret
+> ```
+
+### Option B: Deploy manually via SSH
 
 ```bash
 # 1. SSH into your server
 ssh root@YOUR_SERVER_IP
 
-# 2. Deploy
-/opt/darywin/__scripts/dw-deploy.sh all         # everything
-/opt/darywin/__scripts/dw-deploy.sh backend      # backend only
-/opt/darywin/__scripts/dw-deploy.sh ui           # admin + frontend
-/opt/darywin/__scripts/dw-deploy.sh frontend     # frontend only
-/opt/darywin/__scripts/dw-deploy.sh admin        # admin only
+# 2. Pull and rebuild
+cd /opt/darywin
+git pull origin main
+docker compose up -d --build
 ```
 
 ---

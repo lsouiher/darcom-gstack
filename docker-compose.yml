@@ -1,7 +1,11 @@
 # =============================================================================
 # PRODUCTION Docker Compose Configuration
-# Run with: docker-compose up -d
+# Run with: docker compose up -d
 # This file builds optimized production containers (no hot-reload, smaller images)
+#
+# REQUIRED: Create a .env file in this directory with:
+#   MONGO_USER=your_username
+#   MONGO_PASSWORD=your_strong_password
 # =============================================================================
 
 services:
@@ -11,31 +15,32 @@ services:
   mongo:
     image: mongo:latest                              # Official MongoDB image
     command: mongod --quiet --logpath /dev/null      # Suppress verbose logging
-    restart: always                                  # Auto-restart on failure/reboot
+    restart: unless-stopped                          # Auto-restart on failure/reboot
     environment:
-      # Provide your credentials here
-      MONGO_INITDB_ROOT_USERNAME: admin              # Root username (CHANGE IN PRODUCTION!)
-      MONGO_INITDB_ROOT_PASSWORD: admin              # Root password (CHANGE IN PRODUCTION!)
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}     # Set in .env file
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD} # Set in .env file
     ports:
-      - 27018:27017                                  # Host:Container port mapping
+      - 127.0.0.1:27018:27017                       # Bind to localhost only
     volumes:
       - mongodb_data:/data/db                        # Persist database data
       - mongodb_config:/data/configdb                # Persist MongoDB config
 
   # ===========================================================================
   # Mongo Express - Web-based MongoDB Admin UI
+  # DISABLED in production. Access via SSH tunnel instead:
+  #   ssh -L 8084:localhost:8084 root@YOUR_SERVER_IP
   # ===========================================================================
-  mongo-express:
-    image: mongo-express:latest                      # Web UI for browsing MongoDB
-    restart: always
-    ports:
-      - 8084:8081                                    # Access at http://localhost:8084
-    environment:
-      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/   # Internal Docker network connection
-      ME_CONFIG_BASICAUTH_USERNAME: admin            # Web UI login
-      ME_CONFIG_BASICAUTH_PASSWORD: admin            # Web UI password
-    depends_on:
-      - mongo                                        # Start after MongoDB is running
+  # mongo-express:
+  #   image: mongo-express:latest
+  #   restart: unless-stopped
+  #   ports:
+  #     - 127.0.0.1:8084:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/
+  #     ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_USER}
+  #     ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_PASSWORD}
+  #   depends_on:
+  #     - mongo
 
   # ===========================================================================
   # Backend API Server (Node.js/Express) - PRODUCTION BUILD
@@ -45,7 +50,7 @@ services:
       context: .                                     # Build from project root
       dockerfile: ./backend/Dockerfile               # Production Dockerfile (optimized, no dev tools)
     env_file: ./backend/.env.docker                  # Load environment config
-    restart: always
+    restart: unless-stopped
     ports:
       - 4004:4004                                    # API endpoint
     depends_on:
@@ -54,6 +59,12 @@ services:
       - cdn:/var/www/cdn/darywin                     # Shared CDN for uploaded files
       - backend_logs:/darywin/backend/logs           # Persist logs
       # NOTE: No source code mount - production uses built code inside container
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4004"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   # ===========================================================================
   # Admin Panel (React) - PRODUCTION BUILD
@@ -62,6 +73,7 @@ services:
     build:
       context: .
       dockerfile: ./admin/Dockerfile                 # Production Dockerfile (nginx serving built static files)
+    restart: unless-stopped
     depends_on:
       - dw-backend
     ports:
@@ -75,6 +87,7 @@ services:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile              # Production Dockerfile (nginx serving built static files)
+    restart: unless-stopped
     depends_on:
       - dw-backend
     ports:
