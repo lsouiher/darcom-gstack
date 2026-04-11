@@ -1,12 +1,53 @@
+# Dependencies
+**/node_modules
+
+# Build output
+**/dist
+**/build
+
+# Environment files
+**/.env
+**/.env.local
+**/.env.*.local
+!**/.env.example
+!**/.env.docker.example
+
+# SSL/TLS certificates
 /**/*.key
 /**/*.crt
 /**/*.pem
 /**/*.pem-chain
 /**/*.ca.pem
-/**/.DS_Store
-/**/dist
-/node_modules
+
+# OS files
+**/.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.vs/
+*.swp
+*.swo
+*~
+.idea/
+
+# Logs
+**/logs
+**/*.log
+**/npm-debug.log*
+
+# ESLint
 .eslintcache
 
-# Root .env file (contains MongoDB credentials for docker-compose)
-/.env
+# Coverage
+**/coverage
+
+# Expo / React Native
+mobile/.expo/
+mobile/android/
+mobile/ios/
+
+# gstack (installed globally, not vendored)
+.claude/skills/

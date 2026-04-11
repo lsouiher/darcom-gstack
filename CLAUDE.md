@@ -26,7 +26,7 @@ DaryWin is a Rental Property Management Platform built as a TypeScript monorepo 
 ### Backend
 ```bash
 cd backend
-npm run dev              # Start dev server with nodemon
+npm run dev              # Start dev server with nodemon (port 4004)
 npm run build            # TypeScript + Babel build
 npm run test             # Jest tests with coverage (builds first)
 npm run setup            # Database seeding
@@ -36,7 +36,7 @@ npm run reset            # Database reset
 ### Frontend / Admin
 ```bash
 cd frontend  # or: cd admin
-npm run dev              # Vite dev server
+npm run dev              # Vite dev server (frontend: 3004, admin: 3003)
 npm run build            # Production build
 npm run stylelint        # CSS linting
 ```
@@ -44,7 +44,7 @@ npm run stylelint        # CSS linting
 ### Mobile
 ```bash
 cd mobile
-npm run start            # Expo dev server
+npm run start            # Expo dev server (port 8081)
 npm run android          # Run on Android
 npm run ios              # Run on iOS
 ```
@@ -70,6 +70,12 @@ cd backend
 npm run build && npx jest __tests__/user.test.ts
 ```
 
+Run tests matching a pattern:
+```bash
+cd backend
+npm run build && npx jest --testNamePattern="should create a user"
+```
+
 ## Architecture
 
 ### Backend
@@ -78,6 +84,7 @@ npm run build && npx jest __tests__/user.test.ts
 - **JWT authentication** via jose library
 - **Dual payment gateways**: Stripe and PayPal
 - Route paths are defined separately in `src/config/*Routes.config.ts`, handlers in `src/routes/`, business logic in `src/controllers/`
+- Keep controllers slim -- complex business logic lives in services or model methods
 - Models in `src/models/` (User, Booking, Property, Location, Country, Notification)
 - Auth middleware in `src/middlewares/authJwt.ts`
 - Uses path alias `:darywin-types` to import shared types (configured in tsconfig.json `paths` and resolved by Babel)
@@ -117,6 +124,12 @@ npm run build && npx jest __tests__/user.test.ts
 - Environment config in `config/env.config.ts` per app; backend env vars are prefixed with `DW_`
 - Backend uses ESM (`"type": "module"`) with Babel transpilation for the build step
 
+## Sensitive Areas
+
+Changes to these require extra care and testing:
+- **Database schemas** (`backend/src/models/*`) and shared types in `packages/darywin-types` -- widely consumed across all apps
+- **Payment gateway flows** (Stripe/PayPal) -- sensitive logic with external side effects
+
 ## Docker Development
 
 ```bash
@@ -127,3 +140,11 @@ docker-compose -f docker-compose.dev.yml down     # Stop services
 Services: MongoDB, mongo-express, dw-backend, dw-admin, dw-frontend
 
 The pre-commit hook auto-detects running Docker containers and runs checks inside them when available, otherwise runs locally.
+
+## gstack
+
+Use the /browse skill from gstack for all web browsing. Never use mcp__claude-in-chrome__* tools.
+
+Available skills: /office-hours, /plan-ceo-review, /plan-eng-review, /plan-design-review, /design-consultation, /design-shotgun, /design-html, /review, /ship, /land-and-deploy, /canary, /benchmark, /browse, /connect-chrome, /qa, /qa-only, /design-review, /setup-browser-cookies, /setup-deploy, /retro, /investigate, /document-release, /codex, /cso, /autoplan, /careful, /freeze, /guard, /unfreeze, /gstack-upgrade, /learn.
+
+If gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to build the binary and register skills.
