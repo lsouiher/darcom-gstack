@@ -1,197 +1,156 @@
 # Tasks: Host Admin Portal
 
 **Input**: Design documents from `/specs/001-host-admin-portal/`
-**Prerequisites**: plan.md (required), spec.md (required), research.md, data-model.md, contracts/api-changes.md
-
-**Tests**: Not explicitly requested in the feature specification. Test tasks are omitted.
-
-**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+**Prerequisites**: plan.md, spec.md, research.md, contracts/api-changes.md
+**Tests**: Required. Mandatory test tasks are integrated into each phase.
+**Generated**: 2026-04-11 (revised after CEO + Eng review — supersedes prior task list)
 
 ## Format: `[ID] [P?] [Story] Description`
-
 - **[P]**: Can run in parallel (different files, no dependencies)
-- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
-- Include exact file paths in descriptions
-
-## Path Conventions
-
-- **Backend**: `backend/src/`
-- **Admin**: `admin/src/`
+- **[Story]**: Which user story (US1-US4) or cross-cutting (XC)
 
 ---
 
-## Phase 1: Setup
+## Phase 1: Type & Middleware Foundation
 
-**Purpose**: No new project initialization needed — all changes modify existing files. This phase is empty.
+**Purpose**: Set up `req.user` injection and tenantScope middleware. ALL user stories depend on this.
 
----
+- [ ] T001 [XC] Create `backend/src/types/express.d.ts` with Express Request augmentation for `user?: { _id; type }` and `tenantFilter?: { agency?: ObjectId }`
+- [ ] T002 [XC] Modify `backend/src/middlewares/authJwt.ts`: re-fetch User from MongoDB on every authenticated request and assign to `req.user`. Remove any `req.body._userId/_userType` mutation.
+- [ ] T003 [XC] Create `backend/src/middlewares/tenantScope.ts` with default-deny semantics, marker support (`@AdminOnly`, `@TenantScoped`, `@Public`), env flag `DW_TENANT_ENFORCE=off|warn|strict`, invariant check that scope filter is non-empty for non-admin users
+- [ ] T004 [XC] Add ASCII diagram comment block at top of `tenantScope.ts` explaining marker decision tree and default-deny invariant
+- [ ] T005 [XC] Create `backend/src/observability/tenantAccessLog.ts` with structured log emitter and counter metrics (`tenant_access_denied_total`, `tenant_filter_empty_blocked_total`)
+- [ ] T006 [XC] Wire `tenantScope` middleware into the Express app pipeline (after `authJwt`, before route handlers) in `backend/src/server.ts` (or equivalent app entrypoint)
+- [ ] T007 [XC] Add route marker helpers to `backend/src/routes/_markers.ts` (or extend an existing utility) — wraps `router.get/post/put/delete` to attach metadata
+- [ ] T008 [XC] [TEST] Create `backend/__tests__/tenantScope.test.ts` covering 9 paths (admin pass, agency scoped, public pass, default-deny, warn-mode pass, missing user 500, scope-empty invariant, marker-coverage, env flag toggle)
+- [ ] T009 [XC] [TEST] Create `backend/__tests__/authJwt.test.ts` covering 4 paths (valid token + populated user, user deleted, user type changed, DB unavailable on re-fetch)
+- [ ] T010 [XC] [TEST] Create `backend/__tests__/markerCoverage.test.ts` asserting every route file uses marker helpers (no bare `router.get` calls)
 
-## Phase 2: Foundational (Blocking Prerequisites)
-
-**Purpose**: Extend auth middleware to attach user identity to requests. ALL user stories depend on this.
-
-**CRITICAL**: No user story work can begin until this phase is complete.
-
-- [ ] T001 Extend `authJwt.verifyToken` to attach `_userId` (ObjectId) and `_userType` (UserType enum) to `req.body` after successful token verification, using the user document already queried during verification in `backend/src/middlewares/authJwt.ts`
-- [ ] T002 Verify existing backend tests still pass after middleware change by running `cd backend && npm run build && npm run test`
-
-**Checkpoint**: Middleware now provides user context to all downstream controllers. User story implementation can begin.
-
----
-
-## Phase 3: User Story 1 - Agency Data Isolation (Priority: P1) MVP
-
-**Goal**: Backend enforces that agency users can only access data belonging to their own agency. Closes the critical security gap where client-supplied agency IDs are trusted without validation.
-
-**Independent Test**: Authenticate as an agency user, make direct API calls supplying another agency's ID in the request body. Every property/booking/user endpoint MUST return only the authenticated agency's data. Mutation endpoints MUST return 403 for cross-agency attempts.
-
-### Implementation for User Story 1
-
-- [ ] T003 [P] [US1] Add agency-scoping guard to `getProperties()` in `backend/src/controllers/propertyController.ts` — for Agency users, override `body.agencies` with `[req.body._userId]`
-- [ ] T004 [P] [US1] Add agency-scoping guard to `getBookingProperties()` in `backend/src/controllers/propertyController.ts` — for Agency users, force `body.agency` to `req.body._userId`
-- [ ] T005 [P] [US1] Add agency ownership enforcement to `create()` in `backend/src/controllers/propertyController.ts` — for Agency users, force `body.agency = req.body._userId` ignoring client value
-- [ ] T006 [P] [US1] Add agency ownership validation to `update()` in `backend/src/controllers/propertyController.ts` — for Agency users, verify `property.agency === req.body._userId` before allowing update, return 403 if mismatch
-- [ ] T007 [P] [US1] Add agency ownership validation to `deleteProperty()` in `backend/src/controllers/propertyController.ts` — for Agency users, verify `property.agency === req.body._userId` before allowing delete, return 403 if mismatch
-- [ ] T008 [P] [US1] Add agency-scoping guard to `getBookings()` in `backend/src/controllers/bookingController.ts` — for Agency users, override `body.agencies` with `[req.body._userId]`
-- [ ] T009 [P] [US1] Add agency ownership validation to booking `update()` in `backend/src/controllers/bookingController.ts` — for Agency users, verify booking's agency matches `req.body._userId`, return 403 if mismatch
-- [ ] T010 [P] [US1] Add agency-scoping to user list endpoint in `backend/src/controllers/userController.ts` — for Agency users, filter to show only (a) agency's own account and (b) users with bookings on the agency's properties
-- [ ] T011 [P] [US1] Add admin-only guard to `create()`, `update()`, `deleteLocation()` in `backend/src/controllers/locationController.ts` — return 403 if `_userType !== UserType.Admin`
-- [ ] T012 [P] [US1] Add admin-only guard to `create()`, `update()`, `deleteCountry()` in `backend/src/controllers/countryController.ts` — return 403 if `_userType !== UserType.Admin`
-- [ ] T013 [US1] Verify all existing backend tests still pass after controller changes by running `cd backend && npm run build && npm run test`
-
-**Checkpoint**: Backend now enforces complete agency data isolation. All endpoints return scoped data for Agency users. Cross-agency access returns 403. Admin behavior unchanged.
+**Checkpoint**: Auth pipeline complete. Middleware enforces in `warn` mode by default. All marker tests green. Existing routes still work because warn mode does not block.
 
 ---
 
-## Phase 4: User Story 2 - Agency-Scoped Navigation and Views (Priority: P2)
+## Phase 2: Route Marker Migration (US1 prerequisite)
 
-**Goal**: Admin panel frontend shows only relevant pages and controls for agency users. Admin-only pages are hidden from navigation and blocked via route guards. Data views filter to agency's own data.
+**Purpose**: Annotate every existing route with a marker so default-deny becomes safe to enable.
 
-**Independent Test**: Log in as agency user — sidebar shows 9 items (not Agencies/Countries). Navigate to /agencies or /countries via URL — see Unauthorized page. Properties/Bookings/Users pages show only own data. Locations page is browse-only (no create/edit/delete controls).
+- [ ] T011 [P] [XC] Mark all routes in `backend/src/routes/propertyRoutes.ts` (mostly `@TenantScoped`)
+- [ ] T012 [P] [XC] Mark all routes in `backend/src/routes/bookingRoutes.ts` (mostly `@TenantScoped`)
+- [ ] T013 [P] [XC] Mark all routes in `backend/src/routes/userRoutes.ts` (mix of `@TenantScoped` and `@Public` for signin/signup)
+- [ ] T014 [P] [XC] Mark all routes in `backend/src/routes/locationRoutes.ts` (reads `@TenantScoped`, mutations `@AdminOnly`)
+- [ ] T015 [P] [XC] Mark all routes in `backend/src/routes/countryRoutes.ts` (same pattern)
+- [ ] T016 [P] [XC] Mark all routes in `backend/src/routes/agencyRoutes.ts` (list/create/delete `@AdminOnly`; self-read/self-update `@TenantScoped`)
+- [ ] T017 [P] [XC] Mark all routes in `backend/src/routes/notificationRoutes.ts` (`@TenantScoped`)
+- [ ] T018 [P] [XC] Mark all routes in `backend/src/routes/stripeRoutes.ts` (webhook `@Public`, refund/payment-intent `@TenantScoped`)
+- [ ] T019 [P] [XC] Mark all routes in `backend/src/routes/paypalRoutes.ts` (webhook `@Public`, refund `@TenantScoped`)
+- [ ] T020 [P] [XC] Mark all routes in `backend/src/routes/ipinfoRoutes.ts` (`@Public`)
 
-### Implementation for User Story 2
-
-- [ ] T014 [P] [US2] Add conditional rendering to sidebar navigation in `admin/src/components/Header.tsx` (lines ~303-319) — hide "Agencies" and "Countries" menu items when `user.type !== RecordType.Admin`
-- [ ] T015 [P] [US2] Add route guards in `admin/src/App.tsx` — for admin-only routes (/agencies, /create-agency, /update-agency/:id, /countries, /create-country, /update-country/:id), render `<Unauthorized />` component when user is not admin
-- [ ] T016 [P] [US2] Add agency-scoping to Users page in `admin/src/pages/Users.tsx` — apply the same pattern from Properties.tsx: if not admin, set agencies filter to `[user._id]` and hide user type filter
-- [ ] T017 [P] [US2] Hide mutation controls on Locations page in `admin/src/pages/Locations.tsx` — hide "New Location" button when user is not admin
-- [ ] T018 [P] [US2] Add route guards for location mutation routes in `admin/src/App.tsx` — render `<Unauthorized />` for /create-location and /update-location/:id when user is not admin
-- [ ] T019 [P] [US2] Hide edit/delete controls on individual location pages (e.g., in `admin/src/pages/UpdateLocation.tsx` or location detail views) when user is not admin
-
-**Checkpoint**: Agency users see a streamlined admin panel with only relevant navigation items. Admin-only URLs are blocked. All data views show agency-scoped data.
-
----
-
-## Phase 5: User Story 3 - Agency Profile Self-Management (Priority: P2)
-
-**Goal**: Agency users can edit their own profile (name, avatar, contact info) via the Settings page without contacting the platform admin.
-
-**Independent Test**: Log in as agency user, navigate to Settings, update agency name and avatar, verify changes persist and display correctly across the portal.
-
-### Implementation for User Story 3
-
-- [ ] T020 [US3] Add agency ownership validation to user `update()` in `backend/src/controllers/userController.ts` — for Agency users, verify `body._id === req.body._userId` before allowing profile update, return 403 for other users
-- [ ] T021 [US3] Extend Settings page in `admin/src/pages/Settings.tsx` to detect Agency user type and render agency profile fields (name, avatar, phone, location, bio) using the existing user update service
-
-**Checkpoint**: Agency users can self-manage their profile. Saving changes persists to the database and reflects across the portal.
+**Checkpoint**: Every route has an explicit marker. T010 marker-coverage test passes. Safe to enable strict mode.
 
 ---
 
-## Phase 6: User Story 4 - Agency-Scoped Dashboard and Notifications (Priority: P3)
+## Phase 3: User Story 1 — Agency Data Isolation (P1 MVP)
 
-**Goal**: Dashboard metrics and notifications reflect only the agency's own properties and bookings.
+**Goal**: Controllers consume `req.tenantFilter`. Cross-agency mutations return 403.
 
-**Independent Test**: Log in as agency user — dashboard shows stats for own properties only. Notifications show only agency-relevant items. Agency with zero properties sees empty states, not errors.
+- [ ] T021 [P] [US1] In `backend/src/controllers/propertyController.ts`, replace any client-supplied `body.agencies` filtering with `{ ...req.tenantFilter, ...otherFilters }` in `getProperties()` and `getBookingProperties()`
+- [ ] T022 [P] [US1] In `propertyController.create()`, force `property.agency = req.user._id` for non-admin users (silent rewrite, document with code comment)
+- [ ] T023 [P] [US1] In `propertyController.update()` and `deleteProperty()`, fetch existing doc and assert `existing.agency.equals(req.user._id)` for non-admin → 403 if mismatch
+- [ ] T024 [P] [US1] In `bookingController.ts`, scope `getBookings()` via `req.tenantFilter` and validate ownership in `update()`
+- [ ] T025 [P] [US1] In `userController.ts`, implement scoped user list: admin sees all; agency sees self + users with bookings on agency's properties (single aggregation query)
+- [ ] T026 [P] [US1] In `notificationController.ts`, ensure scoping uses `req.tenantFilter`/`req.user._id` (verify pre-existing per-user scoping is still correct)
+- [ ] T027 [P] [US1] In `agencyController.ts`, controller-level check: agency users may only read/update self (`body._id === req.user._id`)
+- [ ] T028 [P] [US1] In `stripeController.ts`, before any Stripe API call (refund, payment intent), assert booking's agency matches `req.user._id` for non-admin
+- [ ] T029 [P] [US1] In `paypalController.ts`, same ownership assertion before any PayPal API call
+- [ ] T030 [P] [US1] In `locationController.ts` and `countryController.ts`: remove any inline role checks (now handled by `@AdminOnly` markers); leave read endpoints untouched
+- [ ] T031 [US1] [TEST] Create `backend/__tests__/authorizationMatrix.test.ts` — table-driven: every route × every role → expected status (~50-80 cases)
+- [ ] T032 [US1] [TEST] Create `backend/__tests__/crossTenantAttack.test.ts` — adversarial: spoofed agencyId, refund hijack, notification leak, user list leak
+- [ ] T033 [US1] [TEST] Create `backend/__tests__/paymentWebhooks.test.ts` — webhook signature verification + ownership check + cold-start path
+- [ ] T034 [US1] Run `cd backend && npm run build && npm run test` — full suite green
 
-### Implementation for User Story 4
-
-- [ ] T022 [P] [US4] Scope dashboard data in the admin dashboard page — apply agency filter to all stat queries (booking count, revenue, occupancy) when user is not admin, using the same `helper.admin()` pattern
-- [ ] T023 [P] [US4] Verify notifications are already scoped by user in the notifications page — confirm existing behavior filters by `user._id` (per data-model.md, notifications are already per-user)
-- [ ] T024 [US4] Ensure empty states display correctly on Dashboard, Properties, Bookings, Scheduler, and Users pages when an agency has zero properties — no errors or other agencies' data shown
-
-**Checkpoint**: All user stories are independently functional. Agency users have a complete, scoped admin experience.
+**Checkpoint**: Backend enforces full agency isolation. All tests green in warn mode. Ready for staged strict rollout.
 
 ---
 
-## Phase 7: Polish & Cross-Cutting Concerns
+## Phase 4: Staged Rollout (Cross-cutting)
 
-**Purpose**: Final verification and cleanup across all stories
+- [ ] T035 [XC] Deploy backend with `DW_TENANT_ENFORCE=warn` to staging. Run smoke tests.
+- [ ] T036 [XC] Soak in `warn` for 24-48h. Review denial logs daily. Confirm zero unexpected denials for legitimate admin traffic.
+- [ ] T037 [XC] Add Grafana (or equivalent) dashboard panel: denial rate per route, per role, last 24h.
+- [ ] T038 [XC] Add alert: any single user causing >10 denials/min → page on-call.
+- [ ] T039 [XC] Document runbook: "Agency reports they can't see their property" → check denial counter for that user.
+- [ ] T040 [XC] Flip env to `DW_TENANT_ENFORCE=strict` in staging. Re-run smoke tests. Soak 24h.
+- [ ] T041 [XC] Promote to production with `DW_TENANT_ENFORCE=strict`.
 
-- [ ] T025 Run full backend test suite to verify no regressions: `cd backend && npm run test`
-- [ ] T026 Run admin build to verify no TypeScript errors: `cd admin && npm run build`
-- [ ] T027 Run root pre-commit checks: `npm run pre-commit`
-- [ ] T028 Manual end-to-end verification following `specs/001-host-admin-portal/quickstart.md` — test as both Admin and Agency users
+---
+
+## Phase 5: User Story 2 — Agency-Scoped Frontend (P2)
+
+- [ ] T042 [P] [US2] In `admin/src/components/Header.tsx`, hide "Agencies" and "Countries" menu items when `user.type !== UserType.Admin`. Render skeleton/null until UserContext loads to prevent flash-of-admin-content.
+- [ ] T043 [P] [US2] Create `admin/src/components/RoleGuard.tsx` (~10 lines): `<RoleGuard requires={[UserType.Admin]}>{children}</RoleGuard>` renders `<Unauthorized />` if user lacks role.
+- [ ] T044 [P] [US2] In `admin/src/App.tsx`, wrap admin-only routes with `<RoleGuard>`: /agencies, /create-agency, /update-agency/:id, /countries, /create-country, /update-country/:id, /create-location, /update-location/:id
+- [ ] T045 [P] [US2] In `admin/src/pages/Users.tsx`, apply Properties.tsx scoping pattern: agency users get scoped data, no user-type filter.
+- [ ] T046 [P] [US2] In `admin/src/pages/Locations.tsx`, hide "New Location" button and any edit/delete affordances when not admin.
+- [ ] T047 [P] [US2] Polish `<Unauthorized />` page: friendly copy ("You don't have access to this area"), link back to Dashboard.
+
+**Checkpoint**: Agency users see streamlined nav. Direct-URL admin pages show Unauthorized. No flash of admin items.
+
+---
+
+## Phase 6: User Story 3 — Agency Profile Self-Management (P2)
+
+- [ ] T048 [US3] In `admin/src/pages/Settings.tsx`, detect Agency user type and render agency profile fields (name, avatar, contact info) using existing `AgencyService.update()`.
+- [ ] T049 [US3] Decide email/phone change policy with product (default: lock email; phone needs SMS confirmation). Implement accordingly.
+- [ ] T050 [US3] Manual QA: agency edits name → save → header updates immediately.
+
+**Checkpoint**: Agency self-management works.
+
+---
+
+## Phase 7: User Story 4 — Agency-Scoped Dashboard & Notifications (P3)
+
+- [ ] T051 [P] [US4] Scope dashboard stat queries to agency's own properties (booking count, revenue, occupancy). Apply same `req.tenantFilter` pattern in dashboard endpoint.
+- [ ] T052 [P] [US4] Verify notifications scoping (T026) works end-to-end on the frontend Notifications page.
+- [ ] T053 [US4] Implement empty states for Dashboard, Properties, Bookings, Scheduler, Users when agency has zero properties — friendly copy + CTA, no errors.
+
+**Checkpoint**: Full host portal experience.
+
+---
+
+## Phase 8: Polish & Verification
+
+- [ ] T054 [XC] Run `cd backend && npm run test` — full suite green
+- [ ] T055 [XC] Run `cd admin && npm run build` — no TypeScript errors
+- [ ] T056 [XC] Run `npm run pre-commit` from repo root
+- [ ] T057 [XC] End-to-end manual verification per `quickstart.md` — both admin and agency personas
+- [ ] T058 [XC] Drop `warn` mode from rollout config 7 days after strict mode is stable in production
 
 ---
 
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
+- Phase 1 → Phase 2 → Phase 3 (sequential)
+- Phase 4 starts after Phase 3 (rollout requires backend complete)
+- Phase 5 can begin after Phase 1 (frontend doesn't need backend done — just the type contract)
+- Phase 6 depends on Phase 3 (controller ownership check) AND Phase 5 (Settings page)
+- Phase 7 depends on Phase 3 + Phase 5
+- Phase 8 depends on all
 
-- **Foundational (Phase 2)**: No dependencies — can start immediately
-- **User Story 1 (Phase 3)**: Depends on Phase 2 (middleware must attach user context first)
-- **User Story 2 (Phase 4)**: Depends on Phase 2. Can run in parallel with US1 (frontend-only changes)
-- **User Story 3 (Phase 5)**: Depends on Phase 3 (backend ownership validation in T020)
-- **User Story 4 (Phase 6)**: Depends on Phase 2. Can run in parallel with US1/US2
-- **Polish (Phase 7)**: Depends on all previous phases
+### Parallelization Lanes
+- **Lane A (backend core, sequential)**: Phase 1 → Phase 2 → Phase 3 → Phase 4
+- **Lane B (frontend, after Phase 1)**: Phase 5 → Phase 6 (T048+) → Phase 7 (T053)
+- **Lane C (observability)**: T037-T039 in parallel with Phase 3-4
 
-### User Story Dependencies
-
-- **User Story 1 (P1)**: Backend only. Can start after Phase 2.
-- **User Story 2 (P2)**: Frontend only. Can start after Phase 2. Independent of US1.
-- **User Story 3 (P2)**: Mixed. Backend (T020) depends on US1 pattern. Frontend (T021) is independent.
-- **User Story 4 (P3)**: Frontend only. Can start after Phase 2. Independent of US1/US2.
-
-### Within Each User Story
-
-- Tasks marked [P] can run in parallel (different files)
-- T013 (test verification) must run after all US1 controller changes
-- T020 must complete before T021 (backend before frontend for US3)
-
-### Parallel Opportunities
-
-- **Phase 3**: T003-T012 can ALL run in parallel (each modifies a different controller function)
-- **Phase 4**: T014-T019 can ALL run in parallel (each modifies a different frontend file/section)
-- **Phase 3 + Phase 4**: Can run in parallel (backend + frontend are independent)
-- **Phase 6**: T022-T023 can run in parallel
-
----
-
-## Implementation Strategy
-
-### MVP First (User Story 1 Only)
-
-1. Complete Phase 2: Foundational (T001-T002)
-2. Complete Phase 3: User Story 1 (T003-T013)
-3. **STOP and VALIDATE**: Test backend security enforcement independently
-4. Security gap is closed — deploy if critical
-
-### Incremental Delivery
-
-1. Phase 2 → Foundation ready
-2. Phase 3 (US1) → Backend security enforced (MVP!)
-3. Phase 4 (US2) → Frontend scoped (complete agency portal UX)
-4. Phase 5 (US3) → Agency self-management (empowers hosts)
-5. Phase 6 (US4) → Dashboard polish (complete experience)
-6. Phase 7 → Final verification
-
-### Parallel Strategy
-
-With backend + frontend developers working simultaneously:
-
-1. Both complete Phase 2 together (1 file)
-2. Developer A: Phase 3 (backend controllers)
-3. Developer B: Phase 4 (frontend scoping) — in parallel
-4. Merge and proceed to Phase 5-7
+### MVP Cut
+Phase 1 + Phase 2 + Phase 3 + Phase 4 → security gap closed. Deploy.
+Then Phase 5 → Phase 6 → Phase 7 → Phase 8 over subsequent days.
 
 ---
 
 ## Notes
 
-- [P] tasks = different files, no dependencies
-- [Story] label maps task to specific user story for traceability
-- Each user story is independently completable and testable
-- No new dependencies, no schema changes, no new files created
-- All changes modify existing files in backend/src/ and admin/src/
-- Commit after each task or logical group
-- Stop at any checkpoint to validate story independently
+- Every backend code path has an explicit test task. No "tests omitted" exception.
+- Frontend has no Jest setup; manual QA via quickstart.md is the fallback. Flagged as known coverage gap.
+- All identity injection uses `req.user`. Any `req.body._userId` pattern in existing code must be removed in T002.
+- Default-deny middleware ships in `warn` mode first to surface missed routes before they break production.

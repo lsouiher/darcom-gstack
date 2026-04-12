@@ -51,3 +51,4 @@ mobile/ios/
 
 # gstack (installed globally, not vendored)
 .claude/skills/
+.claude/skills/gstack/

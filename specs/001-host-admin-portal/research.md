@@ -1,57 +1,97 @@
 # Research: Host Admin Portal
 
-**Date**: 2026-04-11
+**Date**: 2026-04-11 (revised after CEO + Eng review)
 **Feature**: 001-host-admin-portal
+**Supersedes**: original 2026-04-11 version (per-controller guard approach)
 
 ## R1: How to attach user identity to Express requests
 
-**Decision**: Extend `authJwt.verifyToken` middleware to set `req.body._userId` and `req.body._userType` after successful token verification, using the user document already queried from MongoDB during verification.
+**Decision**: Inject identity into `req.user` (typed via Express type augmentation), not `req.body`. `authJwt.verifyToken` re-fetches the user document from MongoDB on every authenticated request and assigns the result to `req.user`.
 
-**Rationale**: The middleware already queries the User model to validate the token (it does `User.findOne()` with role-based matching). The user document is available but discarded. By attaching it to `req.body`, downstream controllers gain user context with zero additional DB queries. Using `req.body` prefixed with underscore keeps it consistent with Express conventions in this codebase (which already passes data via body).
+**Implementation**:
+```ts
+// backend/src/types/express.d.ts (NEW, ~8 lines)
+import { ObjectId } from 'mongoose'
+import { UserType } from ':darywin-types'
 
-**Alternatives considered**:
-- `req.user` property: Would require TypeScript type augmentation of Express.Request. More conventional, but this codebase doesn't use Express type augmentation anywhere. Adding it would be a new pattern.
-- Custom header injection: Non-standard, fragile.
-- Re-decrypt JWT in each controller: Duplicates work, violates DRY.
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { _id: ObjectId; type: UserType }
+      tenantFilter?: { agency?: ObjectId }  // set by tenantScope middleware
+    }
+  }
+}
+```
 
-**Note**: After further review, `req.body` mutation is the simplest path since controllers already read from `req.body`. The underscore prefix (`_userId`, `_userType`) avoids collision with client-supplied fields.
+**Rationale**: `req.user` is the industry-standard injection point in Express + TypeScript. The original choice of mutating `req.body._userId` was rejected during eng review for three reasons: (1) body-validation libraries can strip unknown fields, silently dropping identity and leaving controllers to fall back to client-supplied `agency` → leak; (2) request bodies are commonly logged for debugging, leaking identity into log streams; (3) GET requests have no body, so the pattern doesn't apply uniformly. The type augmentation is a one-time 8-line addition.
 
-## R2: Agency scoping pattern for controllers
-
-**Decision**: Add a guard at the top of each agency-sensitive controller function. For Agency-type users, override the `agencies` filter with `[req.body._userId]` (since the agency user's `_id` IS the agency ID in the data model). For admin users, pass through unchanged.
-
-**Rationale**: The existing pattern in `propertyController.getProperties()` already accepts `body.agencies` as an array of ObjectIds for filtering. The fix is surgical: for Agency users, ignore the client-supplied value and force it to `[authenticatedUserId]`. This requires no API signature changes — admin callers continue to work identically.
-
-**Alternatives considered**:
-- Middleware-level query rewriting: Would require a new middleware layer that understands each controller's query structure. Over-engineered for this use case.
-- Separate agency-specific endpoints: Violates Simplicity First. Same logic, different URL — unnecessary duplication.
-
-## R3: Admin-only route protection pattern (frontend)
-
-**Decision**: Create a simple inline check in `App.tsx` routes. For admin-only routes, wrap the component with a conditional that checks `user.type === RecordType.Admin` and renders `<Unauthorized />` otherwise.
-
-**Rationale**: The admin app already has an `<Unauthorized />` component. The existing `helper.admin(user)` function provides the role check. No new components or HOCs needed.
+**Per-request DB re-fetch**: spec edge case ("role change while logged in, next request must reflect") requires authoritative role data on every request. JWT claims are not authoritative because they're frozen at issue time. The cost is one indexed `User.findById()` per request (~1-3ms). Not cached — caching would defeat the freshness invariant.
 
 **Alternatives considered**:
-- React Router `<ProtectedRoute>` wrapper component: Adds an abstraction for ~5 routes. Simpler to inline.
-- Redirect to home: Less informative than showing Unauthorized.
+- `req.body._userId` mutation: original choice, rejected (see above)
+- Custom header injection: non-standard, fragile
+- Re-decrypt JWT in each controller: duplicates work, no DB freshness check
+
+## R2: Authorization architecture — defense-in-depth middleware
+
+**Decision**: A new `tenantScope.ts` middleware runs after `authJwt`. It reads per-route metadata markers (`@AdminOnly`, `@TenantScoped`, `@Public`) and either: rejects with 403, attaches `req.tenantFilter = { agency: req.user._id }` for downstream controllers to consume, or passes through. **Routes without any marker default-deny** in `strict` mode.
+
+**Rationale**: The original choice of inline per-controller guards was rejected during CEO review. Per-controller scoping is a "remember to check" convention, not a structural invariant. A new endpoint added six months from now can silently leak data because no compiler/runtime force enforces scoping. The middleware approach makes leakage a test failure (marker coverage test) rather than a code review oversight.
+
+**Cost**: One new file (`tenantScope.ts`, ~150 lines), one wrapper around `router.get/post/etc` to attach markers, one assertion test that every route file has 100% marker coverage. CC implementation time: ~30-45 min beyond Approach A.
+
+**Marker semantics**:
+- `@AdminOnly` — only `req.user.type === UserType.Admin` passes; everyone else 403
+- `@TenantScoped` — populates `req.tenantFilter`; admin gets `{}` (sees all), agency gets `{ agency: req.user._id }`
+- `@Public` — passes through with no role check (used for webhooks, login, public assets)
+- (no marker) — default-deny in `strict` mode; warn-and-pass in `warn` mode
+
+**Invariant**: if `req.tenantFilter` resolves to `{}` for a non-admin user, throw + emit a CRITICAL log. This must never happen in steady state.
+
+**Alternatives considered**:
+- Per-controller inline guards (Approach A, original choice): rejected — no structural guarantee
+- Mongoose schema-level row security plugin (Approach C): rejected as over-engineered; affects admin queries unexpectedly, hard to debug, requires escape hatches that reintroduce the original problem
+
+## R3: Admin-only route protection (frontend)
+
+**Decision**: Inline check in `App.tsx` for admin-only routes — wrap component with conditional rendering of `<Unauthorized />`. Optional improvement: a `<RoleGuard requires={[UserType.Admin]} />` wrapper component once, reused everywhere — eliminates per-route boilerplate and prevents future routes from forgetting the guard.
+
+**Rationale**: Frontend guard is defense-in-depth (backend is authoritative). The wrapper component is ~10 lines and prevents the same drift problem as the backend (new routes, forgotten guards).
 
 ## R4: Agency profile self-management in Settings
 
-**Decision**: Extend the existing Settings page to detect if the user is an Agency type. If so, render additional fields for agency profile (name, avatar, contact info) using the existing agency update service.
+**Decision**: Extend `Settings.tsx` to detect Agency user type and render agency profile fields (name, avatar, contact info) using existing `AgencyService.update()`. Backend enforces ownership via `tenantScope` middleware: the agency self-update route is `@TenantScoped`, and the controller verifies `body._id === req.user._id`.
 
-**Rationale**: The admin app already has `AgencyService.update()` and the agency update endpoint. Settings.tsx already handles user profile updates. Adding agency fields is an extension of the same page, not a new page.
+**Rationale**: Settings is the natural home. Existing service + endpoint reused. No new pages.
 
-**Alternatives considered**:
-- Separate "Agency Profile" page: Adds navigation complexity for a single-use page. Settings is the natural home.
-- Reuse the existing Agency update page (`/update-agency/:id`): This page allows editing ANY agency. For self-management, the simpler path is to embed it in Settings with the user's own agency ID.
+**Email/phone change policy** (decision needed at implementation time): If email or phone is editable here, requires re-verification flow. If the platform admin must mediate sensitive contact changes, lock those fields. **Default recommendation: lock email; allow phone with confirmation SMS.** Confirm with product before implementation.
 
 ## R5: Location/Country mutation protection
 
-**Decision**: Add a `UserType` check at the top of `create`, `update`, and `delete` functions in `locationController.ts` and `countryController.ts`. If `req.body._userType !== UserType.Admin`, return 403.
+**Decision**: Mark `create`, `update`, `deleteLocation` and equivalents in `countryController.ts` as `@AdminOnly` at the route level. No per-controller role check needed — middleware handles it.
 
-**Rationale**: Simplest possible guard. No new middleware, no new patterns. Two lines of code per function.
+**Rationale**: Single source of truth (the marker on the route). Per-controller checks were rejected because they duplicate the middleware's logic and create a second place to forget.
 
-**Alternatives considered**:
-- Route-level middleware: Would require modifying route files and creating a new `adminOnly` middleware. More moving parts for the same result.
-- Separate admin-only router: Over-engineered for 6 functions.
+## R6: Money-handling endpoints (Stripe, PayPal)
+
+**Decision**: Stripe and PayPal webhook routes marked `@Public` (signature verification is the auth boundary, not session). Customer-facing payment endpoints (refund, payment intent creation) marked `@TenantScoped` and the controller verifies the booking's `agency` matches `req.user._id` before any Stripe/PayPal API call. **No money operation may proceed without ownership confirmation.**
+
+**Rationale**: Webhooks have no `req.user` (Stripe is the caller). Marking them `@Public` and validating the signed payload identity is the standard pattern. Refund/payment endpoints are the highest-blast-radius leakage path in the system — explicit ownership check before any external API call.
+
+## R7: Observability for tenant access
+
+**Decision**: A new `backend/src/observability/tenantAccessLog.ts` module emits a structured log line on every authorization decision: `{ userId, userType, route, decision: allow|deny, scope, requestId }`. Counter metrics `tenant_access_denied_total{role, route, reason}` and `tenant_filter_empty_blocked_total`. Alert on >10 denials/min from a single user.
+
+**Rationale**: Security boundary without observability is blind. Detects probes, configuration bugs, and missed-route 403 storms.
+
+## R8: Rollout strategy
+
+**Decision**: Ship middleware behind `DW_TENANT_ENFORCE` env var with three modes:
+- `off` — middleware disabled (rollback escape hatch)
+- `warn` — log all decisions, never block (initial deploy)
+- `strict` — enforce default-deny (final state)
+
+Soak in `warn` for 24-48h, label every existing route from the warn logs, then flip to `strict`. Marker-coverage assertion test only fails the build in `strict` mode.
+
+**Rationale**: Default-deny will 403 everything until every route is marked. Big-bang flip risks breaking working endpoints. Two-phase rollout converts unknown unknowns into known unknowns.

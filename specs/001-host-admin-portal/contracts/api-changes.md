@@ -1,100 +1,112 @@
 # API Authorization Changes: Host Admin Portal
 
-**Date**: 2026-04-11
+**Date**: 2026-04-11 (revised after CEO + Eng review)
 **Feature**: 001-host-admin-portal
+**Supersedes**: original 2026-04-11 version
 
 ## Overview
 
-No new endpoints are created. No API signatures change. The only change is adding server-side authorization enforcement to existing endpoints. Admin users experience zero behavioral changes.
+No new endpoints. No API signatures change. Two new structural pieces:
+1. `authJwt.verifyToken` injects `req.user` (NOT `req.body._userId`) and re-fetches the user document on every request.
+2. New `tenantScope` middleware enforces default-deny authorization based on per-route markers.
 
-## Middleware Change: authJwt.verifyToken
+Admin users experience zero behavioral changes.
 
-**Current behavior**: Verifies JWT token, checks user exists and has correct type. Discards user info.
+## Middleware Changes
 
-**New behavior**: After successful verification, attaches `_userId` (ObjectId) and `_userType` (UserType enum) to `req.body` for downstream controllers.
+### authJwt.verifyToken (modified)
 
-## Property Endpoints
+**Current**: Verifies JWT, queries user once, discards user document.
 
-### POST /api/properties (getProperties)
+**New**: After successful verification, attaches the freshly-loaded user document to `req.user` (typed via `backend/src/types/express.d.ts`). User is re-fetched on every authenticated request to enforce role freshness (closes spec edge case "role change while logged in").
 
-**Current**: Accepts `body.agencies` array, returns all matching properties.
-**New for Agency users**: Ignores `body.agencies`, forces filter to `[authenticatedUser._id]`.
-**Admin behavior**: Unchanged.
+**Rejected pattern**: mutating `req.body._userId` (original choice). Body-validators can strip the field, body-logging leaks identity, GET requests have no body.
 
-### POST /api/create-property (create)
+### tenantScope (NEW)
 
-**Current**: Accepts `body.agency`, creates property for that agency.
-**New for Agency users**: Ignores `body.agency`, forces `property.agency = authenticatedUser._id`.
-**Admin behavior**: Unchanged.
+Runs immediately after `authJwt`. Reads per-route metadata markers:
 
-### PUT /api/update-property/:id (update)
+| Marker | Behavior |
+|--------|----------|
+| `@AdminOnly` | Only `req.user.type === Admin` passes. Else 403. |
+| `@TenantScoped` | Sets `req.tenantFilter`. Admin → `{}` (sees all). Agency → `{ agency: req.user._id }`. |
+| `@Public` | Pass through. Used for webhooks, public assets, login. |
+| (no marker) | `strict`: 403 default-deny. `warn`: pass + log. |
 
-**Current**: Updates any property by ID.
-**New for Agency users**: Validates `property.agency === authenticatedUser._id` before allowing update. Returns 403 if mismatch.
-**Admin behavior**: Unchanged.
+**Invariant**: `req.tenantFilter === {}` for non-admin → throw + CRITICAL log. Must never happen.
 
-### DELETE /api/delete-property/:id (deleteProperty)
+**Env flag**: `DW_TENANT_ENFORCE=off|warn|strict`.
 
-**Current**: Deletes any property by ID.
-**New for Agency users**: Validates `property.agency === authenticatedUser._id` before allowing delete. Returns 403 if mismatch.
-**Admin behavior**: Unchanged.
+## Route Authorization Matrix
 
-## Booking Endpoints
+| Route | Method | Marker | Notes |
+|-------|--------|--------|-------|
+| **Property** | | | |
+| /api/properties | POST | @TenantScoped | Agency sees own; admin sees all (controller uses `req.tenantFilter`) |
+| /api/create-property | POST | @TenantScoped | Force `property.agency = req.user._id` for agency users |
+| /api/update-property/:id | PUT | @TenantScoped | Controller verifies `property.agency === req.user._id` |
+| /api/delete-property/:id | DELETE | @TenantScoped | Same as update |
+| **Booking** | | | |
+| /api/bookings | POST | @TenantScoped | Agency sees only own |
+| /api/update-booking/:id | PUT | @TenantScoped | Verify booking's property belongs to agency |
+| **User** | | | |
+| /api/users | POST | @TenantScoped | Agency: own + renters of own properties. Admin: all. |
+| /api/update-user | PUT | @TenantScoped | Agency may only update self (`body._id === req.user._id`) |
+| **Location** | | | |
+| /api/locations (list/get) | GET/POST | @TenantScoped | Agency may read; admin manages |
+| /api/create-location | POST | @AdminOnly | |
+| /api/update-location/:id | PUT | @AdminOnly | |
+| /api/delete-location/:id | DELETE | @AdminOnly | |
+| **Country** | | | |
+| /api/countries (list/get) | GET/POST | @TenantScoped | Agency may read |
+| /api/create-country | POST | @AdminOnly | |
+| /api/update-country/:id | PUT | @AdminOnly | |
+| /api/delete-country/:id | DELETE | @AdminOnly | |
+| **Agency** | | | |
+| /api/agencies (list) | POST | @AdminOnly | Agency users cannot list other agencies |
+| /api/get-agency/:id | GET | @TenantScoped | Agency may read self only (controller checks) |
+| /api/update-agency/:id | PUT | @TenantScoped | Agency may update self only |
+| /api/create-agency | POST | @AdminOnly | |
+| /api/delete-agency/:id | DELETE | @AdminOnly | |
+| **Notification** | | | |
+| /api/notifications | POST | @TenantScoped | Agency: own notifications only (already scoped per data-model) |
+| **Stripe** | | | |
+| /api/stripe/webhook | POST | @Public | Signature verified; no req.user |
+| /api/stripe/refund | POST | @TenantScoped | Controller verifies booking ownership before Stripe call |
+| /api/stripe/create-payment-intent | POST | @TenantScoped | Same |
+| **PayPal** | | | |
+| /api/paypal/webhook | POST | @Public | Signature verified |
+| /api/paypal/refund | POST | @TenantScoped | Verify booking ownership |
+| **IPInfo / Auth / Public** | | | |
+| /api/signin, /api/signup | POST | @Public | |
+| /api/ipinfo | GET | @Public | |
 
-### POST /api/bookings (getBookings)
+## Endpoint Detail (Behavior Changes)
 
-**Current**: Accepts `body.agencies` array, returns all matching bookings.
-**New for Agency users**: Ignores `body.agencies`, forces filter to `[authenticatedUser._id]`.
-**Admin behavior**: Unchanged.
+### Property — POST /api/properties (getProperties)
+- **Currently**: accepts `body.agencies` array
+- **New**: middleware sets `req.tenantFilter`. Controller does `Property.find({ ...req.tenantFilter, ...otherFilters })`. Client-supplied `body.agencies` is ignored for non-admin users.
 
-### PUT /api/update-booking/:id (update)
+### Property — POST /api/create-property
+- **New**: For agency users, `property.agency` is forced to `req.user._id` regardless of body content. **Decision**: silent rewrite (recommended) or 400 reject. Controller comment must document the chosen behavior.
 
-**Current**: Updates any booking by ID.
-**New for Agency users**: Validates booking's property belongs to authenticated agency before allowing update. Returns 403 if mismatch.
-**Admin behavior**: Unchanged.
+### Property — PUT /api/update-property/:id
+- **New**: Controller fetches existing property, asserts `existing.agency.equals(req.user._id)` for agency users. Mismatch → 403.
 
-## User Endpoints
+### Stripe/PayPal webhooks
+- **Currently**: may or may not be authenticated. Confirm.
+- **New**: explicitly `@Public`. Signature verification is the auth boundary. Handler must verify the signed payload's resource (booking, customer) matches the affected database record.
 
-### POST /api/users (getUsers / user list)
+### Stripe/PayPal refund
+- **New**: Before any Stripe/PayPal API call, controller verifies the booking belongs to `req.user._id` for agency users. Money operations have zero margin for cross-tenant access.
 
-**Current**: Returns users filtered by type.
-**New for Agency users**: Additionally filters to show only (a) the agency's own account and (b) users who have bookings on the agency's properties.
-**Admin behavior**: Unchanged.
+## Observability Endpoints (NEW, internal)
 
-## Location Endpoints
+The `tenantScope` middleware emits structured logs and metrics consumed by the existing observability stack. No new HTTP endpoints. See `backend/src/observability/tenantAccessLog.ts`.
 
-### POST /api/create-location (create)
-### PUT /api/update-location/:id (update)
-### DELETE /api/delete-location/:id (deleteLocation)
+## Backwards Compatibility
 
-**Current**: No role checks.
-**New**: Returns 403 if `_userType !== UserType.Admin`.
-**Read/list endpoints**: Unchanged (accessible to all authenticated users).
-
-## Country Endpoints
-
-### POST /api/create-country (create)
-### PUT /api/update-country/:id (update)
-### DELETE /api/delete-country/:id (deleteCountry)
-
-**Current**: No role checks.
-**New**: Returns 403 if `_userType !== UserType.Admin`.
-**Read/list endpoints**: Unchanged (accessible to all authenticated users).
-
-## Agency Endpoints
-
-### PUT /api/update-user (update — self-management)
-
-**Current**: Updates any user by ID.
-**New for Agency users**: Can only update their own profile (`body._id === authenticatedUser._id`). Returns 403 for other users.
-**Admin behavior**: Unchanged.
-
-## Error Response Format
-
-All new 403 responses use the existing pattern:
-
-```
-HTTP 403 Forbidden
-```
-
-No response body changes. Consistent with existing error handling in the codebase.
+- Existing admin client requests work identically (`@AdminOnly` and `@TenantScoped` both pass admin through unchanged).
+- Existing agency users gain restrictions where they previously had unintended access.
+- Frontend admin app: existing routes continue to work. New `<Unauthorized />` rendering for admin-only routes is additive.
+- Mobile app: unaffected.
