@@ -124,7 +124,7 @@ export const tenantScope = (req: Request, res: Response, next: NextFunction): vo
         reason: 'empty_scope_for_non_admin',
       })
       res.status(500).send({ message: 'Internal authorization error' })
-      throw new Error(`tenantScope invariant: empty filter for non-admin user ${userId} on route ${route}`)
+      return
     }
     accessLog.emit({ userId, userType, route, method: req.method, marker, decision: 'scope-injected', scope: filter })
     next()

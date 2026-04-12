@@ -430,7 +430,7 @@ export const update = async (req: Request, res: Response) => {
     const booking = await Booking.findById(body._id)
 
     // Agency isolation: non-admin users may only modify bookings for their own properties.
-    if (booking && req.user && req.user.type === darywinTypes.UserType.Agency
+    if (booking && req.user && req.user.type !== darywinTypes.UserType.Admin
       && !booking.agency.equals(req.user._id)) {
       res.status(403).send({ message: 'Forbidden' })
       return

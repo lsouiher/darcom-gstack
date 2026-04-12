@@ -31,11 +31,9 @@ describe('marker coverage', () => {
       }
     }
     if (offenders.length > 0) {
-      // Phase 2 migrates existing routes. Until then, this test lists expected offenders.
       // eslint-disable-next-line no-console
-      console.warn(`marker coverage pending (Phase 2):\n  ${offenders.join('\n  ')}`)
+      console.error(`Unmarked routes found:\n  ${offenders.join('\n  ')}`)
     }
-    // During Phase 1, we only assert the check runs. Phase 2 flips this to expect 0 offenders.
-    expect(Array.isArray(offenders)).toBe(true)
+    expect(offenders).toHaveLength(0)
   })
 })
