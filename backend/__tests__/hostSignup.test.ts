@@ -7,7 +7,7 @@ jest.setTimeout(60_000)
 
 const ALLOWED_PHONE = '+213555000001'
 const ALLOWED_PHONE_2 = '+213555000002'
-const BLOCKED_PHONE = '+11234567890'
+const BLOCKED_PHONE = '+14155552671'
 
 const sendCodeMock = jest.fn<(phone: string) => Promise<{ channel: darywinTypes.OtpChannel }>>()
 const verifyCodeMock = jest.fn<(phone: string, code: string) => Promise<boolean>>()
@@ -188,7 +188,6 @@ describe('GET /api/host/onboarding', () => {
     const r1 = await request(app)
       .get('/api/host/onboarding')
       .set('x-access-token', token)
-      .set('origin', env.ADMIN_HOST)
     expect(r1.status).toBe(200)
     const byKey = (k: string) => r1.body.items.find((i: { key: string }) => i.key === k)
     expect(byKey('phone').done).toBe(true)
@@ -217,7 +216,6 @@ describe('GET /api/host/onboarding', () => {
     const r2 = await request(app)
       .get('/api/host/onboarding')
       .set('x-access-token', token)
-      .set('origin', env.ADMIN_HOST)
     expect(r2.body.items.find((i: { key: string }) => i.key === 'property').done).toBe(true)
   })
 })
@@ -242,7 +240,6 @@ describe('Admin payout gate (US3)', () => {
     const r403 = await request(app)
       .patch(`/api/admin/agencies/${host._id}/approve-first-payout`)
       .set('x-access-token', hostToken)
-      .set('origin', env.ADMIN_HOST)
     expect([401, 403]).toContain(r403.status)
 
     // admin caller approves
@@ -257,7 +254,6 @@ describe('Admin payout gate (US3)', () => {
     const r1 = await request(app)
       .patch(`/api/admin/agencies/${host._id}/approve-first-payout`)
       .set('x-access-token', adminToken)
-      .set('origin', env.ADMIN_HOST)
     expect(r1.status).toBe(200)
     expect(r1.body.firstPayoutApproved).toBe(true)
 
@@ -265,7 +261,6 @@ describe('Admin payout gate (US3)', () => {
     const r2 = await request(app)
       .patch(`/api/admin/agencies/${host._id}/approve-first-payout`)
       .set('x-access-token', adminToken)
-      .set('origin', env.ADMIN_HOST)
     expect(r2.status).toBe(200)
     expect(r2.body.firstPayoutApproved).toBe(true)
 
@@ -273,7 +268,6 @@ describe('Admin payout gate (US3)', () => {
     const list = await request(app)
       .get('/api/admin/agencies/pending-review')
       .set('x-access-token', adminToken)
-      .set('origin', env.ADMIN_HOST)
     expect(list.status).toBe(200)
     expect((list.body as { _id: string }[]).find((a) => a._id === String(host._id))).toBeUndefined()
 
@@ -337,7 +331,6 @@ describe('Regression: admin-provisioned CreateAgency (T118)', () => {
     const r = await request(app)
       .post('/api/create-user')
       .set('x-access-token', adminToken)
-      .set('origin', env.ADMIN_HOST)
       .send({
         fullName: 'Admin Provisioned Agency',
         email: agencyEmail,
