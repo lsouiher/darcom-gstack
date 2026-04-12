@@ -149,6 +149,62 @@ describe('POST /api/signup/host/verify-phone — OTP attempts', () => {
   })
 })
 
+describe('GET /api/host/onboarding', () => {
+  it('returns checklist with phone ✓ and others ☐ for a fresh host, flips property ✓ when a property exists', async () => {
+    const Property = (await import('../src/models/Property')).default
+    const authHelper = await import('../src/utils/authHelper')
+
+    const hostEmail = `hostsignup-test-checklist-${Date.now()}@test.darywin.com`
+    const host = await User.create({
+      fullName: 'Checklist Host',
+      email: hostEmail,
+      password: await (await import('bcrypt')).default.hash('Sup3rSecret!', 10),
+      phone: '+213555111111',
+      type: darywinTypes.UserType.Agency,
+      active: true,
+      verified: false,
+      phoneVerified: true,
+      firstPayoutApproved: false,
+    })
+    const token = await authHelper.encryptJWT({ id: host._id.toString() })
+
+    const r1 = await request(app)
+      .get('/api/host/onboarding')
+      .set('x-access-token', token)
+      .set('origin', env.ADMIN_HOST)
+    expect(r1.status).toBe(200)
+    const byKey = (k: string) => r1.body.items.find((i: { key: string }) => i.key === k)
+    expect(byKey('phone').done).toBe(true)
+    expect(byKey('email').done).toBe(false)
+    expect(byKey('property').done).toBe(false)
+    expect(byKey('payout').done).toBe(false)
+    expect(byKey('booking').done).toBe(false)
+
+    const someLocation = await (await import('../src/models/Location')).default.findOne().lean()
+    await Property.create({
+      name: 'Checklist Prop',
+      agency: host._id,
+      type: darywinTypes.PropertyType.Apartment,
+      description: 'x',
+      image: 'x',
+      bedrooms: 1,
+      bathrooms: 1,
+      petsAllowed: false,
+      furnished: false,
+      minimumAge: 21,
+      location: someLocation!._id,
+      price: 100,
+      rentalTerm: darywinTypes.RentalTerm.Monthly,
+    })
+
+    const r2 = await request(app)
+      .get('/api/host/onboarding')
+      .set('x-access-token', token)
+      .set('origin', env.ADMIN_HOST)
+    expect(r2.body.items.find((i: { key: string }) => i.key === 'property').done).toBe(true)
+  })
+})
+
 describe('SIGNUP_PUBLIC_ENABLED kill-switch', () => {
   it('returns 503 when disabled', async () => {
     ;(env as { SIGNUP_PUBLIC_ENABLED: boolean }).SIGNUP_PUBLIC_ENABLED = false

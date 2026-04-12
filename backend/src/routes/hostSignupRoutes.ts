@@ -1,7 +1,8 @@
 import express from 'express'
 import routeNames from '../config/hostSignupRoutes.config'
 import * as controller from '../controllers/hostSignupController'
-import { publicRoute } from './_markers'
+import { publicRoute, tenantScoped, adminOnly } from './_markers'
+import * as hostAdmin from '../controllers/hostAdminController'
 import { signupEnabledGuard } from '../middlewares/signupEnabledGuard'
 import { loadSignupSession } from '../middlewares/loadSignupSession'
 import { signupStartLimiter, signupPhoneLimiter, signupVerifyLimiter } from '../middlewares/rateLimit'
@@ -22,6 +23,9 @@ routes.route(routeNames.complete).post(
 )
 routes.route(routeNames.current).get(
   ...publicRoute(signupEnabledGuard, loadSignupSession, controller.currentSession),
+)
+routes.route(routeNames.onboarding).get(
+  ...tenantScoped(controller.getOnboardingChecklist),
 )
 
 export default routes

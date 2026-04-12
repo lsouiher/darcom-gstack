@@ -5,6 +5,7 @@ import * as darywinTypes from ':darywin-types'
 import * as env from '../config/env.config'
 import User from '../models/User'
 import Property from '../models/Property'
+import Booking from '../models/Booking'
 import HostSignupSession from '../models/HostSignupSession'
 import * as smsProvider from '../services/smsProvider'
 import { SmsProviderError } from '../services/smsProvider'
@@ -256,3 +257,29 @@ export const currentSession = async (req: Request, res: Response) => {
 
 // Expose for testing cookie parsing independently.
 export const __test__ = { verifySessionCookie }
+
+export const getOnboardingChecklist = async (req: Request, res: Response) => {
+  const userId = req.user?._id
+  if (!userId) {
+    return res.status(401).json({ code: 'UNAUTHORIZED' })
+  }
+  const user = await User.findById(userId).lean()
+  if (!user) {
+    return res.status(404).json({ code: 'NOT_FOUND' })
+  }
+  const [propertyCount, hasPaidBooking] = await Promise.all([
+    Property.countDocuments({ agency: userId }),
+    Booking.exists({ agency: userId, status: darywinTypes.BookingStatus.Paid }),
+  ])
+  const items: darywinTypes.OnboardingChecklistItem[] = [
+    { key: 'phone', done: !!user.phoneVerified },
+    { key: 'email', done: !!user.verified },
+    { key: 'property', done: propertyCount > 0, cta: '/create-property' },
+    { key: 'payout', done: !!user.payoutAccountId, cta: '/settings' },
+    { key: 'booking', done: !!hasPaidBooking },
+  ]
+  return res.status(200).json({
+    items,
+    step: user.onboardingStep || darywinTypes.OnboardingStep.Done,
+  })
+}

@@ -77,19 +77,19 @@ Tests are included per Constitution §IX (backend Jest + Supertest, real MongoDB
 
 ### Backend
 
-- [ ] T032 [US2] Implement `getOnboardingChecklist` in `backend/src/controllers/userController.ts` — compute checklist from `user.phoneVerified`, `user.emailVerified`, `Property.countDocuments({agencyId})`, `user.payoutAccountId`, `Booking.exists({agencyId, paid})`
-- [ ] T033 [US2] Register `GET /api/host/onboarding` in `backend/src/config/userRoutes.config.ts` and `backend/src/routes/userRoutes.ts` behind `authJwt.verifyToken` + Agency role check
-- [ ] T034 [US2] On property creation and payout-account save, advance `user.onboardingStep` forward (never backward) in the existing controller paths (`propertyController.createProperty`, payout save handler)
+- [X] T032 [US2] `getOnboardingChecklist` added to `hostSignupController.ts`
+- [X] T033 [US2] `GET /api/host/onboarding` registered via `tenantScoped` marker (Agency scope flows via `req.user`)
+- [X] T034 [US2] Property `create` advances `onboardingStep` → `Payout` on first property (atomic `$in` guard prevents backward move); payout-save hook DEFERRED (no dedicated endpoint today; noted in NOTES)
 
 ### Admin UI
 
-- [ ] T035 [P] [US2] Create `admin/src/services/onboarding.ts` with `getOnboardingChecklist()` via `axiosInstance`
-- [ ] T036 [US2] Create `admin/src/pages/HostOnboardingChecklist.tsx` component rendering the five checklist items with per-item CTA links
-- [ ] T037 [US2] Integrate checklist into `admin/src/pages/Dashboard.tsx` — render only for `UserType.Agency` users; hide for platform admins
+- [X] T035 [P] [US2] `admin/src/services/OnboardingService.ts`
+- [X] T036 [US2] `admin/src/components/HostOnboardingChecklist.tsx` — loading/error/retry states, inline CTAs, hides when step=Done
+- [X] T037 [US2] Integrated at top of `admin/src/pages/Bookings.tsx` (index page) with `user.type === Agency` guard — platform admins don't see it
 
 ### Tests
 
-- [ ] T038 [US2] Add checklist test in `backend/__tests__/hostSignup.test.ts`: fresh signup returns phone ✓, others ☐; after property added, property item ✓
+- [X] T038 [US2] Checklist test: phone✓/email☐/property☐/payout☐/booking☐ on fresh host → property✓ after create
 
 **Checkpoint**: Signup converts to first property listed.
 
