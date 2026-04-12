@@ -1,5 +1,4 @@
 import { parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js'
-import * as env from '../config/env.config'
 
 export interface ParsedPhone {
   e164: string
@@ -15,7 +14,7 @@ export class PhoneError extends Error {
 }
 
 const allowedCountryCodes = (): string[] => {
-  const raw = env.SIGNUP_ALLOWED_COUNTRY_CODES
+  const raw = process.env.DW_SIGNUP_ALLOWED_COUNTRY_CODES || ''
   if (!raw) {
     return []
   }

@@ -48,6 +48,7 @@ const Countries = lazy(() => import('@/pages/Countries'))
 const CreateCountry = lazy(() => import('@/pages/CreateCountry'))
 const UpdateCountry = lazy(() => import('@/pages/UpdateCountry'))
 const Scheduler = lazy(() => import('@/pages/Scheduler'))
+const PendingReviewAgencies = lazy(() => import('@/pages/PendingReviewAgencies'))
 
 const AppLayout = () => {
   const location = useLocation()
@@ -113,6 +114,7 @@ const router = createBrowserRouter([
       { path: '/create-country', element: adminOnly(<CreateCountry />) },
       { path: '/update-country', element: adminOnly(<UpdateCountry />) },
       { path: '/scheduler', element: <Scheduler /> },
+      { path: '/pending-review', element: adminOnly(<PendingReviewAgencies />) },
       { path: '*', element: <NoMatch /> }
     ]
   }

@@ -2,14 +2,6 @@ import 'dotenv/config'
 import { jest } from '@jest/globals'
 import request from 'supertest'
 import * as darywinTypes from ':darywin-types'
-import * as databaseHelper from '../src/utils/databaseHelper'
-import * as testHelper from './testHelper'
-import app from '../src/app'
-import * as env from '../src/config/env.config'
-import User from '../src/models/User'
-import HostSignupSession from '../src/models/HostSignupSession'
-import HostSignupAudit from '../src/models/HostSignupAudit'
-import * as smsProvider from '../src/services/smsProvider'
 
 jest.setTimeout(60_000)
 
@@ -17,12 +9,36 @@ const ALLOWED_PHONE = '+213555000001'
 const ALLOWED_PHONE_2 = '+213555000002'
 const BLOCKED_PHONE = '+11234567890'
 
+const sendCodeMock = jest.fn<(phone: string) => Promise<{ channel: darywinTypes.OtpChannel }>>()
+const verifyCodeMock = jest.fn<(phone: string, code: string) => Promise<boolean>>()
+
+class SmsProviderError extends Error {
+  code: 'RATE_LIMIT' | 'CARRIER_UNREACHABLE' | 'SERVICE_UNAVAILABLE' | 'INVALID_CODE' | 'EXPIRED'
+  constructor(code: SmsProviderError['code'], message: string) {
+    super(message)
+    this.code = code
+  }
+}
+
+jest.unstable_mockModule('../src/services/smsProvider.js', () => ({
+  sendCode: sendCodeMock,
+  verifyCode: verifyCodeMock,
+  SmsProviderError,
+}))
+
+const { default: app } = await import('../src/app')
+const databaseHelper = await import('../src/utils/databaseHelper')
+const testHelper = await import('./testHelper')
+const env = await import('../src/config/env.config')
+const { default: User } = await import('../src/models/User')
+const { default: HostSignupSession } = await import('../src/models/HostSignupSession')
+const { default: HostSignupAudit } = await import('../src/models/HostSignupAudit')
+
 beforeAll(async () => {
   testHelper.initializeLogger()
   await databaseHelper.connect(env.DB_URI, false, false)
   await testHelper.initialize()
-  // restrict to DZ for the country-blocked test
-  ;(env as { SIGNUP_ALLOWED_COUNTRY_CODES: string }).SIGNUP_ALLOWED_COUNTRY_CODES = 'DZ'
+  process.env.DW_SIGNUP_ALLOWED_COUNTRY_CODES = 'DZ'
 })
 
 afterAll(async () => {
@@ -35,12 +51,13 @@ beforeEach(async () => {
   await HostSignupAudit.deleteMany({})
   await User.deleteMany({ phone: { $in: [ALLOWED_PHONE, ALLOWED_PHONE_2] } })
   await User.deleteMany({ email: /hostsignup-test/i })
-  jest.restoreAllMocks()
+  sendCodeMock.mockReset()
+  verifyCodeMock.mockReset()
 })
 
 const stubSms = (approved = true) => {
-  jest.spyOn(smsProvider, 'sendCode').mockResolvedValue({ channel: darywinTypes.OtpChannel.WhatsApp })
-  jest.spyOn(smsProvider, 'verifyCode').mockImplementation(async () => approved)
+  sendCodeMock.mockResolvedValue({ channel: darywinTypes.OtpChannel.WhatsApp })
+  verifyCodeMock.mockResolvedValue(approved)
 }
 
 const extractCookie = (res: request.Response): string => {
@@ -133,8 +150,8 @@ describe('POST /api/signup/host/start — error paths', () => {
 
 describe('POST /api/signup/host/verify-phone — OTP attempts', () => {
   it('returns 403 with remaining, then 429 on exhaustion', async () => {
-    jest.spyOn(smsProvider, 'sendCode').mockResolvedValue({ channel: darywinTypes.OtpChannel.SMS })
-    jest.spyOn(smsProvider, 'verifyCode').mockResolvedValue(false)
+    sendCodeMock.mockResolvedValue({ channel: darywinTypes.OtpChannel.SMS })
+    verifyCodeMock.mockResolvedValue(false)
 
     const r1 = await request(app).post('/api/signup/host/start').send({ phone: ALLOWED_PHONE_2 })
     const cookie = extractCookie(r1)
@@ -205,11 +222,152 @@ describe('GET /api/host/onboarding', () => {
   })
 })
 
+describe('Admin payout gate (US3)', () => {
+  it('self-signed-up host has firstPayoutApproved=false; admin approve flips it; idempotent; non-admin 403', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const bcrypt = (await import('bcrypt')).default
+
+    const hostEmail = `hostsignup-test-payout-${Date.now()}@test.darywin.com`
+    const host = await User.create({
+      fullName: 'Payout Host', email: hostEmail,
+      password: await bcrypt.hash('Sup3rSecret!', 10),
+      phone: '+213555222222',
+      type: darywinTypes.UserType.Agency, active: true,
+      phoneVerified: true, firstPayoutApproved: false,
+    })
+    expect(host.firstPayoutApproved).toBe(false)
+
+    // non-admin caller blocked
+    const hostToken = await authHelper.encryptJWT({ id: host._id.toString() })
+    const r403 = await request(app)
+      .patch(`/api/admin/agencies/${host._id}/approve-first-payout`)
+      .set('x-access-token', hostToken)
+      .set('origin', env.ADMIN_HOST)
+    expect([401, 403]).toContain(r403.status)
+
+    // admin caller approves
+    const adminEmail = `hostsignup-test-admin-${Date.now()}@test.darywin.com`
+    const admin = await User.create({
+      fullName: 'Admin', email: adminEmail,
+      password: await bcrypt.hash('Sup3rSecret!', 10),
+      type: darywinTypes.UserType.Admin, active: true, verified: true,
+    })
+    const adminToken = await authHelper.encryptJWT({ id: admin._id.toString() })
+
+    const r1 = await request(app)
+      .patch(`/api/admin/agencies/${host._id}/approve-first-payout`)
+      .set('x-access-token', adminToken)
+      .set('origin', env.ADMIN_HOST)
+    expect(r1.status).toBe(200)
+    expect(r1.body.firstPayoutApproved).toBe(true)
+
+    // idempotent
+    const r2 = await request(app)
+      .patch(`/api/admin/agencies/${host._id}/approve-first-payout`)
+      .set('x-access-token', adminToken)
+      .set('origin', env.ADMIN_HOST)
+    expect(r2.status).toBe(200)
+    expect(r2.body.firstPayoutApproved).toBe(true)
+
+    // pending-review list no longer contains host
+    const list = await request(app)
+      .get('/api/admin/agencies/pending-review')
+      .set('x-access-token', adminToken)
+      .set('origin', env.ADMIN_HOST)
+    expect(list.status).toBe(200)
+    expect((list.body as { _id: string }[]).find((a) => a._id === String(host._id))).toBeUndefined()
+
+    await User.deleteOne({ _id: admin._id })
+  })
+})
+
+describe('Trust heuristic soft-flag (US4)', () => {
+  it('second signup at ~same lat/lng receives duplicate_address flag in audit', async () => {
+    stubSms(true)
+    const Property = (await import('../src/models/Property')).default
+    const Location = (await import('../src/models/Location')).default
+    const loc = await Location.findOne().lean()
+
+    // Pre-existing property at a coordinate
+    const lat = 36.7525; const lng = 3.0420
+    const seed = await User.create({
+      fullName: 'Seed', email: `hostsignup-test-seed-${Date.now()}@test.darywin.com`,
+      phone: '+213555999001', type: darywinTypes.UserType.Agency, active: true,
+    })
+    await Property.create({
+      name: 'Seed', agency: seed._id, type: darywinTypes.PropertyType.Apartment,
+      description: 'x', image: 'x', bedrooms: 1, bathrooms: 1, petsAllowed: false,
+      furnished: false, minimumAge: 21, location: loc!._id, price: 100,
+      rentalTerm: darywinTypes.RentalTerm.Monthly, latitude: lat, longitude: lng,
+    })
+
+    // Complete a new signup at same coordinate
+    const email = `hostsignup-test-flag-${Date.now()}@test.darywin.com`
+    const r1 = await request(app).post('/api/signup/host/start').send({ phone: '+213555999002' })
+    const cookie = extractCookie(r1)
+    await request(app).post('/api/signup/host/verify-phone').set('Cookie', cookie).send({ code: '123456' })
+    await request(app).post('/api/signup/host/details').set('Cookie', cookie).send({
+      email, password: 'Sup3rSecret!', agencyName: 'Flag Host', locationId: String(loc!._id),
+    })
+    const rComplete = await request(app).post('/api/signup/host/complete').set('Cookie', cookie).send({
+      teaserProperty: { name: 'T', address: 'x', price: 100, latitude: lat, longitude: lng },
+    })
+    expect(rComplete.status).toBe(200)
+
+    const user = await User.findOne({ email }).lean()
+    const audit = await HostSignupAudit.findOne({ event: 'host_signup', userId: user!._id }).lean()
+    expect(audit?.flags).toContain('duplicate_address')
+  })
+})
+
+describe('Regression: admin-provisioned CreateAgency (T118)', () => {
+  it('admin-provisioned agency via existing /api/create-user gets backfilled defaults', async () => {
+    const bcrypt = (await import('bcrypt')).default
+    const authHelper = await import('../src/utils/authHelper')
+
+    const admin = await User.create({
+      fullName: 'Reg Admin',
+      email: `hostsignup-test-regadmin-${Date.now()}@test.darywin.com`,
+      password: await bcrypt.hash('Sup3rSecret!', 10),
+      type: darywinTypes.UserType.Admin, active: true, verified: true,
+    })
+    const adminToken = await authHelper.encryptJWT({ id: admin._id.toString() })
+
+    const agencyEmail = `hostsignup-test-regagency-${Date.now()}@test.darywin.com`
+    const r = await request(app)
+      .post('/api/create-user')
+      .set('x-access-token', adminToken)
+      .set('origin', env.ADMIN_HOST)
+      .send({
+        fullName: 'Admin Provisioned Agency',
+        email: agencyEmail,
+        phone: '+213555333333',
+        location: 'Algiers',
+        bio: 'test',
+        type: darywinTypes.UserType.Agency,
+        language: 'en',
+        password: 'Sup3rSecret!',
+      })
+    expect([200, 201]).toContain(r.status)
+
+    const created = await User.findOne({ email: agencyEmail }).lean()
+    expect(created).toBeTruthy()
+    expect(created!.type).toBe(darywinTypes.UserType.Agency)
+    // Schema defaults: firstPayoutApproved=false, phoneVerified=false, onboardingStep=Done
+    expect(created!.onboardingStep).toBe(darywinTypes.OnboardingStep.Done)
+    // NOTE: admin-provisioned agencies start with firstPayoutApproved=false by default
+    // The backfill script (backfill-host-fields.ts) flips existing agencies to true.
+    // New admin-provisioned ones are subject to the same payout gate — acceptable.
+
+    await User.deleteOne({ _id: admin._id })
+  })
+})
+
 describe('SIGNUP_PUBLIC_ENABLED kill-switch', () => {
   it('returns 503 when disabled', async () => {
-    ;(env as { SIGNUP_PUBLIC_ENABLED: boolean }).SIGNUP_PUBLIC_ENABLED = false
+    process.env.DW_SIGNUP_PUBLIC_ENABLED = 'false'
     const r = await request(app).post('/api/signup/host/start').send({ phone: ALLOWED_PHONE })
     expect(r.status).toBe(503)
-    ;(env as { SIGNUP_PUBLIC_ENABLED: boolean }).SIGNUP_PUBLIC_ENABLED = true
+    process.env.DW_SIGNUP_PUBLIC_ENABLED = 'true'
   })
 })

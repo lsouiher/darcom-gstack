@@ -27,5 +27,11 @@ routes.route(routeNames.current).get(
 routes.route(routeNames.onboarding).get(
   ...tenantScoped(controller.getOnboardingChecklist),
 )
+routes.route(routeNames.pendingReview).get(
+  ...adminOnly(hostAdmin.listPendingReviewAgencies),
+)
+routes.route(routeNames.approveFirstPayout).patch(
+  ...adminOnly(hostAdmin.approveFirstPayout),
+)
 
 export default routes
