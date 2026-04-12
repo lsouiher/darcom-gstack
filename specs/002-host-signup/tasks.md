@@ -268,6 +268,53 @@ Source: `/plan-eng-review` on commit eccc461. Adds 1 architecture check, 2 quali
 
 ---
 
+## Phase 6.9: Design Review Additions (2026-04-12)
+
+Source: `/plan-design-review`. DESIGN.md written to repo root. All tasks ride US1 unless noted.
+
+### Landing page (BecomeAHost.tsx)
+
+- [ ] D01 [US1] Implement IA per Pass 1: hero (brand mark top-left, headline "List your property. Get paid without chasing tenants.", supporting sentence, primary CTA "Become a host", "Already a host? Sign in" secondary micro-link bottom of hero); How-it-works as **horizontal numbered journey** (01/02/03 with connecting scroll line on desktop; vertical narrative on mobile — NO icon-in-circle grid); trust line "We verify property ownership before your first payout."; minimal footer with EN/FR toggle.
+- [ ] D02 [US1] Hero composition: full-bleed, left-aligned body, cardless, one accent panel in `--color-surface-2`. No hero image/video/illustration v1.
+- [ ] D03 [US1] `<noscript>` fallback with a plain-text "Email us to sign up" line (JS load failure safety net).
+
+### Wizard (HostSignupWizard.tsx)
+
+- [ ] D04 [US1] Per-step IA: progress indicator (Step N of 4) top, single focused question, helper text, primary action, back affordance (except step 1). Single-column, max-width 480px desktop, sticky-bottom CTA on mobile.
+- [ ] D05 [US1] OTP input: **single** `<input type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6">` — NOT 6 separate boxes. Auto-submits at 6 digits.
+- [ ] D06 [US1] Post-OTP-verify: 250ms check-mark tick micro-interaction before advancing.
+- [ ] D07 [US1] Step 4 skip action: clearly labeled secondary button "Skip, I'll add it later" with equal weight to "Add property now" (not a small link).
+- [ ] D08 [US1] Step 3 empty-location-results state: message + "add a city" affordance (deferred if out of scope → see TODO).
+
+### Admin (Dashboard + Agencies)
+
+- [ ] D09 [US2] Onboarding checklist empty state (first login): warm copy "Welcome aboard. Here's your path to your first booking." with 5 items and inline CTAs.
+- [ ] D10 [US2] Onboarding checklist fetch-fail state: "Couldn't load your progress. Retry." with retry button.
+- [ ] D11 [US2] Checklist item-flip micro-interaction: 250ms tick + row highlight that fades in 400ms.
+- [ ] D12 [US3] Pending-review empty state: "You're caught up. No hosts waiting on first-payout approval." (not default "No items found").
+- [ ] D13 [US3] "Approve first payout" button opens confirmation dialog with focus trap; confirms agency name + first payout gate lift.
+
+### Accessibility
+
+- [ ] D14 [P] [US1] Wizard step-change announces via `aria-live="polite"` region.
+- [ ] D15 [P] [US1] Progress indicator: `role="progressbar"` with `aria-valuenow/min/max`.
+- [ ] D16 [P] [US1] Error messages link to inputs via `aria-describedby`.
+- [ ] D17 [P] [US1] Focus ring style per DESIGN.md (`outline: 2px solid var(--color-accent); outline-offset: 2px`) applied globally.
+
+### Design system plumbing
+
+- [ ] D18 [P] Extend MUI theme (`frontend/src/theme.ts` and `admin/src/theme.ts`): override palette → `--color-accent`; Button radius 4px; remove default Button elevation; `tabular-nums` on step indicators. Read tokens from CSS vars.
+- [ ] D19 [P] Include Inter Tight + Inter fonts via `<link rel="preconnect">` on Google Fonts or self-hosted. No system-stack fallback on brand surfaces.
+- [ ] D20 [P] Add CSS variables from `DESIGN.md` to `frontend/src/index.css` and `admin/src/index.css` on `:root`.
+
+### Copy / i18n
+
+- [ ] D21 [P] [US1] Landing page EN + FR strings in lang files. Reserve 30% extra button width for FR.
+- [ ] D22 [P] [US1] Resume-link email (EN + FR): Subject "Finish becoming a host on DaryWin" / body "You started signing up. Your link expires in 24 hours. Finish in 3 minutes — [button]. If this wasn't you, ignore this email." Warm + specific tone.
+- [ ] D23 [P] [US1] Founder Slack alert copy: "New host signup: {agencyName} · {phone} · {city}{flags?}. Call them this week."
+
+---
+
 ## Phase 7: Polish & Cross-Cutting
 
 - [ ] T051 Create `backend/src/models/HostSignupAudit.ts` Mongoose model per data-model.md (fields + indexes on `userId` and `createdAt`) — NOTE: create this in Phase 2 if T022 is worked on first; placed here only if skipped earlier
