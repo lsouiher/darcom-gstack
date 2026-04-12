@@ -10,26 +10,26 @@ Tests are included per Constitution §IX (backend Jest + Supertest, real MongoDB
 
 ## Phase 1: Setup
 
-- [ ] T001 Confirm prerequisite — 001-host-admin-portal tenant isolation merged; if not, halt (per research §R8)
-- [ ] T002 Add `libphonenumber-js` to `backend/package.json` dependencies
-- [ ] T003 Add `twilio` SDK to `backend/package.json` dependencies
-- [ ] T004 Add `express-rate-limit` to `backend/package.json` dependencies (skip if already present)
-- [ ] T005 [P] Add `DW_TWILIO_ACCOUNT_SID`, `DW_TWILIO_AUTH_TOKEN`, `DW_TWILIO_VERIFY_SERVICE_SID`, `DW_SIGNUP_ALLOWED_COUNTRY_CODES`, `DW_SIGNUP_SESSION_SECRET` to `backend/src/config/env.config.ts` and `.env.example`
-- [ ] T006 [P] Add new i18n string keys (signup wizard + checklist labels + admin review) to `frontend/src/lang/en.ts` and `frontend/src/lang/fr.ts`
-- [ ] T007 [P] Add new i18n string keys (checklist + pending-review filter + approve button) to `admin/src/lang/en.ts` and `admin/src/lang/fr.ts`
+- [ ] T001 Confirm prerequisite — 001-host-admin-portal tenant isolation merged; if not, halt (per research §R8) — NOTE: 001 uses route markers (`publicRoute`/`tenantScoped`/`adminOnly`) which already handle public paths; no middleware change needed (supersedes A01)
+- [X] T002 Add `libphonenumber-js` to `backend/package.json` dependencies
+- [X] T003 Add `twilio` SDK to `backend/package.json` dependencies
+- [X] T004 Add `express-rate-limit` to `backend/package.json` dependencies (skip if already present)
+- [X] T005 [P] Add `DW_TWILIO_ACCOUNT_SID`, `DW_TWILIO_AUTH_TOKEN`, `DW_TWILIO_VERIFY_SERVICE_SID`, `DW_SIGNUP_ALLOWED_COUNTRY_CODES`, `DW_SIGNUP_SESSION_SECRET` to `backend/src/config/env.config.ts` (plus SIGNUP_PUBLIC_ENABLED, AUDIT_PEPPER, POSTHOG_KEY, FOUNDER_ALERT_WEBHOOK, TWILIO_WHATSAPP_ENABLED, SIGNUP_SESSION_TTL)
+- [X] T006 [P] Added `frontend/src/lang/host-signup.ts` (en/fr/ar) — repo uses per-page modular lang files, not monolithic en.ts/fr.ts
+- [X] T007 [P] Added `admin/src/lang/host-onboarding.ts` (en/fr/ar)
 
 ## Phase 2: Foundational (blocking prerequisites)
 
-- [ ] T008 [P] Add `OnboardingStep` enum to `packages/darywin-types/src/enums/OnboardingStep.ts` and export from package root
-- [ ] T009 [P] Extend `User` interface in `packages/darywin-types/src/interfaces/User.ts` with `phoneVerified`, `firstPayoutApproved`, `onboardingStep`
-- [ ] T010 [P] Add payload types in `packages/darywin-types/src/payloads/`: `HostSignupStartPayload.ts`, `VerifyPhonePayload.ts`, `HostSignupDetailsPayload.ts`, `HostSignupResponse.ts`, `OnboardingChecklistResponse.ts`; export from package root
-- [ ] T011 Build `packages/darywin-types` and re-link consuming apps (`backend`, `frontend`, `admin`)
-- [ ] T012 Extend Mongoose `User` schema in `backend/src/models/User.ts` with `phoneVerified` (default false), `firstPayoutApproved` (default false), `onboardingStep` (enum, default 'done'); add compound index `{ type: 1, firstPayoutApproved: 1 }`
-- [ ] T013 Write and run backfill script `backend/src/scripts/backfill-host-fields.ts` to set `phoneVerified=true`, `firstPayoutApproved=true`, `onboardingStep='done'` on all existing agencies
-- [ ] T014 [P] Create phone utility `backend/src/utils/phone.ts` wrapping `libphonenumber-js` (parse, normalise, country-code allow-list check)
-- [ ] T015 [P] Create SMS provider service `backend/src/services/smsProvider.ts` exposing `sendCode(phone)` and `verifyCode(phone, code)` over Twilio Verify
-- [ ] T016 [P] Create rate-limit middleware `backend/src/middlewares/rateLimit.ts` with helpers for IP-scoped and phone-scoped limits
-- [ ] T017 [P] Create signed signup-session cookie helper `backend/src/utils/signupSession.ts` (sign/verify using `DW_SIGNUP_SESSION_SECRET`)
+- [X] T008 [P] Added `OnboardingStep` + `OtpChannel` enums to `packages/darywin-types/index.ts` (single-file package; no subdirs)
+- [X] T009 [P] Extended `User` interface in `packages/darywin-types/index.ts` and `backend/src/config/env.config.ts` with `phoneVerified`, `firstPayoutApproved`, `onboardingStep`, `payoutAccountId`
+- [X] T010 [P] Added payload types (`HostSignupStartPayload`, `VerifyPhonePayload`, `HostSignupDetailsPayload`, `HostSignupCompletePayload`, `HostSignupResponse`, `OnboardingChecklistResponse`, `PendingReviewAgency`) in `packages/darywin-types/index.ts`
+- [X] T011 Built `packages/darywin-types` (tsc emitted index.js + index.d.ts)
+- [X] T012 Extended Mongoose `User` schema with `phoneVerified`, `firstPayoutApproved`, `onboardingStep`, `payoutAccountId`; added compound index `{ type: 1, firstPayoutApproved: 1 }` + sparse `{ phone: 1 }`
+- [X] T013 Wrote backfill script `backend/src/scripts/backfill-host-fields.ts` (still needs to be run against dev DB during deploy)
+- [X] T014 [P] Created `backend/src/utils/phone.ts` with `parseAndValidate`/`normalise` + typed `PhoneError`
+- [X] T015 [P] Created `backend/src/services/smsProvider.ts` — Twilio Verify, WhatsApp→SMS fallback (C06/C07), typed error mapping (Q03)
+- [X] T016 [P] Created `backend/src/middlewares/rateLimit.ts` with `ipLimiter`/`phoneLimiter` + ready-made `signupStartLimiter`, `signupPhoneLimiter`, `signupVerifyLimiter`
+- [X] T017 [P] Created `backend/src/utils/signupSession.ts` — HMAC-signed cookie, TTL check, `cookieOptions()`
 
 ---
 
@@ -41,29 +41,29 @@ Tests are included per Constitution §IX (backend Jest + Supertest, real MongoDB
 
 ### Backend models & session
 
-- [ ] T018 [US1] Create `backend/src/models/HostSignupSession.ts` Mongoose model per data-model.md (fields + TTL index on `createdAt` 86400s + index on `phone`)
+- [X] T018 [US1] Created `backend/src/models/HostSignupSession.ts` + `HostSignupAudit.ts` (T051 pulled forward), `utils/audit.ts` (Q01), `utils/fireAndForget.ts` (Q02), `middlewares/loadSignupSession.ts` (C17), `middlewares/signupEnabledGuard.ts` (K01)
 
 ### Backend controller & routes
 
-- [ ] T019 [US1] Implement `hostSignupStart` in `backend/src/controllers/userController.ts` — validate phone, check country-code allow-list, check phone uniqueness on `User`, create `HostSignupSession`, call `smsProvider.sendCode`, set signed session cookie, return `{ sessionId }`
-- [ ] T020 [US1] Implement `verifyHostPhone` in `backend/src/controllers/userController.ts` — read session cookie, call `smsProvider.verifyCode`, flip `session.phoneVerified=true`, return `{ phoneVerified, nextStep }`; enforce attempt counter
-- [ ] T021 [US1] Implement `hostSignupDetails` in `backend/src/controllers/userController.ts` — validate email/password/agencyName/locationId, hash password, require `session.phoneVerified`, check email uniqueness, persist to session
-- [ ] T022 [US1] Implement `hostSignupComplete` in `backend/src/controllers/userController.ts` — promote session to `User{type:Agency, active:true, phoneVerified:true, firstPayoutApproved:false, onboardingStep:'property'}`, create optional teaser `Property`, write `HostSignupAudit` entry (see T033), delete session, issue JWT, return `{ token, user }`
-- [ ] T023 [US1] Register public paths in `backend/src/config/userRoutes.config.ts`: `POST /signup/host/start`, `POST /signup/host/verify-phone`, `POST /signup/host/details`, `POST /signup/host/complete`
-- [ ] T024 [US1] Wire handlers in `backend/src/routes/userRoutes.ts` with rate-limit middleware applied to start + verify-phone
+- [X] T019 [US1] `start` in new `backend/src/controllers/hostSignupController.ts` (separate controller file — cleaner than stuffing into userController). Validates phone, country-allow, phone uniqueness, creates session, sends OTP (WA→SMS), sets signed cookie. Handles rate-limit/503 mapping.
+- [X] T020 [US1] `verifyPhone` — attempts counter (max 5), returns 403 wrong-code w/ remaining, 429 on exhaustion. Audit on failure.
+- [X] T021 [US1] `details` — validates email/password/agencyName/locationId, enumeration-safe 409 (C16), hashes pw, persists to session.
+- [X] T022 [US1] `complete` — phone+email race recheck, creates Agency User w/ `firstPayoutApproved=false`, teaser Property optional, writes success audit w/ raw phone, clears cookie, issues JWT. Founder Slack alert fire-and-forget (C12). Trust flags computed (US4 T047 inline).
+- [X] T023 [US1] Routes in `backend/src/config/hostSignupRoutes.config.ts`: start, verify-phone, details, complete, current
+- [X] T024 [US1] `backend/src/routes/hostSignupRoutes.ts` wired via `publicRoute(signupEnabledGuard, rateLimiters, loadSignupSession, handler)`; registered in `app.ts`
 
 ### Frontend landing + wizard
 
-- [ ] T025 [P] [US1] Create public landing page `frontend/src/pages/BecomeAHost.tsx` (hero, value prop, 3-step how-it-works, CTA → `/signup/host`), MUI-styled, mobile-first, all strings from `lang/`
-- [ ] T026 [P] [US1] Create `frontend/src/services/hostSignup.ts` with `startSignup`, `verifyPhone`, `submitDetails`, `completeSignup` functions using `axiosInstance`, typed against `darywin-types`
-- [ ] T027 [US1] Create multi-step wizard page `frontend/src/pages/HostSignupWizard.tsx` (Steps: Phone+OTP → Email+Password → Agency name+Location → Optional teaser property → Redirect to admin portal with JWT); MUI stepper, mobile-first, error states for 409/429/503
-- [ ] T028 [US1] Register routes in `frontend/src/App.tsx` (or equivalent router config): `/become-a-host` (public) and `/signup/host` (public)
+- [X] T025 [P] [US1] `frontend/src/pages/BecomeAHost.tsx` — MUI, mobile-first, 3-step journey, strings from `@/lang/host-signup`, noscript fallback (D03)
+- [X] T026 [P] [US1] `frontend/src/services/HostSignupService.ts` — axios w/ withCredentials, typed against darywin-types
+- [X] T027 [US1] `frontend/src/pages/HostSignupWizard.tsx` — 4 steps (phone / OTP single-box w/ one-time-code autocomplete D05 / details w/ LocationSelectList / teaser), LinearProgress (D15), aria-live (D14), equal-weight skip/add (D07), cross-device resume via current() call, error mapping for 409/410/429/503
+- [X] T028 [US1] Routes `/become-a-host` + `/signup/host` registered in `frontend/src/App.tsx`
 
 ### Tests (backend)
 
-- [ ] T029 [US1] Add `backend/__tests__/hostSignup.test.ts`: happy-path full signup (start → verify → details → complete returns valid JWT and persists User)
-- [ ] T030 [US1] Extend `backend/__tests__/hostSignup.test.ts`: phone-collision returns 409; unsupported country code returns 400; OTP wrong code returns 403 with remaining attempts then 429 on exhaustion
-- [ ] T031 [US1] Extend `backend/__tests__/hostSignup.test.ts`: tenant isolation negative test — host B cannot read host A's properties (depends on 001-host-admin-portal scoping)
+- [X] T029 [US1] Created `backend/__tests__/hostSignup.test.ts` with happy-path: full signup persists User w/ firstPayoutApproved=false + host_signup audit w/ raw phone
+- [X] T030 [US1] Covers phone-collision 409 (hashed audit), country-blocked 400, unparseable 400, OTP wrong 403 w/ remaining → 429 exhaustion, kill-switch 503
+- [ ] T031 [US1] Tenant-isolation negative test — DEFERRED; relies on 001's `tenantScope` already covered by existing `crossTenantAttack.test.ts`/`tenantScope.test.ts`; not redundant-coded here
 
 **Checkpoint**: Story 1 delivers the MVP — named hosts can onboard themselves end-to-end without admin intervention.
 

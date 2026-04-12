@@ -450,6 +450,51 @@ export const SENTRY_DSN_BACKEND = __env__('DW_SENTRY_DSN_BACKEND', ENABLE_SENTRY
 export const SENTRY_TRACES_SAMPLE_RATE = Number.parseFloat(__env__('DW_SENTRY_TRACES_SAMPLE_RATE', false, '1.0'))
 
 /**
+ * Twilio Verify — host signup OTP.
+ */
+export const TWILIO_ACCOUNT_SID = __env__('DW_TWILIO_ACCOUNT_SID', false)
+export const TWILIO_AUTH_TOKEN = __env__('DW_TWILIO_AUTH_TOKEN', false)
+export const TWILIO_VERIFY_SERVICE_SID = __env__('DW_TWILIO_VERIFY_SERVICE_SID', false)
+export const TWILIO_WHATSAPP_ENABLED = helper.StringToBoolean(__env__('DW_TWILIO_WHATSAPP_ENABLED', false, 'true'))
+
+/**
+ * Comma-separated ISO-3166-1 alpha-2 country codes allowed to sign up as a host.
+ * Empty means allow all (not recommended in prod).
+ */
+export const SIGNUP_ALLOWED_COUNTRY_CODES = __env__('DW_SIGNUP_ALLOWED_COUNTRY_CODES', false, '')
+
+/**
+ * Secret used to sign the host-signup session cookie.
+ */
+export const SIGNUP_SESSION_SECRET = __env__('DW_SIGNUP_SESSION_SECRET', false, 'Darywin-signup-session')
+
+/**
+ * Kill-switch for the public host signup flow.
+ */
+export const SIGNUP_PUBLIC_ENABLED = helper.StringToBoolean(__env__('DW_SIGNUP_PUBLIC_ENABLED', false, 'true'))
+
+/**
+ * Pepper for hashing phone numbers in audit rows for failure events.
+ */
+export const AUDIT_PEPPER = __env__('DW_AUDIT_PEPPER', false, 'Darywin-audit-pepper')
+
+/**
+ * PostHog analytics (server-side).
+ */
+export const POSTHOG_KEY = __env__('DW_POSTHOG_KEY', false)
+export const ANALYTICS_BACKEND = __env__('DW_ANALYTICS_BACKEND', false, 'https://app.posthog.com')
+
+/**
+ * Optional Slack-compatible webhook that receives a new-host alert on signup complete.
+ */
+export const FOUNDER_ALERT_WEBHOOK = __env__('DW_FOUNDER_ALERT_WEBHOOK', false)
+
+/**
+ * Host-signup session TTL in seconds. Default 24h.
+ */
+export const SIGNUP_SESSION_TTL = Number.parseInt(__env__('DW_SIGNUP_SESSION_TTL', false, '86400'), 10)
+
+/**
  * User Document.
  *
  * @export
@@ -477,6 +522,10 @@ export interface User extends Document {
   payLater?: boolean
   customerId?: string
   expireAt?: Date
+  phoneVerified?: boolean
+  firstPayoutApproved?: boolean
+  onboardingStep?: darywinTypes.OnboardingStep
+  payoutAccountId?: string
 }
 
 /**
