@@ -61,6 +61,14 @@ export const update = async (req: Request, res: Response) => {
     if (!helper.isValidObjectId(_id)) {
       throw new Error('body._id is not valid')
     }
+
+    // Agency isolation: an agency user may only update their own profile.
+    if (req.user && req.user.type === darywinTypes.UserType.Agency
+      && req.user._id.toString() !== String(_id)) {
+      res.status(403).send({ message: 'Forbidden' })
+      return
+    }
+
     const agency = await User.findById(_id)
 
     if (agency) {

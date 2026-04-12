@@ -1,9 +1,10 @@
 import express from 'express'
 import routeNames from '../config/ipinfoRoutes.config'
 import * as ipinfoController from '../controllers/ipinfoController'
+import { publicRoute } from './_markers'
 
 const routes = express.Router()
 
-routes.route(routeNames.getCountryCode).get(ipinfoController.getCountryCode)
+routes.route(routeNames.getCountryCode).get(...publicRoute(ipinfoController.getCountryCode))
 
 export default routes

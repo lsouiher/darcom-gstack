@@ -1,21 +1,21 @@
 import express from 'express'
 import multer from 'multer'
 import routeNames from '../config/propertyRoutes.config'
-import authJwt from '../middlewares/authJwt'
 import * as propertyController from '../controllers/propertyController'
+import { tenantScoped, publicRoute } from './_markers'
 
 const routes = express.Router()
 
-routes.route(routeNames.create).post(authJwt.verifyToken, propertyController.create)
-routes.route(routeNames.update).put(authJwt.verifyToken, propertyController.update)
-routes.route(routeNames.checkProperty).get(authJwt.verifyToken, propertyController.checkProperty)
-routes.route(routeNames.delete).delete(authJwt.verifyToken, propertyController.deleteProperty)
-routes.route(routeNames.uploadImage).post([authJwt.verifyToken, multer({ storage: multer.memoryStorage() }).single('image')], propertyController.uploadImage)
-routes.route(routeNames.deleteImage).post(authJwt.verifyToken, propertyController.deleteImage)
-routes.route(routeNames.deleteTempImage).post(authJwt.verifyToken, propertyController.deleteTempImage)
-routes.route(routeNames.getProperty).get(propertyController.getProperty)
-routes.route(routeNames.getProperties).post(authJwt.verifyToken, propertyController.getProperties)
-routes.route(routeNames.getBookingProperties).post(authJwt.verifyToken, propertyController.getBookingProperties)
-routes.route(routeNames.getFrontendProperties).post(propertyController.getFrontendProperties)
+routes.route(routeNames.create).post(...tenantScoped(propertyController.create))
+routes.route(routeNames.update).put(...tenantScoped(propertyController.update))
+routes.route(routeNames.checkProperty).get(...tenantScoped(propertyController.checkProperty))
+routes.route(routeNames.delete).delete(...tenantScoped(propertyController.deleteProperty))
+routes.route(routeNames.uploadImage).post(...tenantScoped(multer({ storage: multer.memoryStorage() }).single('image'), propertyController.uploadImage))
+routes.route(routeNames.deleteImage).post(...tenantScoped(propertyController.deleteImage))
+routes.route(routeNames.deleteTempImage).post(...tenantScoped(propertyController.deleteTempImage))
+routes.route(routeNames.getProperty).get(...publicRoute(propertyController.getProperty))
+routes.route(routeNames.getProperties).post(...tenantScoped(propertyController.getProperties))
+routes.route(routeNames.getBookingProperties).post(...tenantScoped(propertyController.getBookingProperties))
+routes.route(routeNames.getFrontendProperties).post(...publicRoute(propertyController.getFrontendProperties))
 
 export default routes

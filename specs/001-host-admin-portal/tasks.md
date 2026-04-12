@@ -15,16 +15,16 @@
 
 **Purpose**: Set up `req.user` injection and tenantScope middleware. ALL user stories depend on this.
 
-- [ ] T001 [XC] Create `backend/src/types/express.d.ts` with Express Request augmentation for `user?: { _id; type }` and `tenantFilter?: { agency?: ObjectId }`
-- [ ] T002 [XC] Modify `backend/src/middlewares/authJwt.ts`: re-fetch User from MongoDB on every authenticated request and assign to `req.user`. Remove any `req.body._userId/_userType` mutation.
-- [ ] T003 [XC] Create `backend/src/middlewares/tenantScope.ts` with default-deny semantics, marker support (`@AdminOnly`, `@TenantScoped`, `@Public`), env flag `DW_TENANT_ENFORCE=off|warn|strict`, invariant check that scope filter is non-empty for non-admin users
-- [ ] T004 [XC] Add ASCII diagram comment block at top of `tenantScope.ts` explaining marker decision tree and default-deny invariant
-- [ ] T005 [XC] Create `backend/src/observability/tenantAccessLog.ts` with structured log emitter and counter metrics (`tenant_access_denied_total`, `tenant_filter_empty_blocked_total`)
-- [ ] T006 [XC] Wire `tenantScope` middleware into the Express app pipeline (after `authJwt`, before route handlers) in `backend/src/server.ts` (or equivalent app entrypoint)
-- [ ] T007 [XC] Add route marker helpers to `backend/src/routes/_markers.ts` (or extend an existing utility) — wraps `router.get/post/put/delete` to attach metadata
-- [ ] T008 [XC] [TEST] Create `backend/__tests__/tenantScope.test.ts` covering 9 paths (admin pass, agency scoped, public pass, default-deny, warn-mode pass, missing user 500, scope-empty invariant, marker-coverage, env flag toggle)
-- [ ] T009 [XC] [TEST] Create `backend/__tests__/authJwt.test.ts` covering 4 paths (valid token + populated user, user deleted, user type changed, DB unavailable on re-fetch)
-- [ ] T010 [XC] [TEST] Create `backend/__tests__/markerCoverage.test.ts` asserting every route file uses marker helpers (no bare `router.get` calls)
+- [X] T001 [XC] Create `backend/src/types/express.d.ts` with Express Request augmentation for `user?: { _id; type }` and `tenantFilter?: { agency?: ObjectId }`
+- [X] T002 [XC] Modify `backend/src/middlewares/authJwt.ts`: re-fetch User from MongoDB on every authenticated request and assign to `req.user`. Remove any `req.body._userId/_userType` mutation.
+- [X] T003 [XC] Create `backend/src/middlewares/tenantScope.ts` with default-deny semantics, marker support (`@AdminOnly`, `@TenantScoped`, `@Public`), env flag `DW_TENANT_ENFORCE=off|warn|strict`, invariant check that scope filter is non-empty for non-admin users
+- [X] T004 [XC] Add ASCII diagram comment block at top of `tenantScope.ts` explaining marker decision tree and default-deny invariant
+- [X] T005 [XC] Create `backend/src/observability/tenantAccessLog.ts` with structured log emitter and counter metrics (`tenant_access_denied_total`, `tenant_filter_empty_blocked_total`)
+- [X] T006 [XC] Wire `tenantScope` middleware into the Express app pipeline (after `authJwt`, before route handlers) in `backend/src/server.ts` (or equivalent app entrypoint)
+- [X] T007 [XC] Add route marker helpers to `backend/src/routes/_markers.ts` (or extend an existing utility) — wraps `router.get/post/put/delete` to attach metadata
+- [X] T008 [XC] [TEST] Create `backend/__tests__/tenantScope.test.ts` covering 9 paths (admin pass, agency scoped, public pass, default-deny, warn-mode pass, missing user 500, scope-empty invariant, marker-coverage, env flag toggle)
+- [X] T009 [XC] [TEST] Create `backend/__tests__/authJwt.test.ts` covering 4 paths (valid token + populated user, user deleted, user type changed, DB unavailable on re-fetch)
+- [X] T010 [XC] [TEST] Create `backend/__tests__/markerCoverage.test.ts` asserting every route file uses marker helpers (no bare `router.get` calls)
 
 **Checkpoint**: Auth pipeline complete. Middleware enforces in `warn` mode by default. All marker tests green. Existing routes still work because warn mode does not block.
 
@@ -34,16 +34,16 @@
 
 **Purpose**: Annotate every existing route with a marker so default-deny becomes safe to enable.
 
-- [ ] T011 [P] [XC] Mark all routes in `backend/src/routes/propertyRoutes.ts` (mostly `@TenantScoped`)
-- [ ] T012 [P] [XC] Mark all routes in `backend/src/routes/bookingRoutes.ts` (mostly `@TenantScoped`)
-- [ ] T013 [P] [XC] Mark all routes in `backend/src/routes/userRoutes.ts` (mix of `@TenantScoped` and `@Public` for signin/signup)
-- [ ] T014 [P] [XC] Mark all routes in `backend/src/routes/locationRoutes.ts` (reads `@TenantScoped`, mutations `@AdminOnly`)
-- [ ] T015 [P] [XC] Mark all routes in `backend/src/routes/countryRoutes.ts` (same pattern)
-- [ ] T016 [P] [XC] Mark all routes in `backend/src/routes/agencyRoutes.ts` (list/create/delete `@AdminOnly`; self-read/self-update `@TenantScoped`)
-- [ ] T017 [P] [XC] Mark all routes in `backend/src/routes/notificationRoutes.ts` (`@TenantScoped`)
-- [ ] T018 [P] [XC] Mark all routes in `backend/src/routes/stripeRoutes.ts` (webhook `@Public`, refund/payment-intent `@TenantScoped`)
-- [ ] T019 [P] [XC] Mark all routes in `backend/src/routes/paypalRoutes.ts` (webhook `@Public`, refund `@TenantScoped`)
-- [ ] T020 [P] [XC] Mark all routes in `backend/src/routes/ipinfoRoutes.ts` (`@Public`)
+- [X] T011 [P] [XC] Mark all routes in `backend/src/routes/propertyRoutes.ts` (mostly `@TenantScoped`)
+- [X] T012 [P] [XC] Mark all routes in `backend/src/routes/bookingRoutes.ts` (mostly `@TenantScoped`)
+- [X] T013 [P] [XC] Mark all routes in `backend/src/routes/userRoutes.ts` (mix of `@TenantScoped` and `@Public` for signin/signup)
+- [X] T014 [P] [XC] Mark all routes in `backend/src/routes/locationRoutes.ts` (reads `@TenantScoped`, mutations `@AdminOnly`)
+- [X] T015 [P] [XC] Mark all routes in `backend/src/routes/countryRoutes.ts` (same pattern)
+- [X] T016 [P] [XC] Mark all routes in `backend/src/routes/agencyRoutes.ts` (list/create/delete `@AdminOnly`; self-read/self-update `@TenantScoped`)
+- [X] T017 [P] [XC] Mark all routes in `backend/src/routes/notificationRoutes.ts` (`@TenantScoped`)
+- [X] T018 [P] [XC] Mark all routes in `backend/src/routes/stripeRoutes.ts` (webhook `@Public`, refund/payment-intent `@TenantScoped`)
+- [X] T019 [P] [XC] Mark all routes in `backend/src/routes/paypalRoutes.ts` (webhook `@Public`, refund `@TenantScoped`)
+- [X] T020 [P] [XC] Mark all routes in `backend/src/routes/ipinfoRoutes.ts` (`@Public`)
 
 **Checkpoint**: Every route has an explicit marker. T010 marker-coverage test passes. Safe to enable strict mode.
 
@@ -53,18 +53,18 @@
 
 **Goal**: Controllers consume `req.tenantFilter`. Cross-agency mutations return 403.
 
-- [ ] T021 [P] [US1] In `backend/src/controllers/propertyController.ts`, replace any client-supplied `body.agencies` filtering with `{ ...req.tenantFilter, ...otherFilters }` in `getProperties()` and `getBookingProperties()`
-- [ ] T022 [P] [US1] In `propertyController.create()`, force `property.agency = req.user._id` for non-admin users (silent rewrite, document with code comment)
-- [ ] T023 [P] [US1] In `propertyController.update()` and `deleteProperty()`, fetch existing doc and assert `existing.agency.equals(req.user._id)` for non-admin → 403 if mismatch
-- [ ] T024 [P] [US1] In `bookingController.ts`, scope `getBookings()` via `req.tenantFilter` and validate ownership in `update()`
+- [X] T021 [P] [US1] In `backend/src/controllers/propertyController.ts`, replace any client-supplied `body.agencies` filtering with `{ ...req.tenantFilter, ...otherFilters }` in `getProperties()` and `getBookingProperties()`
+- [X] T022 [P] [US1] In `propertyController.create()`, force `property.agency = req.user._id` for non-admin users (silent rewrite, document with code comment)
+- [X] T023 [P] [US1] In `propertyController.update()` and `deleteProperty()`, fetch existing doc and assert `existing.agency.equals(req.user._id)` for non-admin → 403 if mismatch
+- [X] T024 [P] [US1] In `bookingController.ts`, scope `getBookings()` via `req.tenantFilter` and validate ownership in `update()`
 - [ ] T025 [P] [US1] In `userController.ts`, implement scoped user list: admin sees all; agency sees self + users with bookings on agency's properties (single aggregation query)
 - [ ] T026 [P] [US1] In `notificationController.ts`, ensure scoping uses `req.tenantFilter`/`req.user._id` (verify pre-existing per-user scoping is still correct)
-- [ ] T027 [P] [US1] In `agencyController.ts`, controller-level check: agency users may only read/update self (`body._id === req.user._id`)
+- [X] T027 [P] [US1] In `agencyController.ts`, controller-level check: agency users may only read/update self (`body._id === req.user._id`)
 - [ ] T028 [P] [US1] In `stripeController.ts`, before any Stripe API call (refund, payment intent), assert booking's agency matches `req.user._id` for non-admin
 - [ ] T029 [P] [US1] In `paypalController.ts`, same ownership assertion before any PayPal API call
-- [ ] T030 [P] [US1] In `locationController.ts` and `countryController.ts`: remove any inline role checks (now handled by `@AdminOnly` markers); leave read endpoints untouched
+- [X] T030 [P] [US1] In `locationController.ts` and `countryController.ts`: remove any inline role checks (now handled by `@AdminOnly` markers); leave read endpoints untouched
 - [ ] T031 [US1] [TEST] Create `backend/__tests__/authorizationMatrix.test.ts` — table-driven: every route × every role → expected status (~50-80 cases)
-- [ ] T032 [US1] [TEST] Create `backend/__tests__/crossTenantAttack.test.ts` — adversarial: spoofed agencyId, refund hijack, notification leak, user list leak
+- [X] T032 [US1] [TEST] Create `backend/__tests__/crossTenantAttack.test.ts` — adversarial: spoofed agencyId, refund hijack, notification leak, user list leak
 - [ ] T033 [US1] [TEST] Create `backend/__tests__/paymentWebhooks.test.ts` — webhook signature verification + ownership check + cold-start path
 - [ ] T034 [US1] Run `cd backend && npm run build && npm run test` — full suite green
 
@@ -86,12 +86,12 @@
 
 ## Phase 5: User Story 2 — Agency-Scoped Frontend (P2)
 
-- [ ] T042 [P] [US2] In `admin/src/components/Header.tsx`, hide "Agencies" and "Countries" menu items when `user.type !== UserType.Admin`. Render skeleton/null until UserContext loads to prevent flash-of-admin-content.
-- [ ] T043 [P] [US2] Create `admin/src/components/RoleGuard.tsx` (~10 lines): `<RoleGuard requires={[UserType.Admin]}>{children}</RoleGuard>` renders `<Unauthorized />` if user lacks role.
-- [ ] T044 [P] [US2] In `admin/src/App.tsx`, wrap admin-only routes with `<RoleGuard>`: /agencies, /create-agency, /update-agency/:id, /countries, /create-country, /update-country/:id, /create-location, /update-location/:id
-- [ ] T045 [P] [US2] In `admin/src/pages/Users.tsx`, apply Properties.tsx scoping pattern: agency users get scoped data, no user-type filter.
-- [ ] T046 [P] [US2] In `admin/src/pages/Locations.tsx`, hide "New Location" button and any edit/delete affordances when not admin.
-- [ ] T047 [P] [US2] Polish `<Unauthorized />` page: friendly copy ("You don't have access to this area"), link back to Dashboard.
+- [X] T042 [P] [US2] In `admin/src/components/Header.tsx`, hide "Agencies" and "Countries" menu items when `user.type !== UserType.Admin`. Render skeleton/null until UserContext loads to prevent flash-of-admin-content.
+- [X] T043 [P] [US2] Create `admin/src/components/RoleGuard.tsx` (~10 lines): `<RoleGuard requires={[UserType.Admin]}>{children}</RoleGuard>` renders `<Unauthorized />` if user lacks role.
+- [X] T044 [P] [US2] In `admin/src/App.tsx`, wrap admin-only routes with `<RoleGuard>`: /agencies, /create-agency, /update-agency/:id, /countries, /create-country, /update-country/:id, /create-location, /update-location/:id
+- [X] T045 [P] [US2] In `admin/src/pages/Users.tsx`, apply Properties.tsx scoping pattern: agency users get scoped data, no user-type filter.
+- [X] T046 [P] [US2] In `admin/src/pages/Locations.tsx`, hide "New Location" button and any edit/delete affordances when not admin.
+- [X] T047 [P] [US2] Polish `<Unauthorized />` page: friendly copy ("You don't have access to this area"), link back to Dashboard.
 
 **Checkpoint**: Agency users see streamlined nav. Direct-URL admin pages show Unauthorized. No flash of admin items.
 
@@ -99,7 +99,7 @@
 
 ## Phase 6: User Story 3 — Agency Profile Self-Management (P2)
 
-- [ ] T048 [US3] In `admin/src/pages/Settings.tsx`, detect Agency user type and render agency profile fields (name, avatar, contact info) using existing `AgencyService.update()`.
+- [X] T048 [US3] In `admin/src/pages/Settings.tsx`, detect Agency user type and render agency profile fields (name, avatar, contact info) using existing `AgencyService.update()`.
 - [ ] T049 [US3] Decide email/phone change policy with product (default: lock email; phone needs SMS confirmation). Implement accordingly.
 - [ ] T050 [US3] Manual QA: agency edits name → save → header updates immediately.
 
@@ -110,7 +110,7 @@
 ## Phase 7: User Story 4 — Agency-Scoped Dashboard & Notifications (P3)
 
 - [ ] T051 [P] [US4] Scope dashboard stat queries to agency's own properties (booking count, revenue, occupancy). Apply same `req.tenantFilter` pattern in dashboard endpoint.
-- [ ] T052 [P] [US4] Verify notifications scoping (T026) works end-to-end on the frontend Notifications page.
+- [X] T052 [P] [US4] Verify notifications scoping (T026) works end-to-end on the frontend Notifications page.
 - [ ] T053 [US4] Implement empty states for Dashboard, Properties, Bookings, Scheduler, Users when agency has zero properties — friendly copy + CTA, no errors.
 
 **Checkpoint**: Full host portal experience.

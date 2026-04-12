@@ -7,11 +7,14 @@ import { strings } from '@/lang/locations'
 import Search from '@/components/Search'
 import LocationList from '@/components/LocationList'
 import InfoBox from '@/components/InfoBox'
+import { useUserContext, UserContextType } from '@/context/UserContext'
 
 import '@/assets/css/locations.css'
 
 const Locations = () => {
   const navigate = useNavigate()
+  const { user } = useUserContext() as UserContextType
+  const isAdmin = user?.type === darywinTypes.UserType.Admin
 
   const [keyword, setKeyword] = useState('')
   const [rowCount, setRowCount] = useState(-1)
@@ -39,7 +42,7 @@ const Locations = () => {
           <div className="col-1-container">
             <Search className="search" onSubmit={handleSearch} />
 
-            {rowCount > -1 && (
+            {isAdmin && rowCount > -1 && (
               <Button variant="contained" className="btn-primary new-location" size="small" onClick={() => navigate('/create-location')}>
                 {strings.NEW_LOCATION}
               </Button>
