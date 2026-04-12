@@ -152,6 +152,8 @@ If gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to bu
 ## Active Technologies
 - TypeScript (Node.js backend, React 19 frontend) + Express.js, Mongoose, MUI, Vite (001-host-admin-portal)
 - MongoDB via Mongoose ODM (001-host-admin-portal)
+- TypeScript (Node.js 20 backend via ESM+Babel; React 19 + Vite frontend/admin) + Express.js, Mongoose, jose (JWT), MUI, axios (existing); add `libphonenumber-js` (phone validation), SMS provider SDK (see research), existing bcrypt/argon2 via existing User model (002-host-signup)
+- MongoDB via Mongoose — extend `User` collection, add `HostSignupAudit` collection (002-host-signup)
 
 ## Recent Changes
 - 001-host-admin-portal: Added TypeScript (Node.js backend, React 19 frontend) + Express.js, Mongoose, MUI, Vite
