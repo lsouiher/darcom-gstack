@@ -137,7 +137,9 @@ docker-compose -f docker-compose.dev.yml up -d    # Start all services
 docker-compose -f docker-compose.dev.yml down     # Stop services
 ```
 
-Services: MongoDB, mongo-express, dw-backend, dw-admin, dw-frontend
+Services: MongoDB, mongo-express, dw-backend, dw-admin, dw-frontend.
+
+Host ports (remapped from the parent `darcom` repo so both can run side-by-side): frontend 8091, admin 3013, backend 4005, mongo-express 8085, mongo 27019. In-container ports are unchanged. Services use `restart: unless-stopped` — containers do not auto-start on Docker Desktop launch after an explicit `down`. See `DOCKER-QUICKSTART.md` and `LOCAL-SETUP.md` for details.
 
 The pre-commit hook auto-detects running Docker containers and runs checks inside them when available, otherwise runs locally.
 

@@ -76,22 +76,24 @@ This creates a default admin account:
 
 | Application | URL |
 |-------------|-----|
-| Frontend (Customer) | http://localhost:8081 |
-| Admin Panel | http://localhost:3003 |
-| Backend API | http://localhost:4004 |
-| MongoDB Web UI | http://localhost:8084 |
+| Frontend (Customer) | http://localhost:8091 |
+| Admin Panel | http://localhost:3013 |
+| Backend API | http://localhost:4005 |
+| MongoDB Web UI | http://localhost:8085 |
+
+> Host ports differ from the `darcom` parent repo so both projects can run in Docker Desktop at the same time. See **Running alongside darcom** below.
 
 ## Services Overview
 
 Docker Compose starts 5 services:
 
-| Service | Description | Port |
-|---------|-------------|------|
-| mongo | MongoDB database | 27018 |
-| mongo-express | Database admin UI | 8084 |
-| dw-dev-backend | Node.js/Express API | 4004 |
-| dw-dev-admin | React admin panel | 3003 |
-| dw-dev-frontend | React customer app | 8081 |
+| Service | Description | Host Port |
+|---------|-------------|-----------|
+| mongo | MongoDB database | 27019 |
+| mongo-express | Database admin UI | 8085 |
+| dw-dev-backend | Node.js/Express API | 4005 |
+| dw-dev-admin | React admin panel | 3013 |
+| dw-dev-frontend | React customer app | 8091 (HTTPS 8445) |
 
 ## Common Commands
 
@@ -139,8 +141,8 @@ Key settings already configured for Docker:
 |----------|---------|-------------|
 | DW_DB_URI | `mongodb://admin:admin@mongo:27017/darywin` | MongoDB connection |
 | DW_PORT | 4004 | API port |
-| DW_ADMIN_HOST | `http://localhost:3003/` | Admin panel URL |
-| DW_FRONTEND_HOST | `http://localhost:8081/` | Frontend URL |
+| DW_ADMIN_HOST | `http://localhost:3013/` | Admin panel URL |
+| DW_FRONTEND_HOST | `http://localhost:8091/` | Frontend URL |
 
 **Required secrets to set:**
 - `DW_JWT_SECRET` - JWT signing key
@@ -156,16 +158,16 @@ Key settings already configured for Docker:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| VITE_DW_API_HOST | `http://localhost:4004` | Backend API URL |
-| VITE_PORT | 8081 | Dev server port |
+| VITE_DW_API_HOST | `http://localhost:4005` | Backend API URL |
+| VITE_PORT | 8081 | Dev server port (inside container; host maps to 8091) |
 | VITE_DW_PAYMENT_GATEWAY | Stripe | Payment provider |
 
 ### Admin (`admin/.env.docker`)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| VITE_DW_API_HOST | `http://localhost:4004` | Backend API URL |
-| VITE_PORT | 3003 | Dev server port |
+| VITE_DW_API_HOST | `http://localhost:4005` | Backend API URL |
+| VITE_PORT | 3003 | Dev server port (inside container; host maps to 3013) |
 
 ## Hot Reload
 
@@ -180,13 +182,13 @@ Changes to source files should reflect automatically without restarting containe
 
 ### Via Mongo Express (Web UI)
 
-Open http://localhost:8084 in your browser:
+Open http://localhost:8085 in your browser:
 - **Username:** admin
 - **Password:** admin
 
 ### Via MongoDB Client
 
-Connect to `mongodb://admin:admin@127.0.0.1:27018/darywin`
+Connect to `mongodb://admin:admin@127.0.0.1:27019/darywin`
 
 ## Running the Mobile App
 
@@ -204,13 +206,37 @@ The mobile app is NOT included in Docker Compose. To run it:
    ```
 4. Update `mobile/.env`:
    ```
-   DW_API_HOST=http://YOUR_LOCAL_IP:4004
+   DW_API_HOST=http://YOUR_LOCAL_IP:4005
    ```
    (Use your machine's IP, not localhost, for device access)
 5. Start Expo:
    ```bash
    npm run start
    ```
+
+## Running alongside darcom
+
+This fork uses a different host-port set from its parent repo (`darcom`) so both stacks can run in Docker Desktop at the same time without colliding:
+
+| Service | darcom | darcom-gstack |
+|---------|--------|---------------|
+| mongo | 27018 | **27019** |
+| mongo-express | 8084 | **8085** |
+| backend | 4004 | **4005** |
+| admin | 3003 | **3013** |
+| frontend | 8081 / 8444 | **8091 / 8445** |
+
+Services use `restart: unless-stopped`, so containers recover from crashes but do **not** auto-start when Docker Desktop launches after an explicit `down`. That gives you full control:
+
+```bash
+# Start this project
+docker-compose -f docker-compose.dev.yml up -d
+
+# Stop this project (keeps data in volumes)
+docker-compose -f docker-compose.dev.yml down
+```
+
+You can have both darcom and darcom-gstack up simultaneously. If you prefer to run only one at a time, just `down` the other first.
 
 ## Troubleshooting
 
@@ -220,9 +246,9 @@ The mobile app is NOT included in Docker Compose. To run it:
 # Stop all containers first
 docker-compose -f docker-compose.dev.yml down
 
-# Check what's using the port (e.g., 4004)
-# Windows: netstat -ano | findstr :4004
-# Linux/Mac: lsof -i :4004
+# Check what's using the port (e.g., 4005)
+# Windows: netstat -ano | findstr :4005
+# Linux/Mac: lsof -i :4005
 ```
 
 ### MongoDB connection failed
@@ -271,10 +297,10 @@ Uploaded files (avatars, property images) are stored in a Docker volume named `c
 
 ## Next Steps
 
-1. Log into the admin panel at http://localhost:3003 with the default credentials
+1. Log into the admin panel at http://localhost:3013 with the default credentials
 2. Create agencies, locations, and properties
-3. Test the customer frontend at http://localhost:8081
-4. Check the API at http://localhost:4004/api/docs (if Swagger is enabled)
+3. Test the customer frontend at http://localhost:8091
+4. Check the API at http://localhost:4005/api/docs (if Swagger is enabled)
 
 ## Useful Resources
 

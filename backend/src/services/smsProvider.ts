@@ -11,6 +11,8 @@ export class SmsProviderError extends Error {
   }
 }
 
+const devModeActive = (): boolean => env.SMS_DEV_MODE && process.env.NODE_ENV !== 'production'
+
 let cached: ReturnType<typeof twilio> | null = null
 const client = () => {
   if (!cached) {
@@ -42,6 +44,10 @@ export interface SendResult {
 }
 
 export const sendCode = async (phone: string): Promise<SendResult> => {
+  if (devModeActive()) {
+    logger.info(`[smsProvider] DEV MODE: OTP for ${phone} is ${env.SMS_DEV_CODE}`)
+    return { channel: darywinTypes.OtpChannel.SMS }
+  }
   const verify = client().verify.v2.services(env.TWILIO_VERIFY_SERVICE_SID)
   if (env.TWILIO_WHATSAPP_ENABLED) {
     try {
@@ -60,6 +66,9 @@ export const sendCode = async (phone: string): Promise<SendResult> => {
 }
 
 export const verifyCode = async (phone: string, code: string): Promise<boolean> => {
+  if (devModeActive()) {
+    return code === env.SMS_DEV_CODE
+  }
   const verify = client().verify.v2.services(env.TWILIO_VERIFY_SERVICE_SID)
   try {
     const check = await verify.verificationChecks.create({ to: phone, code })

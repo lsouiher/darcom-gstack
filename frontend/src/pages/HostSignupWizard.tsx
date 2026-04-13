@@ -23,10 +23,12 @@ type Step = 'phone' | 'otp' | 'details' | 'teaser'
 const TOTAL_STEPS = 4
 const stepIndex: Record<Step, number> = { phone: 1, otp: 2, details: 3, teaser: 4 }
 
-const mapError = (status: number): string => {
+const mapError = (status: number, code?: string): string => {
+  if (code === 'COUNTRY_BLOCKED') return strings.COUNTRY_BLOCKED
+  if (code === 'INVALID_PHONE') return strings.PHONE_HELPER
+  if (code === 'SIGNUP_CLOSED') return strings.SIGNUP_CLOSED
   if (status === 409) return strings.GENERIC_CONFLICT
   if (status === 429) return strings.RATE_LIMITED
-  if (status === 400) return strings.SIGNUP_ERROR
   if (status === 503) return strings.SERVICE_UNAVAILABLE
   if (status === 410) return strings.SESSION_EXPIRED
   return strings.SIGNUP_ERROR
@@ -69,8 +71,8 @@ const HostSignupWizard = () => {
       setChannel(r.channel || null)
       setStep('otp')
     } catch (e: unknown) {
-      const status = (e as { response?: { status: number } }).response?.status ?? 0
-      setError(mapError(status))
+      const resp = (e as { response?: { status: number; data?: { code?: string } } }).response
+      setError(mapError(resp?.status ?? 0, resp?.data?.code))
     } finally { setLoading(false) }
   }
 
@@ -87,7 +89,7 @@ const HostSignupWizard = () => {
       } else if (resp?.status === 429) {
         setError(strings.OTP_EXHAUSTED)
       } else {
-        setError(mapError(resp?.status ?? 0))
+        setError(mapError(resp?.status ?? 0, resp?.data?.code))
       }
     } finally { setLoading(false) }
   }
@@ -102,7 +104,8 @@ const HostSignupWizard = () => {
       await HostSignupService.submitDetails({ email, password, agencyName, locationId })
       setStep('teaser')
     } catch (e: unknown) {
-      setError(mapError((e as { response?: { status: number } }).response?.status ?? 0))
+      const resp = (e as { response?: { status: number; data?: { code?: string } } }).response
+      setError(mapError(resp?.status ?? 0, resp?.data?.code))
     } finally { setLoading(false) }
   }
 
@@ -117,7 +120,8 @@ const HostSignupWizard = () => {
       const adminHost = window.location.origin.replace(/:\d+/, ':3003')
       window.location.href = `${adminHost}/?signup-token=${encodeURIComponent(r.token || '')}`
     } catch (e: unknown) {
-      setError(mapError((e as { response?: { status: number } }).response?.status ?? 0))
+      const resp = (e as { response?: { status: number; data?: { code?: string } } }).response
+      setError(mapError(resp?.status ?? 0, resp?.data?.code))
     } finally { setLoading(false) }
   }
 

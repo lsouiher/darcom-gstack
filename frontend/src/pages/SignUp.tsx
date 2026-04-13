@@ -177,6 +177,7 @@ const SignUp = () => {
 
       const _birthDateValid = validateBirthDate(birthDate)
       if (!birthDate || !_birthDateValid) {
+        setBirthDateValid(false)
         return
       }
 

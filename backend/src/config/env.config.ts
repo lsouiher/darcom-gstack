@@ -226,14 +226,14 @@ export const SMTP_PORT = Number.parseInt(__env__('DW_SMTP_PORT', true), 10)
  *
  * @type {string}
  */
-export const SMTP_USER = __env__('DW_SMTP_USER', true)
+export const SMTP_USER = __env__('DW_SMTP_USER', false)
 
 /**
  * SMTP password.
  *
  * @type {string}
  */
-export const SMTP_PASS = __env__('DW_SMTP_PASS', true)
+export const SMTP_PASS = __env__('DW_SMTP_PASS', false)
 
 /**
  * SMTP from email.
@@ -456,6 +456,13 @@ export const TWILIO_ACCOUNT_SID = __env__('DW_TWILIO_ACCOUNT_SID', false)
 export const TWILIO_AUTH_TOKEN = __env__('DW_TWILIO_AUTH_TOKEN', false)
 export const TWILIO_VERIFY_SERVICE_SID = __env__('DW_TWILIO_VERIFY_SERVICE_SID', false)
 export const TWILIO_WHATSAPP_ENABLED = helper.StringToBoolean(__env__('DW_TWILIO_WHATSAPP_ENABLED', false, 'true'))
+
+/**
+ * Dev-only OTP bypass: skip Twilio, log the code, accept DW_SMS_DEV_CODE.
+ * MUST be false in production. Refused unless NODE_ENV !== 'production'.
+ */
+export const SMS_DEV_MODE = helper.StringToBoolean(__env__('DW_SMS_DEV_MODE', false, 'false'))
+export const SMS_DEV_CODE = __env__('DW_SMS_DEV_CODE', false, '000000')
 
 /**
  * Comma-separated ISO-3166-1 alpha-2 country codes allowed to sign up as a host.
