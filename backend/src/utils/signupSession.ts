@@ -18,7 +18,9 @@ export const verifySessionCookie = (raw: string | undefined): string | null => {
   const [body, sig] = raw.split('.')
   if (!body || !sig) return null
   const expected = crypto.createHmac('sha256', env.SIGNUP_SESSION_SECRET).update(body).digest('base64url')
-  if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null
+  const sigBuf = Buffer.from(sig)
+  const expectedBuf = Buffer.from(expected)
+  if (sigBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(sigBuf, expectedBuf)) return null
   try {
     const decoded = Buffer.from(body, 'base64url').toString('utf8')
     const [sessionId, tsRaw] = decoded.split(':')

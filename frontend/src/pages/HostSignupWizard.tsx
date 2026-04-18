@@ -76,10 +76,10 @@ const HostSignupWizard = () => {
     } finally { setLoading(false) }
   }
 
-  const handleVerify = async () => {
+  const handleVerify = async (codeOverride?: string) => {
     setError(null); setLoading(true)
     try {
-      await HostSignupService.verifyPhone({ code })
+      await HostSignupService.verifyPhone({ code: codeOverride || code })
       setStep('details')
     } catch (e: unknown) {
       const resp = (e as { response?: { status: number; data?: { code?: string; remaining?: number } } }).response
@@ -177,7 +177,7 @@ const HostSignupWizard = () => {
                 onChange={(e) => {
                   const v = e.target.value.replace(/\D/g, '').slice(0, 6)
                   setCode(v)
-                  if (v.length === 6) { /* auto-submit */ setTimeout(handleVerify, 0) }
+                  if (v.length === 6) { handleVerify(v) }
                 }}
                 fullWidth
                 autoFocus
@@ -190,7 +190,7 @@ const HostSignupWizard = () => {
               />
               <Stack direction="row" spacing={1}>
                 <Button onClick={() => setStep('phone')}>{strings.BACK}</Button>
-                <Button variant="contained" onClick={handleVerify} disabled={loading || code.length < 6}>
+                <Button variant="contained" onClick={() => handleVerify()} disabled={loading || code.length < 6}>
                   {strings.CONTINUE}
                 </Button>
               </Stack>

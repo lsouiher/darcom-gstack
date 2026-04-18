@@ -143,7 +143,7 @@ userSchema.index({ type: 1, expireAt: 1, email: 1 })
 userSchema.index({ type: 1, expireAt: 1, fullName: 1, _id: 1 })
 userSchema.index({ type: 1, expireAt: 1, email: 1, _id: 1 })
 userSchema.index({ type: 1, firstPayoutApproved: 1 })
-userSchema.index({ phone: 1 }, { sparse: true })
+userSchema.index({ phone: 1, type: 1 }, { unique: true, sparse: true })
 
 const User = model<env.User>('User', userSchema)
 

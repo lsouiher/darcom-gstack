@@ -6,6 +6,7 @@ export type HostSignupAuditEvent =
   | 'otp_send_failed'
   | 'phone_collision'
   | 'email_collision'
+  | 'duplicate_signup'
   | 'rate_limited'
   | 'country_blocked'
 

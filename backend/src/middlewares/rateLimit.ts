@@ -25,3 +25,5 @@ export const phoneLimiter = (max: number, windowMs = 60 * 60 * 1000) =>
 export const signupStartLimiter = ipLimiter(10, 15 * 60 * 1000)
 export const signupPhoneLimiter = phoneLimiter(5, 60 * 60 * 1000)
 export const signupVerifyLimiter = ipLimiter(20, 15 * 60 * 1000)
+export const signupDetailsLimiter = ipLimiter(15, 15 * 60 * 1000)
+export const signupCompleteLimiter = ipLimiter(5, 15 * 60 * 1000)

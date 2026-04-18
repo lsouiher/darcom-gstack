@@ -473,7 +473,7 @@ export const SIGNUP_ALLOWED_COUNTRY_CODES = __env__('DW_SIGNUP_ALLOWED_COUNTRY_C
 /**
  * Secret used to sign the host-signup session cookie.
  */
-export const SIGNUP_SESSION_SECRET = __env__('DW_SIGNUP_SESSION_SECRET', false, 'Darywin-signup-session')
+export const SIGNUP_SESSION_SECRET = __env__('DW_SIGNUP_SESSION_SECRET', true)
 
 /**
  * Kill-switch for the public host signup flow.

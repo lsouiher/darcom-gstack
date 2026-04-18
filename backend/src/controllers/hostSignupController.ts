@@ -178,19 +178,47 @@ export const complete = async (req: Request, res: Response) => {
 
   const teaser = (req.body || {} as darywinTypes.HostSignupCompletePayload).teaserProperty as TeaserProperty | undefined
 
-  const user = await User.create({
-    type: darywinTypes.UserType.Agency,
-    fullName: session.agencyName,
-    email: session.email,
-    phone: session.phone,
-    password: session.passwordHash,
-    active: true,
-    verified: false,
-    language: session.language,
-    phoneVerified: true,
-    firstPayoutApproved: false,
-    onboardingStep: teaser ? darywinTypes.OnboardingStep.Payout : darywinTypes.OnboardingStep.Property,
-  })
+  if (teaser) {
+    if (teaser.price != null && (typeof teaser.price !== 'number' || teaser.price <= 0)) {
+      return res.status(400).json({ code: 'INVALID_TEASER' })
+    }
+    if (teaser.name && teaser.name.length > 500) {
+      return res.status(400).json({ code: 'INVALID_TEASER' })
+    }
+    if (teaser.address && teaser.address.length > 500) {
+      return res.status(400).json({ code: 'INVALID_TEASER' })
+    }
+    if (teaser.latitude != null && (teaser.latitude < -90 || teaser.latitude > 90)) {
+      return res.status(400).json({ code: 'INVALID_TEASER' })
+    }
+    if (teaser.longitude != null && (teaser.longitude < -180 || teaser.longitude > 180)) {
+      return res.status(400).json({ code: 'INVALID_TEASER' })
+    }
+  }
+
+  let user
+  try {
+    user = await User.create({
+      type: darywinTypes.UserType.Agency,
+      fullName: session.agencyName,
+      email: session.email,
+      phone: session.phone,
+      password: session.passwordHash,
+      active: true,
+      verified: false,
+      language: session.language,
+      phoneVerified: true,
+      firstPayoutApproved: false,
+      onboardingStep: teaser ? darywinTypes.OnboardingStep.Payout : darywinTypes.OnboardingStep.Property,
+    })
+  } catch (err: unknown) {
+    const mongoErr = err as { code?: number }
+    if (mongoErr.code === 11000) {
+      writeAudit({ event: 'duplicate_signup', phone: session.phone, req })
+      return res.status(409).json({ code: 'CONFLICT' })
+    }
+    throw err
+  }
 
   let flags: string[] = []
   if (teaser) {

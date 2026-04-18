@@ -11,7 +11,8 @@ export class SmsProviderError extends Error {
   }
 }
 
-const devModeActive = (): boolean => env.SMS_DEV_MODE && process.env.NODE_ENV !== 'production'
+const devModeActive = (): boolean =>
+  env.SMS_DEV_MODE && (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
 
 let cached: ReturnType<typeof twilio> | null = null
 const client = () => {

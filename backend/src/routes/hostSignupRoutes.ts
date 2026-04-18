@@ -5,7 +5,7 @@ import { publicRoute, tenantScoped, adminOnly } from './_markers'
 import * as hostAdmin from '../controllers/hostAdminController'
 import { signupEnabledGuard } from '../middlewares/signupEnabledGuard'
 import { loadSignupSession } from '../middlewares/loadSignupSession'
-import { signupStartLimiter, signupPhoneLimiter, signupVerifyLimiter } from '../middlewares/rateLimit'
+import { signupStartLimiter, signupPhoneLimiter, signupVerifyLimiter, signupDetailsLimiter, signupCompleteLimiter } from '../middlewares/rateLimit'
 
 const routes = express.Router()
 
@@ -16,10 +16,10 @@ routes.route(routeNames.verifyPhone).post(
   ...publicRoute(signupEnabledGuard, signupVerifyLimiter, loadSignupSession, controller.verifyPhone),
 )
 routes.route(routeNames.details).post(
-  ...publicRoute(signupEnabledGuard, loadSignupSession, controller.details),
+  ...publicRoute(signupEnabledGuard, signupDetailsLimiter, loadSignupSession, controller.details),
 )
 routes.route(routeNames.complete).post(
-  ...publicRoute(signupEnabledGuard, loadSignupSession, controller.complete),
+  ...publicRoute(signupEnabledGuard, signupCompleteLimiter, loadSignupSession, controller.complete),
 )
 routes.route(routeNames.current).get(
   ...publicRoute(signupEnabledGuard, loadSignupSession, controller.currentSession),
