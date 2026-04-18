@@ -98,7 +98,7 @@ const _signup = async (req: Request, res: Response, userType: darywinTypes.UserT
         `<p>
     ${i18n.t('HELLO')}${user.fullName},<br><br>
     ${i18n.t('ACCOUNT_ACTIVATION_LINK')}<br><br>
-    http${env.HTTPS ? 's' : ''}://${req.headers.host}/api/confirm-email/${user.email}/${token.token}<br><br>
+    ${helper.joinURL(env.FRONTEND_HOST, 'confirm-email')}?e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(token.token)}<br><br>
     ${i18n.t('REGARDS')}<br>
     </p>`,
     }
@@ -810,9 +810,15 @@ export const confirmEmail = async (req: Request, res: Response) => {
 
     const user = await User.findOne({ email: _email })
 
+    const isPost = req.method === 'POST'
+
     if (!user) {
       logger.error('[user.confirmEmail] User not found', req.params)
-      res.status(204).send(i18n.t('ACCOUNT_ACTIVATION_LINK_ERROR'))
+      if (isPost) {
+        res.status(204).json({ status: 'error' })
+      } else {
+        res.status(204).send(i18n.t('ACCOUNT_ACTIVATION_LINK_ERROR'))
+      }
       return
     }
 
@@ -822,7 +828,11 @@ export const confirmEmail = async (req: Request, res: Response) => {
     // token is not found into database i.e. token may have expired
     if (!token) {
       logger.error(i18n.t('ACCOUNT_ACTIVATION_LINK_EXPIRED'), req.params)
-      res.status(400).send(getStatusMessage(user.language, i18n.t('ACCOUNT_ACTIVATION_LINK_EXPIRED')))
+      if (isPost) {
+        res.status(400).json({ status: 'expired' })
+      } else {
+        res.status(400).send(getStatusMessage(user.language, i18n.t('ACCOUNT_ACTIVATION_LINK_EXPIRED')))
+      }
       return
     }
 
@@ -830,7 +840,11 @@ export const confirmEmail = async (req: Request, res: Response) => {
     // not valid user
     if (user.verified) {
       // user is already verified
-      res.status(200).send(getStatusMessage(user.language, i18n.t('ACCOUNT_ACTIVATION_ACCOUNT_VERIFIED')))
+      if (isPost) {
+        res.status(200).json({ status: 'already_verified' })
+      } else {
+        res.status(200).send(getStatusMessage(user.language, i18n.t('ACCOUNT_ACTIVATION_ACCOUNT_VERIFIED')))
+      }
       return
     }
 
@@ -839,10 +853,18 @@ export const confirmEmail = async (req: Request, res: Response) => {
     user.verified = true
     user.verifiedAt = new Date()
     await user.save()
-    res.status(200).send(getStatusMessage(user.language, i18n.t('ACCOUNT_ACTIVATION_SUCCESS')))
+    if (isPost) {
+      res.status(200).json({ status: 'success' })
+    } else {
+      res.status(200).send(getStatusMessage(user.language, i18n.t('ACCOUNT_ACTIVATION_SUCCESS')))
+    }
   } catch (err) {
     logger.error(`[user.confirmEmail] ${i18n.t('DB_ERROR')} ${JSON.stringify(req.params)}`, err)
-    res.status(400).send(i18n.t('DB_ERROR') + err)
+    if (req.method === 'POST') {
+      res.status(400).json({ status: 'error' })
+    } else {
+      res.status(400).send(i18n.t('DB_ERROR') + err)
+    }
   }
 }
 
@@ -893,7 +915,7 @@ export const resendLink = async (req: Request, res: Response) => {
       html:
         `<p>${i18n.t('HELLO')}${user.fullName},<br><br>
           ${i18n.t('ACCOUNT_ACTIVATION_LINK')}<br><br>
-          http${env.HTTPS ? 's' : ''}://${req.headers.host}/api/confirm-email/${user.email}/${token.token}<br><br>
+          ${helper.joinURL(env.FRONTEND_HOST, 'confirm-email')}?e=${encodeURIComponent(user.email)}&t=${encodeURIComponent(token.token)}<br><br>
           ${i18n.t('REGARDS')}<br></p>`,
     }
 

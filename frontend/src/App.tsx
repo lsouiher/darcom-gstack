@@ -37,6 +37,7 @@ const Agencies = lazy(() => import('@/pages/Agencies'))
 const Locations = lazy(() => import('@/pages/Locations'))
 const Privacy = lazy(() => import('@/pages/Privacy'))
 const CookiePolicy = lazy(() => import('@/pages/CookiePolicy'))
+const ConfirmEmail = lazy(() => import('@/pages/ConfirmEmail'))
 const BecomeAHost = lazy(() => import('@/pages/BecomeAHost'))
 const HostSignupWizard = lazy(() => import('@/pages/HostSignupWizard'))
 
@@ -76,6 +77,7 @@ const router = createBrowserRouter([
       { path: '/sign-in', element: <SignIn /> },
       { path: '/sign-up', element: <SignUp /> },
       { path: '/activate', element: <Activate /> },
+      { path: '/confirm-email', element: <ConfirmEmail /> },
       { path: '/forgot-password', element: <ForgotPassword /> },
       { path: '/reset-password', element: <ResetPassword /> },
       { path: '/search', element: <Search /> },

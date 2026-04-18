@@ -22,6 +22,7 @@ routes.route(routeNames.deletePushToken).post(...tenantScoped(userController.del
 routes.route(routeNames.validateEmail).post(...publicRoute(userController.validateEmail))
 routes.route(routeNames.validateAccessToken).post(...tenantScoped(userController.validateAccessToken))
 routes.route(routeNames.confirmEmail).get(...publicRoute(userController.confirmEmail))
+routes.route(routeNames.confirmEmail).post(...publicRoute(userController.confirmEmail))
 routes.route(routeNames.resendLink).post(...tenantScoped(userController.resendLink))
 routes.route(routeNames.update).post(...tenantScoped(userController.update))
 routes.route(routeNames.updateEmailNotifications).post(...tenantScoped(userController.updateEmailNotifications))

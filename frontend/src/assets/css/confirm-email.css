@@ -1,0 +1,66 @@
+/* Confirm Email */
+div.confirm-email {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 120px 0;
+  transform: translate3d(0, 0, 0);
+  flex: 1 0 auto;
+  padding-bottom: 40px;
+  min-height: 100vh;
+}
+
+.confirm-email-form h1 {
+  text-align: center;
+  color: #232323;
+}
+
+.confirm-email-form div.confirm-email-form-content {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+.confirm-email-form div.confirm-email-form-content span {
+  float: left;
+  text-align: center;
+}
+
+.confirm-email-form div.confirm-email-form-content span.redirect-message {
+  margin-top: 15px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.confirm-email-form div.confirm-email-form-content .btn-resend {
+  float: left;
+  clear: left;
+  width: 90px;
+  margin-top: 15px !important;
+}
+
+.confirm-email-form div.confirm-email-form-content p.go-to-home {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Device width is less than or equal to 960px */
+@media only screen and (width <=960px) {
+  .confirm-email-form {
+    margin-top: 40px;
+    width: 330px;
+    padding: 30px;
+  }
+}
+
+/* Device width is greater than or equal to 960px */
+@media only screen and (width >=960px) {
+  .confirm-email-form {
+    margin-top: 40px;
+    width: 430px;
+    padding: 30px;
+  }
+}
