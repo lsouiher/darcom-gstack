@@ -9,6 +9,8 @@ export type HostSignupAuditEvent =
   | 'duplicate_signup'
   | 'rate_limited'
   | 'country_blocked'
+  | 'signup_token_consumed'
+  | 'signup_token_rejected'
 
 export interface HostSignupAuditDoc extends Document {
   event: HostSignupAuditEvent

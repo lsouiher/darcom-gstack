@@ -533,6 +533,7 @@ export interface User extends Document {
   firstPayoutApproved?: boolean
   onboardingStep?: darywinTypes.OnboardingStep
   payoutAccountId?: string
+  signupTokenConsumedAt?: Date
 }
 
 /**

@@ -30,6 +30,7 @@ const SignIn = () => {
   const [visible, setVisible] = useState(false)
   const [blacklisted, setBlacklisted] = useState(false)
   const [stayConnected, setStayConnected] = useState(false)
+  const [signupExpired, setSignupExpired] = useState(false)
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value)
@@ -98,6 +99,10 @@ const SignIn = () => {
       try {
         langHelper.setLanguage(strings)
 
+        if (new URLSearchParams(window.location.search).get('expired') === 'signup') {
+          setSignupExpired(true)
+        }
+
         const currentUser = UserService.getCurrentUser()
 
         if (currentUser) {
@@ -131,6 +136,11 @@ const SignIn = () => {
           <Paper className="signin-form" elevation={10}>
             <form onSubmit={handleSubmit}>
               <h1 className="signin-form-title">{strings.SIGN_IN_HEADING}</h1>
+              {signupExpired && (
+                <div className="form-error" role="status">
+                  <Error message={strings.SIGNUP_LINK_EXPIRED} />
+                </div>
+              )}
               <FormControl fullWidth margin="dense">
                 <InputLabel htmlFor="email">{commonStrings.EMAIL}</InputLabel>
                 <Input id="email" type="text" name="Email" onChange={handleEmailChange} autoComplete="email" required />

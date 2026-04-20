@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import type { CookieOptions, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import validator from 'validator'
 import * as darywinTypes from ':darywin-types'
@@ -15,6 +15,7 @@ import * as authHelper from '../utils/authHelper'
 import { writeAudit } from '../utils/audit'
 import { fireAndForget } from '../utils/fireAndForget'
 import { signSessionId, verifySessionCookie, cookieOptions, SIGNUP_COOKIE_NAME } from '../utils/signupSession'
+import { BRIDGE_COOKIE_NAME, BRIDGE_TOKEN_TTL_SECONDS, bridgeCookieOptions } from '../utils/signupBridge'
 import * as logger from '../utils/logger'
 import axios from 'axios'
 
@@ -254,9 +255,13 @@ export const complete = async (req: Request, res: Response) => {
   await session.save()
   res.clearCookie(SIGNUP_COOKIE_NAME, cookieOptions())
 
-  const token = await authHelper.encryptJWT({ id: user._id.toString() })
+  const bridgeToken = await authHelper.signPurposeToken(
+    { id: user._id.toString(), purpose: 'host-signup' },
+    BRIDGE_TOKEN_TTL_SECONDS,
+  )
+  res.cookie(BRIDGE_COOKIE_NAME, bridgeToken, bridgeCookieOptions())
+
   return res.status(200).json({
-    token,
     user: {
       _id: user._id.toString(),
       fullName: user.fullName,
@@ -266,6 +271,70 @@ export const complete = async (req: Request, res: Response) => {
       onboardingStep: user.onboardingStep,
     },
   })
+}
+
+export const consumeSignupToken = async (req: Request, res: Response) => {
+  const reject = (status: number, code: string, reason: string) => {
+    writeAudit({ event: 'signup_token_rejected', req, reason })
+    return res.status(status).json({ code })
+  }
+
+  if (!authHelper.isAdmin(req)) {
+    return reject(403, 'FORBIDDEN', 'origin_not_admin')
+  }
+
+  const token = req.signedCookies?.[BRIDGE_COOKIE_NAME] as string | undefined
+  if (!token || typeof token !== 'string') {
+    return reject(401, 'INVALID_TOKEN', 'no_bridge_cookie')
+  }
+
+  let payload: authHelper.PurposeBoundPayload
+  try {
+    payload = await authHelper.verifyPurposeToken(token, 'host-signup')
+  } catch {
+    res.clearCookie(BRIDGE_COOKIE_NAME, bridgeCookieOptions())
+    return reject(401, 'INVALID_TOKEN', 'verify_failed')
+  }
+
+  const user = await User.findById(payload.id)
+  if (!user || user.type !== darywinTypes.UserType.Agency || user.blacklisted) {
+    res.clearCookie(BRIDGE_COOKIE_NAME, bridgeCookieOptions())
+    return reject(401, 'INVALID_TOKEN', 'user_invalid')
+  }
+
+  // One-time use: reject if a session has already been minted from a token
+  // issued at or before this token's iat.
+  const consumedAtSec = user.signupTokenConsumedAt
+    ? Math.floor(user.signupTokenConsumedAt.getTime() / 1000)
+    : 0
+  if (payload.iat <= consumedAtSec) {
+    res.clearCookie(BRIDGE_COOKIE_NAME, bridgeCookieOptions())
+    return reject(401, 'INVALID_TOKEN', 'replay')
+  }
+
+  user.signupTokenConsumedAt = new Date()
+  await user.save()
+
+  const sessionToken = await authHelper.encryptJWT({ id: user._id.toString() })
+  const opts: CookieOptions = { ...env.COOKIE_OPTIONS, maxAge: env.JWT_EXPIRE_AT * 1000 }
+  const cookieName = authHelper.getAuthCookieName(req)
+
+  writeAudit({ event: 'signup_token_consumed', userId: user._id, req })
+
+  return res
+    .clearCookie(BRIDGE_COOKIE_NAME, bridgeCookieOptions())
+    .clearCookie(cookieName)
+    .cookie(cookieName, sessionToken, opts)
+    .status(200)
+    .json({
+      _id: user._id.toString(),
+      email: user.email,
+      fullName: user.fullName,
+      language: user.language,
+      enableEmailNotifications: user.enableEmailNotifications,
+      blacklisted: user.blacklisted,
+      avatar: user.avatar,
+    })
 }
 
 // Used by loadSignupSession guard indirectly — no-op getter for wizard resume.

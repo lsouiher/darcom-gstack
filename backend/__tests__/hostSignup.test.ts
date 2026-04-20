@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { jest } from '@jest/globals'
 import request from 'supertest'
 import * as darywinTypes from ':darywin-types'
+import type { User as EnvUser } from '../src/config/env.config'
 
 jest.setTimeout(60_000)
 
@@ -96,8 +97,11 @@ describe('POST /api/signup/host — happy path', () => {
 
     const r4 = await request(app).post('/api/signup/host/complete').set('Cookie', cookie).send({})
     expect(r4.status).toBe(200)
-    expect(r4.body.token).toBeTruthy()
+    // The bridge JWT is delivered as a short-TTL httpOnly signed cookie, NOT in the body.
+    const r4Cookies = ([] as string[]).concat(r4.headers['set-cookie'] || [])
+    expect(r4Cookies.some((c) => c.startsWith('dw-host-signup-bridge=s%3A') || c.startsWith('dw-host-signup-bridge=s:'))).toBe(true)
     expect(r4.body.user.email).toBe(email)
+    expect(r4.body.token).toBeUndefined()
 
     const user = await User.findOne({ email }).lean()
     expect(user).toBeTruthy()
@@ -353,6 +357,179 @@ describe('Regression: admin-provisioned CreateAgency (T118)', () => {
     // New admin-provisioned ones are subject to the same payout gate — acceptable.
 
     await User.deleteOne({ _id: admin._id })
+  })
+})
+
+describe('POST /api/host/signup/session-from-token — admin bridge cookie exchange', () => {
+  // Sign a value the same way express's res.cookie(..., { signed: true }) does
+  // so cookie-parser's req.signedCookies will accept it on the inbound request.
+  const signCookieValue = async (raw: string): Promise<string> => {
+    const cookieSignature = (await import('cookie-signature')).default as { sign: (val: string, secret: string) => string }
+    return `s:${cookieSignature.sign(raw, env.COOKIE_SECRET)}`
+  }
+
+  // The token endpoint is rate-limited at 5/15min per IP. Reset between tests
+  // so each case gets a fresh bucket; test runner is single-threaded, no flake risk.
+  beforeEach(async () => {
+    const { signupTokenLimiter } = await import('../src/middlewares/rateLimit')
+    const limiter = signupTokenLimiter as unknown as { resetKey: (k: string) => void | Promise<void> }
+    if (typeof limiter.resetKey === 'function') {
+      await Promise.resolve(limiter.resetKey('::ffff:127.0.0.1'))
+      await Promise.resolve(limiter.resetKey('127.0.0.1'))
+      await Promise.resolve(limiter.resetKey('::1'))
+    }
+  })
+
+  const sendWithBridgeCookie = async (rawToken: string, opts: { origin?: string } = {}) => {
+    const signed = await signCookieValue(rawToken)
+    return request(app)
+      .post('/api/host/signup/session-from-token')
+      .set('Cookie', `dw-host-signup-bridge=${signed}`)
+      .set('Origin', opts.origin ?? env.ADMIN_HOST)
+      .send({})
+  }
+
+  const makeHost = async (overrides: Record<string, unknown> = {}) => {
+    const bcrypt = (await import('bcrypt')).default
+    const doc = {
+      fullName: 'Bridge Host',
+      email: `hostsignup-test-bridge-${Date.now()}-${Math.random().toString(36).slice(2)}@test.darywin.com`,
+      password: await bcrypt.hash('Sup3rSecret!', 10),
+      phone: `+21355544${Math.floor(1000 + Math.random() * 8999)}`,
+      type: darywinTypes.UserType.Agency,
+      active: true,
+      phoneVerified: true,
+      ...overrides,
+    }
+    return (await User.create(doc)) as unknown as EnvUser & { _id: { toString(): string } }
+  }
+
+  it('issues the admin auth cookie for a valid bridge token', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const host = await makeHost()
+    const token = await authHelper.signPurposeToken({ id: host._id.toString(), purpose: 'host-signup' }, 120)
+
+    const r = await sendWithBridgeCookie(token)
+    expect(r.status).toBe(200)
+    expect(r.body._id).toBe(host._id.toString())
+    expect(r.body.email).toBe(host.email)
+
+    const setCookie = ([] as string[]).concat(r.headers['set-cookie'] || [])
+    expect(setCookie.some((c) => c.startsWith(`${env.ADMIN_AUTH_COOKIE_NAME}=`))).toBe(true)
+    // bridge cookie must be cleared
+    expect(setCookie.some((c) => c.startsWith('dw-host-signup-bridge=') && /Expires=Thu, 01 Jan 1970/.test(c))).toBe(true)
+
+    // user.signupTokenConsumedAt was stamped
+    const after = await User.findById(host._id)
+    expect(after?.signupTokenConsumedAt).toBeTruthy()
+  })
+
+  it('rejects replay of the same bridge token (401)', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const host = await makeHost()
+    const token = await authHelper.signPurposeToken({ id: host._id.toString(), purpose: 'host-signup' }, 120)
+
+    const r1 = await sendWithBridgeCookie(token)
+    expect(r1.status).toBe(200)
+    const r2 = await sendWithBridgeCookie(token)
+    expect(r2.status).toBe(401)
+    expect(r2.body.code).toBe('INVALID_TOKEN')
+  })
+
+  it('rejects requests from the frontend Origin (admin-only endpoint, 403)', async () => {
+    // CORS only allows ADMIN_HOST and FRONTEND_HOST; anything else gets stopped at the
+    // CORS layer (defense in depth). For the controller-level Origin guard we test the
+    // closest legitimate non-admin caller: the frontend.
+    const authHelper = await import('../src/utils/authHelper')
+    const host = await makeHost()
+    const token = await authHelper.signPurposeToken({ id: host._id.toString(), purpose: 'host-signup' }, 120)
+
+    const r = await sendWithBridgeCookie(token, { origin: env.FRONTEND_HOST })
+    expect(r.status).toBe(403)
+    expect(r.body.code).toBe('FORBIDDEN')
+  })
+
+  it('rejects when the bridge cookie is missing (401)', async () => {
+    const r = await request(app)
+      .post('/api/host/signup/session-from-token')
+      .set('Origin', env.ADMIN_HOST)
+      .send({})
+    expect(r.status).toBe(401)
+    expect(r.body.code).toBe('INVALID_TOKEN')
+  })
+
+  it('rejects a plain session JWT (no purpose) injected into the bridge cookie (401)', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const host = await makeHost()
+    const plain = await authHelper.encryptJWT({ id: host._id.toString() })
+
+    const r = await sendWithBridgeCookie(plain)
+    expect(r.status).toBe(401)
+  })
+
+  it('rejects a malformed bridge cookie value (401)', async () => {
+    const r = await sendWithBridgeCookie('not-a-jwt')
+    expect(r.status).toBe(401)
+  })
+
+  it('rejects an expired bridge token (401)', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const host = await makeHost()
+    // ttlSeconds=1, then wait 1.5s
+    const token = await authHelper.signPurposeToken({ id: host._id.toString(), purpose: 'host-signup' }, 1)
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    const r = await sendWithBridgeCookie(token)
+    expect(r.status).toBe(401)
+  })
+
+  it('rejects a bridge token for a blacklisted Agency (401)', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const host = await makeHost({ blacklisted: true })
+    const token = await authHelper.signPurposeToken({ id: host._id.toString(), purpose: 'host-signup' }, 120)
+
+    const r = await sendWithBridgeCookie(token)
+    expect(r.status).toBe(401)
+  })
+
+  it('rejects a bridge token for a non-Agency user (401)', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const bcrypt = (await import('bcrypt')).default
+    const customer = await User.create({
+      fullName: 'Customer',
+      email: `hostsignup-test-customer-${Date.now()}@test.darywin.com`,
+      password: await bcrypt.hash('Sup3rSecret!', 10),
+      type: darywinTypes.UserType.User, active: true, verified: true,
+    })
+    const token = await authHelper.signPurposeToken({ id: customer._id.toString(), purpose: 'host-signup' }, 120)
+
+    const r = await sendWithBridgeCookie(token)
+    expect(r.status).toBe(401)
+    await User.deleteOne({ _id: customer._id })
+  })
+
+  it('writes signup_token_consumed audit on success and signup_token_rejected on failure', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    const host = await makeHost()
+    const token = await authHelper.signPurposeToken({ id: host._id.toString(), purpose: 'host-signup' }, 120)
+
+    await sendWithBridgeCookie(token)
+    // Replay → rejected
+    await sendWithBridgeCookie(token)
+    // Allow fire-and-forget audit writes to flush
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    const consumed = await HostSignupAudit.findOne({ event: 'signup_token_consumed', userId: host._id })
+    expect(consumed).toBeTruthy()
+    const rejected = await HostSignupAudit.findOne({ event: 'signup_token_rejected', reason: 'replay' })
+    expect(rejected).toBeTruthy()
+  })
+
+  it('decryptJWT (session verifier) rejects any payload with a purpose claim', async () => {
+    const authHelper = await import('../src/utils/authHelper')
+    // Sign a token with purpose via the purpose helper, then try to verify it as a session.
+    const purposeTok = await authHelper.signPurposeToken({ id: '507f1f77bcf86cd799439011', purpose: 'host-signup' }, 120)
+    await expect(authHelper.decryptJWT(purposeTok)).rejects.toThrow(/purpose-bound token rejected/)
   })
 })
 

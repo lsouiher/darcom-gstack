@@ -122,6 +122,9 @@ const userSchema = new Schema<env.User>(
     payoutAccountId: {
       type: String,
     },
+    signupTokenConsumedAt: {
+      type: Date,
+    },
     expireAt: {
       //
       // Non verified and active users created from checkout with Stripe are temporary and

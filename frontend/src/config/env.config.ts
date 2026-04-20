@@ -68,6 +68,7 @@ const env = {
 
   APP_TYPE: darywinTypes.AppType.Frontend,
   API_HOST: String(import.meta.env.VITE_DW_API_HOST),
+  ADMIN_HOST: String(import.meta.env.VITE_DW_ADMIN_HOST || window.location.origin),
   LANGUAGES: LANGUAGES.map((l) => l.code),
   _LANGUAGES: LANGUAGES,
   DEFAULT_LANGUAGE: String(import.meta.env.VITE_DW_DEFAULT_LANGUAGE || 'en'),

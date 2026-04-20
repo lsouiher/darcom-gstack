@@ -99,7 +99,6 @@ export interface HostSignupResponse {
   phoneVerified?: boolean
   nextStep?: OnboardingStep
   channel?: OtpChannel
-  token?: string
   user?: User
 }
 
@@ -340,6 +339,7 @@ export interface User {
   phoneVerified?: boolean
   firstPayoutApproved?: boolean
   onboardingStep?: OnboardingStep
+  signupTokenConsumedAt?: Date
   payoutAccountId?: string
 }
 

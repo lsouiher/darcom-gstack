@@ -9,6 +9,7 @@ const strings = new LocalizedStrings({
     IS_BLACKLISTED: 'Votre compte est suspendu.',
     RESET_PASSWORD: 'Mot de passe oublié ?',
     STAY_CONNECTED: 'Rester connecté',
+    SIGNUP_LINK_EXPIRED: 'Votre lien d\'inscription a expiré. Connectez-vous pour continuer.',
   },
   en: {
     SIGN_IN_HEADING: 'Sign in',
@@ -17,6 +18,7 @@ const strings = new LocalizedStrings({
     IS_BLACKLISTED: 'Your account is suspended.',
     RESET_PASSWORD: 'Forgot password?',
     STAY_CONNECTED: 'Stay connected',
+    SIGNUP_LINK_EXPIRED: 'Your signup link expired. Sign in to continue.',
   },
 })
 

@@ -17,6 +17,7 @@ import * as HostSignupService from '@/services/HostSignupService'
 import LocationSelectList from '@/components/LocationSelectList'
 import Layout from '@/components/Layout'
 import Footer from '@/components/Footer'
+import { adminUrl, adminSignInUrl } from '@/utils/adminUrl'
 
 type Step = 'phone' | 'otp' | 'details' | 'teaser'
 
@@ -38,7 +39,17 @@ const HostSignupWizard = () => {
   const navigate = useNavigate()
   const [step, setStep] = useState<Step>('phone')
   const [error, setError] = useState<string | null>(null)
+  const [showSignInCta, setShowSignInCta] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const applyError = (status: number, code?: string) => {
+    setError(mapError(status, code))
+    setShowSignInCta(status === 409)
+  }
+  const clearError = () => {
+    setError(null)
+    setShowSignInCta(false)
+  }
 
   const [phone, setPhone] = useState('')
   const [channel, setChannel] = useState<darywinTypes.OtpChannel | null>(null)
@@ -65,19 +76,19 @@ const HostSignupWizard = () => {
   }, [])
 
   const handleStart = async () => {
-    setError(null); setLoading(true)
+    clearError(); setLoading(true)
     try {
       const r = await HostSignupService.start({ phone })
       setChannel(r.channel || null)
       setStep('otp')
     } catch (e: unknown) {
       const resp = (e as { response?: { status: number; data?: { code?: string } } }).response
-      setError(mapError(resp?.status ?? 0, resp?.data?.code))
+      applyError(resp?.status ?? 0, resp?.data?.code)
     } finally { setLoading(false) }
   }
 
   const handleVerify = async (codeOverride?: string) => {
-    setError(null); setLoading(true)
+    clearError(); setLoading(true)
     try {
       await HostSignupService.verifyPhone({ code: codeOverride || code })
       setStep('details')
@@ -89,13 +100,13 @@ const HostSignupWizard = () => {
       } else if (resp?.status === 429) {
         setError(strings.OTP_EXHAUSTED)
       } else {
-        setError(mapError(resp?.status ?? 0, resp?.data?.code))
+        applyError(resp?.status ?? 0, resp?.data?.code)
       }
     } finally { setLoading(false) }
   }
 
   const handleDetails = async () => {
-    setError(null)
+    clearError()
     if (!validator.isEmail(email)) { setError(strings.SIGNUP_ERROR); return }
     if (password.length < 8) { setError(strings.WEAK_PASSWORD); return }
     if (!agencyName.trim() || !locationId) { setError(strings.SIGNUP_ERROR); return }
@@ -105,23 +116,23 @@ const HostSignupWizard = () => {
       setStep('teaser')
     } catch (e: unknown) {
       const resp = (e as { response?: { status: number; data?: { code?: string } } }).response
-      setError(mapError(resp?.status ?? 0, resp?.data?.code))
+      applyError(resp?.status ?? 0, resp?.data?.code)
     } finally { setLoading(false) }
   }
 
   const handleComplete = async (withTeaser: boolean) => {
-    setError(null); setLoading(true)
+    clearError(); setLoading(true)
     try {
       const payload: darywinTypes.HostSignupCompletePayload = withTeaser && teaserName && teaserAddress && teaserPrice
         ? { teaserProperty: { name: teaserName, address: teaserAddress, price: Number(teaserPrice) } }
         : {}
-      const r = await HostSignupService.complete(payload)
-      // Redirect to admin app with the JWT — admin reads it via ?token=
-      const adminHost = window.location.origin.replace(/:\d+/, ':3003')
-      window.location.href = `${adminHost}/?signup-token=${encodeURIComponent(r.token || '')}`
+      await HostSignupService.complete(payload)
+      // Backend set a short-TTL httpOnly bridge cookie scoped to AUTH_COOKIE_DOMAIN.
+      // `bridged=1` is a non-credential signal so the admin bootstrap knows to try the exchange.
+      window.location.href = adminUrl('/?bridged=1')
     } catch (e: unknown) {
       const resp = (e as { response?: { status: number; data?: { code?: string } } }).response
-      setError(mapError(resp?.status ?? 0, resp?.data?.code))
+      applyError(resp?.status ?? 0, resp?.data?.code)
     } finally { setLoading(false) }
   }
 
@@ -144,7 +155,12 @@ const HostSignupWizard = () => {
           />
         </Box>
 
-        {error && <Alert severity="error" sx={{ mb: 2 }} role="alert">{error}</Alert>}
+        {error && <Alert severity="error" sx={{ mb: showSignInCta ? 1 : 2 }} role="alert">{error}</Alert>}
+        {showSignInCta && (
+          <Button href={adminSignInUrl()} variant="outlined" size="small" sx={{ mb: 2 }}>
+            {strings.ALREADY_A_HOST}
+          </Button>
+        )}
 
         <Box aria-live="polite">
           {step === 'phone' && (

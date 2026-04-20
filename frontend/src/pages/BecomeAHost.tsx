@@ -1,9 +1,10 @@
 import React from 'react'
 import { Button, Box, Typography, Stack, Container } from '@mui/material'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { strings } from '@/lang/host-signup'
 import Layout from '@/components/Layout'
 import Footer from '@/components/Footer'
+import { adminSignInUrl } from '@/utils/adminUrl'
 
 const steps = [
   { n: '01', tKey: 'STEP_01' },
@@ -34,7 +35,7 @@ const BecomeAHost = () => {
               >
                 {strings.PRIMARY_CTA}
               </Button>
-              <Button component={Link} to="/sign-in" variant="text" size="large">
+              <Button href={adminSignInUrl()} variant="text" size="large">
                 {strings.ALREADY_A_HOST}
               </Button>
             </Stack>

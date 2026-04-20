@@ -9,20 +9,25 @@ import * as darywinTypes from ':darywin-types'
 const jwtSecret = new TextEncoder().encode(env.JWT_SECRET)
 const jwtAlg = 'HS256'
 
+const PURPOSE_HOST_SIGNUP = 'host-signup' as const
+export type TokenPurpose = typeof PURPOSE_HOST_SIGNUP
+
 export type SessionData = {
   id: string
 }
 
+export type PurposeBoundPayload = {
+  id: string
+  purpose: TokenPurpose
+  iat: number
+}
+
 /**
- * Sign and return the JWT.
- *
- * @async
- * @param {SessionData} payload
- * @param {?boolean} [stayConnected]
- * @returns {Promise<string>}
+ * Sign and return a session JWT. Session tokens never carry a `purpose`
+ * claim — the verifier rejects them if they do.
  */
 export const encryptJWT = async (payload: SessionData, stayConnected?: boolean) => {
-  const jwt = await new SignJWT(payload)
+  const jwt = await new SignJWT({ id: payload.id })
     .setProtectedHeader({ alg: jwtAlg })
     .setIssuedAt()
 
@@ -34,17 +39,57 @@ export const encryptJWT = async (payload: SessionData, stayConnected?: boolean) 
 }
 
 /**
- * Verify the JWT format, verify the JWS signature, validate the JWT Claims Set.
- *
- * @async
- * @param {string} input
- * @returns {Promise<SessionData>}
+ * Verify a session JWT. Defense-in-depth: rejects any token that carries a
+ * `purpose` claim so a leaked purpose-bound token (e.g. host-signup bridge)
+ * cannot be replayed as a session cookie.
  */
-export const decryptJWT = async (input: string) => {
+export const decryptJWT = async (input: string): Promise<SessionData> => {
   const { payload } = await jwtVerify(input, jwtSecret, {
     algorithms: [jwtAlg],
   })
-  return payload as SessionData
+  if ((payload as { purpose?: unknown }).purpose !== undefined) {
+    throw new Error('purpose-bound token rejected by session verifier')
+  }
+  return { id: (payload as { id: string }).id }
+}
+
+/**
+ * Sign a short-lived purpose-bound token. Used for the host-signup admin
+ * handoff; never accepted by the session verifier above.
+ */
+export const signPurposeToken = async (
+  payload: { id: string; purpose: TokenPurpose },
+  ttlSeconds: number,
+) =>
+  new SignJWT({ id: payload.id, purpose: payload.purpose })
+    .setProtectedHeader({ alg: jwtAlg })
+    .setIssuedAt()
+    .setExpirationTime(`${ttlSeconds} seconds`)
+    .sign(jwtSecret)
+
+/**
+ * Verify a purpose-bound token. Rejects if the token is missing the
+ * `purpose` claim or doesn't match the expected purpose. Returns `iat`
+ * so callers can enforce one-time use against a stored consumed-at marker.
+ */
+export const verifyPurposeToken = async (
+  input: string,
+  expectedPurpose: TokenPurpose,
+): Promise<PurposeBoundPayload> => {
+  const { payload } = await jwtVerify(input, jwtSecret, {
+    algorithms: [jwtAlg],
+  })
+  const p = payload as { id?: unknown; purpose?: unknown; iat?: unknown }
+  if (typeof p.id !== 'string' || !p.id) {
+    throw new Error('purpose-bound token missing id')
+  }
+  if (p.purpose !== expectedPurpose) {
+    throw new Error('purpose-bound token mismatch')
+  }
+  if (typeof p.iat !== 'number') {
+    throw new Error('purpose-bound token missing iat')
+  }
+  return { id: p.id, purpose: expectedPurpose, iat: p.iat }
 }
 
 /**

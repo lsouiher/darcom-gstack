@@ -5,7 +5,7 @@ import { publicRoute, tenantScoped, adminOnly } from './_markers'
 import * as hostAdmin from '../controllers/hostAdminController'
 import { signupEnabledGuard } from '../middlewares/signupEnabledGuard'
 import { loadSignupSession } from '../middlewares/loadSignupSession'
-import { signupStartLimiter, signupPhoneLimiter, signupVerifyLimiter, signupDetailsLimiter, signupCompleteLimiter } from '../middlewares/rateLimit'
+import { signupStartLimiter, signupPhoneLimiter, signupVerifyLimiter, signupDetailsLimiter, signupCompleteLimiter, signupTokenLimiter } from '../middlewares/rateLimit'
 
 const routes = express.Router()
 
@@ -23,6 +23,9 @@ routes.route(routeNames.complete).post(
 )
 routes.route(routeNames.current).get(
   ...publicRoute(signupEnabledGuard, loadSignupSession, controller.currentSession),
+)
+routes.route(routeNames.sessionFromToken).post(
+  ...publicRoute(signupTokenLimiter, controller.consumeSignupToken),
 )
 routes.route(routeNames.onboarding).get(
   ...tenantScoped(controller.getOnboardingChecklist),

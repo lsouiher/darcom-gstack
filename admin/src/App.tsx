@@ -7,6 +7,7 @@ import { RecaptchaProvider } from '@/context/RecaptchaContext'
 import ScrollToTop from '@/components/ScrollToTop'
 import NProgressIndicator from '@/components/NProgressIndicator'
 import RoleGuard from '@/components/RoleGuard'
+import SignupTokenBootstrap from '@/components/SignupTokenBootstrap'
 
 const adminOnly = (node: React.ReactNode) => (
   <RoleGuard requires={[darywinTypes.UserType.Admin]}>{node}</RoleGuard>
@@ -60,6 +61,7 @@ const AppLayout = () => {
 
   return (
     <UserProvider refreshKey={refreshKey}>
+      <SignupTokenBootstrap />
       <NotificationProvider refreshKey={refreshKey}>
         <RecaptchaProvider>
           <ScrollToTop />
