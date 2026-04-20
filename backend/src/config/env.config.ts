@@ -142,7 +142,7 @@ export const DB_SERVER_SIDE_JAVASCRIPT = helper.StringToBoolean(__env__('DW_DB_S
  *
  * @type {string}
  */
-export const COOKIE_SECRET = __env__('DW_COOKIE_SECRET', false, 'Darywin')
+export const COOKIE_SECRET = __env__('DW_COOKIE_SECRET', true)
 
 /**
  * Authentication cookie domain.
@@ -191,7 +191,7 @@ export const X_ACCESS_TOKEN = 'x-access-token'
  *
  * @type {string}
  */
-export const JWT_SECRET = __env__('DW_JWT_SECRET', false, 'Darywin')
+export const JWT_SECRET = __env__('DW_JWT_SECRET', true)
 
 /**
  * JWT expiration in seconds. Default is 86400 seconds.
@@ -482,8 +482,28 @@ export const SIGNUP_PUBLIC_ENABLED = helper.StringToBoolean(__env__('DW_SIGNUP_P
 
 /**
  * Pepper for hashing phone numbers in audit rows for failure events.
+ * Required so a leaked database backup can't be reversed against the
+ * publicly known default.
  */
-export const AUDIT_PEPPER = __env__('DW_AUDIT_PEPPER', false, 'Darywin-audit-pepper')
+export const AUDIT_PEPPER = __env__('DW_AUDIT_PEPPER', true)
+
+// Defense-in-depth: refuse to boot if any of the previously shipped
+// public defaults reappear (e.g. someone copy-pastes the old code, or
+// `__env__` regains a default arg). Cheaper than another /cso finding.
+const KNOWN_LEAKED_DEFAULTS: Record<string, string[]> = {
+  DW_JWT_SECRET: ['Darywin'],
+  DW_COOKIE_SECRET: ['Darywin'],
+  DW_AUDIT_PEPPER: ['Darywin-audit-pepper'],
+}
+for (const [name, banned] of Object.entries(KNOWN_LEAKED_DEFAULTS)) {
+  const value = process.env[name]
+  if (value && banned.includes(value)) {
+    throw new Error(
+      `${name} is set to a known-leaked default value (${value}). `
+      + 'Generate a fresh ≥32-byte random secret and update your env file before booting.',
+    )
+  }
+}
 
 /**
  * PostHog analytics (server-side).
