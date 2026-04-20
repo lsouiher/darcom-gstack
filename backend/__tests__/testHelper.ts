@@ -38,6 +38,12 @@ export const initializeLogger = () => {
 export const initialize = async () => {
   const passwordHash = await authHelper.hashPassword(PASSWORD)
 
+  // Wipe any leftover test users from prior aborted runs. Tests use the
+  // `@test.darywin.com` email suffix as a namespace; cleaning here prevents
+  // partial-unique-index collisions (e.g. Agency phone uniqueness) when the
+  // test suite ran without a clean teardown last time.
+  await User.deleteMany({ email: /@test\.darywin\.com$/i })
+
   // admin
   const admin = new User({
     fullName: 'admin',

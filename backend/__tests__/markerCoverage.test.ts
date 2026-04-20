@@ -1,7 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const ROUTES_DIR = path.resolve(__dirname, '../src/routes')
+const ROUTES_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../src/routes')
 
 const listRouteFiles = (): string[] => fs
   .readdirSync(ROUTES_DIR)
