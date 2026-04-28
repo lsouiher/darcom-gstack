@@ -30,9 +30,11 @@ const Users = () => {
 
   const onLoad = (_user?: darywinTypes.User) => {
     const _admin = helper.admin(_user)
+    // Agency scoping: agency users only see renters (User type).
+    // Other agencies are hidden — backend also enforces via tenantScope.
     const _types = _admin
       ? helper.getUserTypes().map((userType) => userType.value)
-      : [darywinTypes.UserType.Agency, darywinTypes.UserType.User]
+      : [darywinTypes.UserType.User]
 
     setUser(_user)
     setAdmin(_admin)

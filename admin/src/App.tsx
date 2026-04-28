@@ -1,10 +1,16 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react'
 import { createBrowserRouter, RouterProvider, Outlet, useLocation } from 'react-router-dom'
+import * as darywinTypes from ':darywin-types'
 import { NotificationProvider } from '@/context/NotificationContext'
 import { UserProvider } from '@/context/UserContext'
 import { RecaptchaProvider } from '@/context/RecaptchaContext'
 import ScrollToTop from '@/components/ScrollToTop'
 import NProgressIndicator from '@/components/NProgressIndicator'
+import RoleGuard from '@/components/RoleGuard'
+
+const adminOnly = (node: React.ReactNode) => (
+  <RoleGuard requires={[darywinTypes.UserType.Admin]}>{node}</RoleGuard>
+)
 
 const Header = lazy(() => import('@/components/Header'))
 const SignIn = lazy(() => import('@/pages/SignIn'))
@@ -79,13 +85,13 @@ const router = createBrowserRouter([
       { path: '/forgot-password', element: <ForgotPassword /> },
       { path: '/reset-password', element: <ResetPassword /> },
       // { path: '/sign-up', element: <SignUp /> },
-      { path: '/agencies', element: <Agencies /> },
-      { path: '/agency', element: <Agency /> },
-      { path: '/create-agency', element: <CreateAgency /> },
-      { path: '/update-agency', element: <UpdateAgency /> },
+      { path: '/agencies', element: adminOnly(<Agencies />) },
+      { path: '/agency', element: adminOnly(<Agency />) },
+      { path: '/create-agency', element: adminOnly(<CreateAgency />) },
+      { path: '/update-agency', element: adminOnly(<UpdateAgency />) },
       { path: '/locations', element: <Locations /> },
-      { path: '/create-location', element: <CreateLocation /> },
-      { path: '/update-location', element: <UpdateLocation /> },
+      { path: '/create-location', element: adminOnly(<CreateLocation />) },
+      { path: '/update-location', element: adminOnly(<UpdateLocation />) },
       { path: '/properties', element: <Properties /> },
       { path: '/property', element: <Property /> },
       { path: '/property-bookings', element: <PropertyBookings /> },
@@ -103,9 +109,9 @@ const router = createBrowserRouter([
       { path: '/about', element: <About /> },
       { path: '/tos', element: <ToS /> },
       { path: '/contact', element: <Contact /> },
-      { path: '/countries', element: <Countries /> },
-      { path: '/create-country', element: <CreateCountry /> },
-      { path: '/update-country', element: <UpdateCountry /> },
+      { path: '/countries', element: adminOnly(<Countries />) },
+      { path: '/create-country', element: adminOnly(<CreateCountry />) },
+      { path: '/update-country', element: adminOnly(<UpdateCountry />) },
       { path: '/scheduler', element: <Scheduler /> },
       { path: '*', element: <NoMatch /> }
     ]

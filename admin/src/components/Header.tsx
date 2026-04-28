@@ -299,24 +299,28 @@ const Header = ({
                   <ListItemIcon><SchedulerIcon /></ListItemIcon>
                   <ListItemText primary={strings.SCHEDULER} />
                 </ListItem>
-                <ListItem
-                  onClick={() => {
-                    navigate('/agencies')
-                    handleSideMenuClose()
-                  }}
-                >
-                  <ListItemIcon><AgenciesIcon /></ListItemIcon>
-                  <ListItemText primary={strings.AGENCIES} />
-                </ListItem>
-                <ListItem
-                  onClick={() => {
-                    navigate('/countries')
-                    handleSideMenuClose()
-                  }}
-                >
-                  <ListItemIcon><CountriesIcon /></ListItemIcon>
-                  <ListItemText primary={strings.COUNTRIES} />
-                </ListItem>
+                {user?.type === darywinTypes.UserType.Admin && (
+                  <ListItem
+                    onClick={() => {
+                      navigate('/agencies')
+                      handleSideMenuClose()
+                    }}
+                  >
+                    <ListItemIcon><AgenciesIcon /></ListItemIcon>
+                    <ListItemText primary={strings.AGENCIES} />
+                  </ListItem>
+                )}
+                {user?.type === darywinTypes.UserType.Admin && (
+                  <ListItem
+                    onClick={() => {
+                      navigate('/countries')
+                      handleSideMenuClose()
+                    }}
+                  >
+                    <ListItemIcon><CountriesIcon /></ListItemIcon>
+                    <ListItemText primary={strings.COUNTRIES} />
+                  </ListItem>
+                )}
                 <ListItem
                   onClick={() => {
                     navigate('/locations')

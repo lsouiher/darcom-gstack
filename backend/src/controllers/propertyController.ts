@@ -52,10 +52,16 @@ export const create = async (req: Request, res: Response) => {
       rentalTerm,
     } = body
 
+    // Agency isolation: force agency to req.user._id for non-admin callers.
+    // Silent rewrite — client-supplied body.agency is ignored for non-admin users.
+    const effectiveAgency = req.user && req.user.type !== darywinTypes.UserType.Admin
+      ? req.user._id
+      : agency
+
     const _property = {
       name,
       type,
-      agency,
+      agency: effectiveAgency,
       description,
       bedrooms,
       bathrooms,
@@ -144,6 +150,13 @@ export const update = async (req: Request, res: Response) => {
       throw new Error('body._id is not valid')
     }
     const property = await Property.findById(_id)
+
+    // Agency isolation: non-admin users may only modify properties they own.
+    if (property && req.user && req.user.type !== darywinTypes.UserType.Admin
+      && !property.agency.equals(req.user._id)) {
+      res.status(403).send({ message: 'Forbidden' })
+      return
+    }
 
     if (property) {
       const {
@@ -314,6 +327,14 @@ export const deleteProperty = async (req: Request, res: Response) => {
 
   try {
     const property = await Property.findById(id)
+
+    // Agency isolation: non-admin users may only delete properties they own.
+    if (property && req.user && req.user.type !== darywinTypes.UserType.Admin
+      && !property.agency.equals(req.user._id)) {
+      res.status(403).send({ message: 'Forbidden' })
+      return
+    }
+
     if (property) {
       await Property.deleteOne({ _id: id })
 
@@ -502,7 +523,11 @@ export const getProperties = async (req: Request, res: Response) => {
     const { body }: { body: darywinTypes.GetPropertiesPayload } = req
     const page = Number.parseInt(req.params.page, 10)
     const size = Number.parseInt(req.params.size, 10)
-    const agencies = body.agencies.map((id) => new mongoose.Types.ObjectId(id))
+    // Agency isolation: non-admin callers cannot query other agencies' properties.
+    // Override client-supplied body.agencies with req.user._id for agency users.
+    const agencies = req.user && req.user.type !== darywinTypes.UserType.Admin
+      ? [req.user._id]
+      : body.agencies.map((id) => new mongoose.Types.ObjectId(id))
     const keyword = escapeStringRegexp(String(req.query.s || ''))
     const types = body.types || []
     const rentalTerms = body.rentalTerms || []
@@ -634,7 +659,10 @@ export const getProperties = async (req: Request, res: Response) => {
 export const getBookingProperties = async (req: Request, res: Response) => {
   try {
     const { body }: { body: darywinTypes.GetBookingPropertiesPayload } = req
-    const agency = new mongoose.Types.ObjectId(body.agency)
+    // Agency isolation: non-admin callers cannot query other agencies' booking properties.
+    const agency = req.user && req.user.type !== darywinTypes.UserType.Admin
+      ? req.user._id
+      : new mongoose.Types.ObjectId(body.agency)
     const location = new mongoose.Types.ObjectId(body.location)
     const keyword = escapeStringRegexp(String(req.query.s || ''))
     const options = 'i'

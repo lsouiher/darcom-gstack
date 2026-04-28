@@ -429,6 +429,13 @@ export const update = async (req: Request, res: Response) => {
     }
     const booking = await Booking.findById(body._id)
 
+    // Agency isolation: non-admin users may only modify bookings for their own properties.
+    if (booking && req.user && req.user.type !== darywinTypes.UserType.Admin
+      && !booking.agency.equals(req.user._id)) {
+      res.status(403).send({ message: 'Forbidden' })
+      return
+    }
+
     if (booking) {
       const {
         agency,
@@ -657,7 +664,10 @@ export const getBookings = async (req: Request, res: Response) => {
     const { body }: { body: darywinTypes.GetBookingsPayload } = req
     const page = Number.parseInt(req.params.page, 10)
     const size = Number.parseInt(req.params.size, 10)
-    const agencies = body.agencies.map((id: string) => new mongoose.Types.ObjectId(id))
+    // Agency isolation: non-admin callers cannot query other agencies' bookings.
+    const agencies = req.user && req.user.type === darywinTypes.UserType.Agency
+      ? [req.user._id]
+      : body.agencies.map((id: string) => new mongoose.Types.ObjectId(id))
     const {
       statuses,
       user,
