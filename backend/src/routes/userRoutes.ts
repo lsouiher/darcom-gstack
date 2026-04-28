@@ -2,12 +2,14 @@ import express from 'express'
 import multer from 'multer'
 import routeNames from '../config/userRoutes.config'
 import * as userController from '../controllers/userController'
-import { tenantScoped, publicRoute } from './_markers'
+import { tenantScoped, publicRoute, adminOnly } from './_markers'
 
 const routes = express.Router()
 
 routes.route(routeNames.signup).post(...publicRoute(userController.signup))
-routes.route(routeNames.adminSignup).post(...publicRoute(userController.adminSignup))
+// Admin account creation is gated behind an existing admin session. Provision the
+// first admin via the seed script (`backend/src/setup/seed-prod.ts`), not this route.
+routes.route(routeNames.adminSignup).post(...adminOnly(userController.adminSignup))
 routes.route(routeNames.create).post(...tenantScoped(userController.create))
 routes.route(routeNames.checkToken).get(...publicRoute(userController.checkToken))
 routes.route(routeNames.deleteTokens).delete(...publicRoute(userController.deleteTokens))
@@ -22,6 +24,7 @@ routes.route(routeNames.deletePushToken).post(...tenantScoped(userController.del
 routes.route(routeNames.validateEmail).post(...publicRoute(userController.validateEmail))
 routes.route(routeNames.validateAccessToken).post(...tenantScoped(userController.validateAccessToken))
 routes.route(routeNames.confirmEmail).get(...publicRoute(userController.confirmEmail))
+routes.route(routeNames.confirmEmail).post(...publicRoute(userController.confirmEmail))
 routes.route(routeNames.resendLink).post(...tenantScoped(userController.resendLink))
 routes.route(routeNames.update).post(...tenantScoped(userController.update))
 routes.route(routeNames.updateEmailNotifications).post(...tenantScoped(userController.updateEmailNotifications))

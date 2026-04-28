@@ -14,6 +14,7 @@ import locationRoutes from './routes/locationRoutes'
 import notificationRoutes from './routes/notificationRoutes'
 import propertyRoutes from './routes/propertyRoutes'
 import userRoutes from './routes/userRoutes'
+import hostSignupRoutes from './routes/hostSignupRoutes'
 import stripeRoutes from './routes/stripeRoutes'
 import countryRoutes from './routes/countryRoutes'
 import paypalRoutes from './routes/paypalRoutes'
@@ -56,6 +57,7 @@ app.use('/', locationRoutes)
 app.use('/', notificationRoutes)
 app.use('/', propertyRoutes)
 app.use('/', userRoutes)
+app.use('/', hostSignupRoutes)
 app.use('/', stripeRoutes)
 app.use('/', countryRoutes)
 app.use('/', paypalRoutes)

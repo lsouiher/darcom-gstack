@@ -8,6 +8,7 @@ import env from '@/config/env.config'
 import { strings } from '@/lang/bookings'
 import * as helper from '@/utils/helper'
 import BookingList from '@/components/BookingList'
+import HostOnboardingChecklist from '@/components/HostOnboardingChecklist'
 import AgencyFilter from '@/components/AgencyFilter'
 import StatusFilter from '@/components/StatusFilter'
 import BookingFilter from '@/components/BookingFilter'
@@ -68,6 +69,11 @@ const Bookings = () => {
 
   return (
     <Layout onLoad={onLoad} strict>
+      {user && user.type === darywinTypes.UserType.Agency && (
+        <div style={{ padding: '16px 16px 0 16px' }}>
+          <HostOnboardingChecklist />
+        </div>
+      )}
       {user && (
         <div className="bookings">
           <div className="col-1">

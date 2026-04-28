@@ -31,6 +31,7 @@ import {
   Business as AgencyIcon,
   LocationOn as LocationIcon,
   PersonOutline as SignUpIcon,
+  HomeWork as HostIcon,
   PrivacyTip as PrivacyIcon,
   Cookie as CookiePolicyIcon,
 } from '@mui/icons-material'
@@ -40,6 +41,7 @@ import * as darywinTypes from ':darywin-types'
 import env from '@/config/env.config'
 import { strings as commonStrings } from '@/lang/common'
 import { strings as suStrings } from '@/lang/sign-up'
+import { strings as hostStrings } from '@/lang/host-signup'
 import { strings } from '@/lang/header'
 import * as UserService from '@/services/UserService'
 import * as PaymentService from '@/services/PaymentService'
@@ -435,6 +437,15 @@ const Header = ({
                     <>
                       <ListItem
                         onClick={() => {
+                          navigate('/become-a-host')
+                          handleSideMenuClose()
+                        }}
+                      >
+                        <ListItemIcon><HostIcon /></ListItemIcon>
+                        <ListItemText primary={hostStrings.BECOME_A_HOST} />
+                      </ListItem>
+                      <ListItem
+                        onClick={() => {
                           navigate('/sign-in')
                           handleSideMenuClose()
                         }}
@@ -467,6 +478,11 @@ const Header = ({
                 <Button variant="contained" onClick={handleLangMenuOpen} disableElevation fullWidth className="btn">
                   {/* {lang?.label} */}
                   <CircleFlag countryCode={lang?.countryCode as string} height={flagHeight} className="flag" title={lang?.label} />
+                </Button>
+              )}
+              {!hideSignin && !isSignedIn && isLoaded && (
+                <Button variant="outlined" size="medium" startIcon={<HostIcon />} onClick={() => navigate('/become-a-host')} disableElevation className="btn btn-auth" aria-label="Become a host">
+                  <span className="btn-auth-txt">{hostStrings.BECOME_A_HOST}</span>
                 </Button>
               )}
               {!hideSignin && !isSignedIn && isLoaded && (

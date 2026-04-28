@@ -7,6 +7,7 @@ import { RecaptchaProvider } from '@/context/RecaptchaContext'
 import ScrollToTop from '@/components/ScrollToTop'
 import NProgressIndicator from '@/components/NProgressIndicator'
 import RoleGuard from '@/components/RoleGuard'
+import SignupTokenBootstrap from '@/components/SignupTokenBootstrap'
 
 const adminOnly = (node: React.ReactNode) => (
   <RoleGuard requires={[darywinTypes.UserType.Admin]}>{node}</RoleGuard>
@@ -48,6 +49,7 @@ const Countries = lazy(() => import('@/pages/Countries'))
 const CreateCountry = lazy(() => import('@/pages/CreateCountry'))
 const UpdateCountry = lazy(() => import('@/pages/UpdateCountry'))
 const Scheduler = lazy(() => import('@/pages/Scheduler'))
+const PendingReviewAgencies = lazy(() => import('@/pages/PendingReviewAgencies'))
 
 const AppLayout = () => {
   const location = useLocation()
@@ -59,6 +61,7 @@ const AppLayout = () => {
 
   return (
     <UserProvider refreshKey={refreshKey}>
+      <SignupTokenBootstrap />
       <NotificationProvider refreshKey={refreshKey}>
         <RecaptchaProvider>
           <ScrollToTop />
@@ -113,6 +116,7 @@ const router = createBrowserRouter([
       { path: '/create-country', element: adminOnly(<CreateCountry />) },
       { path: '/update-country', element: adminOnly(<UpdateCountry />) },
       { path: '/scheduler', element: <Scheduler /> },
+      { path: '/pending-review', element: adminOnly(<PendingReviewAgencies />) },
       { path: '*', element: <NoMatch /> }
     ]
   }

@@ -152,12 +152,12 @@ describe('GET /api/user/:id', () => {
   })
 })
 
-describe('PATCH /api/user/:id', () => {
-  it('should revoke access to PATCH method', async () => {
+describe('TRACE /api/user/:id', () => {
+  it('should revoke access to TRACE method (XST prevention)', async () => {
     const token = await testHelper.signinAsAdmin()
 
     const res = await request(app)
-      .patch(`/api/user/${USER_ID}`)
+      .trace(`/api/user/${USER_ID}`)
       .set(env.X_ACCESS_TOKEN, token)
     expect(res.statusCode).toBe(405)
 

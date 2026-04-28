@@ -25,10 +25,12 @@ docker-compose -f docker-compose.dev.yml exec dw-dev-backend npm run setup
 
 | App | URL | Login |
 |-----|-----|-------|
-| Frontend | http://localhost:8081 | jdoe@darywin.com / M00vinin |
-| Admin | http://localhost:3003 | admin@darywin.com / M00vinin |
-| API | http://localhost:4004 | - |
-| MongoDB UI | http://localhost:8084 | admin / admin |
+| Frontend | http://localhost:8091 | jdoe@darywin.com / M00vinin |
+| Admin | http://localhost:3013 | admin@darywin.com / M00vinin |
+| API | http://localhost:4005 | - |
+| MongoDB UI | http://localhost:8085 | admin / admin |
+
+> Host ports intentionally differ from the `darcom` parent repo (8081/3003/4004/8084) so both projects can run in Docker Desktop simultaneously.
 
 ## Daily Use
 
@@ -47,3 +49,7 @@ docker-compose -f docker-compose.dev.yml down -v
 ```
 
 Hot reload is enabled -- code changes reflect automatically in all services.
+
+## Startup behavior
+
+Services use `restart: unless-stopped`, so they recover from crashes but do **not** auto-start when Docker Desktop launches after an explicit `down`. Always bring the stack up with `up -d` and take it down with `down` — this is what lets you cleanly switch between darcom and darcom-gstack without port collisions.

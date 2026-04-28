@@ -142,7 +142,7 @@ export const DB_SERVER_SIDE_JAVASCRIPT = helper.StringToBoolean(__env__('DW_DB_S
  *
  * @type {string}
  */
-export const COOKIE_SECRET = __env__('DW_COOKIE_SECRET', false, 'Darywin')
+export const COOKIE_SECRET = __env__('DW_COOKIE_SECRET', true)
 
 /**
  * Authentication cookie domain.
@@ -191,7 +191,7 @@ export const X_ACCESS_TOKEN = 'x-access-token'
  *
  * @type {string}
  */
-export const JWT_SECRET = __env__('DW_JWT_SECRET', false, 'Darywin')
+export const JWT_SECRET = __env__('DW_JWT_SECRET', true)
 
 /**
  * JWT expiration in seconds. Default is 86400 seconds.
@@ -226,14 +226,14 @@ export const SMTP_PORT = Number.parseInt(__env__('DW_SMTP_PORT', true), 10)
  *
  * @type {string}
  */
-export const SMTP_USER = __env__('DW_SMTP_USER', true)
+export const SMTP_USER = __env__('DW_SMTP_USER', false)
 
 /**
  * SMTP password.
  *
  * @type {string}
  */
-export const SMTP_PASS = __env__('DW_SMTP_PASS', true)
+export const SMTP_PASS = __env__('DW_SMTP_PASS', false)
 
 /**
  * SMTP from email.
@@ -450,6 +450,78 @@ export const SENTRY_DSN_BACKEND = __env__('DW_SENTRY_DSN_BACKEND', ENABLE_SENTRY
 export const SENTRY_TRACES_SAMPLE_RATE = Number.parseFloat(__env__('DW_SENTRY_TRACES_SAMPLE_RATE', false, '1.0'))
 
 /**
+ * Twilio Verify — host signup OTP.
+ */
+export const TWILIO_ACCOUNT_SID = __env__('DW_TWILIO_ACCOUNT_SID', false)
+export const TWILIO_AUTH_TOKEN = __env__('DW_TWILIO_AUTH_TOKEN', false)
+export const TWILIO_VERIFY_SERVICE_SID = __env__('DW_TWILIO_VERIFY_SERVICE_SID', false)
+export const TWILIO_WHATSAPP_ENABLED = helper.StringToBoolean(__env__('DW_TWILIO_WHATSAPP_ENABLED', false, 'true'))
+
+/**
+ * Dev-only OTP bypass: skip Twilio, log the code, accept DW_SMS_DEV_CODE.
+ * MUST be false in production. Refused unless NODE_ENV !== 'production'.
+ */
+export const SMS_DEV_MODE = helper.StringToBoolean(__env__('DW_SMS_DEV_MODE', false, 'false'))
+export const SMS_DEV_CODE = __env__('DW_SMS_DEV_CODE', false, '000000')
+
+/**
+ * Comma-separated ISO-3166-1 alpha-2 country codes allowed to sign up as a host.
+ * Empty means allow all (not recommended in prod).
+ */
+export const SIGNUP_ALLOWED_COUNTRY_CODES = __env__('DW_SIGNUP_ALLOWED_COUNTRY_CODES', false, '')
+
+/**
+ * Secret used to sign the host-signup session cookie.
+ */
+export const SIGNUP_SESSION_SECRET = __env__('DW_SIGNUP_SESSION_SECRET', true)
+
+/**
+ * Kill-switch for the public host signup flow.
+ */
+export const SIGNUP_PUBLIC_ENABLED = helper.StringToBoolean(__env__('DW_SIGNUP_PUBLIC_ENABLED', false, 'true'))
+
+/**
+ * Pepper for hashing phone numbers in audit rows for failure events.
+ * Required so a leaked database backup can't be reversed against the
+ * publicly known default.
+ */
+export const AUDIT_PEPPER = __env__('DW_AUDIT_PEPPER', true)
+
+// Defense-in-depth: refuse to boot if any of the previously shipped
+// public defaults reappear (e.g. someone copy-pastes the old code, or
+// `__env__` regains a default arg). Cheaper than another /cso finding.
+const KNOWN_LEAKED_DEFAULTS: Record<string, string[]> = {
+  DW_JWT_SECRET: ['Darywin'],
+  DW_COOKIE_SECRET: ['Darywin'],
+  DW_AUDIT_PEPPER: ['Darywin-audit-pepper'],
+}
+for (const [name, banned] of Object.entries(KNOWN_LEAKED_DEFAULTS)) {
+  const value = process.env[name]
+  if (value && banned.includes(value)) {
+    throw new Error(
+      `${name} is set to a known-leaked default value (${value}). `
+      + 'Generate a fresh ≥32-byte random secret and update your env file before booting.',
+    )
+  }
+}
+
+/**
+ * PostHog analytics (server-side).
+ */
+export const POSTHOG_KEY = __env__('DW_POSTHOG_KEY', false)
+export const ANALYTICS_BACKEND = __env__('DW_ANALYTICS_BACKEND', false, 'https://app.posthog.com')
+
+/**
+ * Optional Slack-compatible webhook that receives a new-host alert on signup complete.
+ */
+export const FOUNDER_ALERT_WEBHOOK = __env__('DW_FOUNDER_ALERT_WEBHOOK', false)
+
+/**
+ * Host-signup session TTL in seconds. Default 24h.
+ */
+export const SIGNUP_SESSION_TTL = Number.parseInt(__env__('DW_SIGNUP_SESSION_TTL', false, '86400'), 10)
+
+/**
  * User Document.
  *
  * @export
@@ -477,6 +549,11 @@ export interface User extends Document {
   payLater?: boolean
   customerId?: string
   expireAt?: Date
+  phoneVerified?: boolean
+  firstPayoutApproved?: boolean
+  onboardingStep?: darywinTypes.OnboardingStep
+  payoutAccountId?: string
+  signupTokenConsumedAt?: Date
 }
 
 /**

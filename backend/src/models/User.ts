@@ -99,6 +99,32 @@ const userSchema = new Schema<env.User>(
     customerId: {
       type: String,
     },
+    phoneVerified: {
+      type: Boolean,
+      default: false,
+    },
+    firstPayoutApproved: {
+      type: Boolean,
+      default: false,
+    },
+    onboardingStep: {
+      type: String,
+      enum: [
+        darywinTypes.OnboardingStep.Phone,
+        darywinTypes.OnboardingStep.Email,
+        darywinTypes.OnboardingStep.Details,
+        darywinTypes.OnboardingStep.Property,
+        darywinTypes.OnboardingStep.Payout,
+        darywinTypes.OnboardingStep.Done,
+      ],
+      default: darywinTypes.OnboardingStep.Done,
+    },
+    payoutAccountId: {
+      type: String,
+    },
+    signupTokenConsumedAt: {
+      type: Date,
+    },
     expireAt: {
       //
       // Non verified and active users created from checkout with Stripe are temporary and
@@ -119,6 +145,11 @@ userSchema.index({ type: 1, expireAt: 1, fullName: 1 })
 userSchema.index({ type: 1, expireAt: 1, email: 1 })
 userSchema.index({ type: 1, expireAt: 1, fullName: 1, _id: 1 })
 userSchema.index({ type: 1, expireAt: 1, email: 1, _id: 1 })
+userSchema.index({ type: 1, firstPayoutApproved: 1 })
+userSchema.index(
+  { phone: 1 },
+  { unique: true, partialFilterExpression: { phone: { $type: 'string', $gt: '' }, type: 'AGENCY' } },
+)
 
 const User = model<env.User>('User', userSchema)
 

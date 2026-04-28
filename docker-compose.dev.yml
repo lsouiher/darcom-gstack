@@ -11,13 +11,14 @@ services:
   mongo:
     image: mongo:latest                              # Use the official MongoDB image from Docker Hub
     command: mongod --quiet --logpath /dev/null      # Run MongoDB with minimal logging (suppress noisy output)
-    restart: always                                  # Auto-restart if container crashes or Docker restarts
+    restart: unless-stopped                          # Recover from crashes, but don't auto-start after explicit `down`
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin              # Create root user "admin" on first startup
       MONGO_INITDB_ROOT_PASSWORD: admin              # Password for root user (change in production!)
     ports:
-      - 27018:27017                                  # Map host port 27018 → container port 27017 (MongoDB default)
-                                                     # Access from host: mongodb://admin:admin@localhost:27018
+      - 27019:27017                                  # Map host port 27019 → container port 27017 (MongoDB default)
+                                                     # Host port differs from darcom parent repo (27018) so both can run side-by-side
+                                                     # Access from host: mongodb://admin:admin@localhost:27019
     volumes:
       - mongodb_data:/data/db                        # Persist database files (survives container restarts)
       - mongodb_config:/data/configdb                # Persist MongoDB config (replica set configs, etc.)
@@ -27,15 +28,26 @@ services:
   # ===========================================================================
   mongo-express:
     image: mongo-express:latest                      # Official web UI for MongoDB
-    restart: always                                  # Auto-restart on failure
+    restart: unless-stopped                          # Recover from crashes, but don't auto-start after explicit `down`
     ports:
-      - 8084:8081                                    # Access at http://localhost:8084
+      - 8085:8081                                    # Access at http://localhost:8085 (differs from darcom parent repo's 8084)
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/   # Connect to mongo service (uses Docker network name "mongo")
       ME_CONFIG_BASICAUTH_USERNAME: admin            # Login username for the web UI
       ME_CONFIG_BASICAUTH_PASSWORD: admin            # Login password for the web UI
     depends_on:
       - mongo                                        # Wait for mongo container to start first
+
+  # ===========================================================================
+  # MailHog - Local SMTP sink for development (captures all outbound email)
+  # ===========================================================================
+  mailhog:
+    image: mailhog/mailhog:latest                    # Lightweight fake SMTP + web UI
+    restart: unless-stopped
+    ports:
+      - 1026:1025                                    # SMTP port (host 1026 → container 1025) for host tools
+      - 8026:8025                                    # Web UI at http://localhost:8026 to inspect captured emails
+    # Backend connects via Docker network at mailhog:1025 (no auth)
 
   # ===========================================================================
   # Backend API Server (Node.js/Express)
@@ -45,11 +57,12 @@ services:
       context: .                                     # Build context is the project root (can access all files)
       dockerfile: ./backend/Dockerfile.dev           # Use development Dockerfile (includes nodemon for hot-reload)
     env_file: ./backend/.env.docker                  # Load environment variables from this file
-    restart: always                                  # Auto-restart on failure
+    restart: unless-stopped                          # Recover from crashes, but don't auto-start after explicit `down`
     ports:
-      - 4004:4004                                    # API available at http://localhost:4004
+      - 4005:4004                                    # API available at http://localhost:4005 (differs from darcom parent repo's 4004)
     depends_on:
       - mongo                                        # Wait for MongoDB to start first
+      - mailhog                                      # Local SMTP sink (dev-only)
     volumes:
       - cdn:/var/www/cdn/darywin                     # Shared volume for uploaded files (images, avatars)
       - ./backend:/darywin/backend                   # Mount local backend code INTO container (enables hot-reload)
@@ -66,11 +79,11 @@ services:
       context: .                                     # Build context is project root
       dockerfile: ./admin/Dockerfile.dev             # Development Dockerfile with Vite dev server
     env_file: ./admin/.env.docker                    # Load environment variables
-    restart: always                                  # Auto-restart on failure
+    restart: unless-stopped                          # Recover from crashes, but don't auto-start after explicit `down`
     depends_on:
       - dw-dev-backend                               # Wait for backend API to be available
     ports:
-      - 3003:3003                                    # Admin panel at http://localhost:3003
+      - 3013:3003                                    # Admin panel at http://localhost:3013 (differs from darcom parent repo's 3003)
     volumes:
       - ./admin:/darywin/admin                       # Mount local admin code (hot-reload: edit files, see changes)
       - /darywin/admin/node_modules                  # Keep container's node_modules isolated
@@ -86,12 +99,12 @@ services:
       context: .                                     # Build context is project root
       dockerfile: ./frontend/Dockerfile.dev          # Development Dockerfile with Vite dev server
     env_file: ./frontend/.env.docker                 # Load environment variables
-    restart: always                                  # Auto-restart on failure
+    restart: unless-stopped                          # Recover from crashes, but don't auto-start after explicit `down`
     depends_on:
       - dw-dev-backend                               # Wait for backend API to be available
     ports:
-      - 8081:8081                                    # Frontend at http://localhost:8081
-      - 8444:443                                     # HTTPS port (if configured)
+      - 8091:8081                                    # Frontend at http://localhost:8091 (differs from darcom parent repo's 8081)
+      - 8445:443                                     # HTTPS port (differs from darcom parent repo's 8444)
     volumes:
       - ./frontend:/darywin/frontend                 # Mount local frontend code (hot-reload enabled)
       - /darywin/frontend/node_modules               # Keep container's node_modules isolated

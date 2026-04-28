@@ -5,6 +5,7 @@ import escapeStringRegexp from 'escape-string-regexp'
 import mongoose from 'mongoose'
 import { Request, Response } from 'express'
 import * as darywinTypes from ':darywin-types'
+import User from '../models/User'
 import Booking from '../models/Booking'
 import Property from '../models/Property'
 import i18n from '../lang/i18n'
@@ -84,6 +85,14 @@ export const create = async (req: Request, res: Response) => {
 
     const property = new Property(_property)
     await property.save()
+
+    // Advance host onboarding step forward (never backward) on first property
+    if (req.user && req.user.type === darywinTypes.UserType.Agency) {
+      await User.updateOne(
+        { _id: req.user._id, onboardingStep: { $in: [darywinTypes.OnboardingStep.Phone, darywinTypes.OnboardingStep.Email, darywinTypes.OnboardingStep.Details, darywinTypes.OnboardingStep.Property] } },
+        { $set: { onboardingStep: darywinTypes.OnboardingStep.Payout } },
+      )
+    }
 
     // image
     const _image = path.join(env.CDN_TEMP_PROPERTIES, imageFile)

@@ -32,7 +32,7 @@ describe('GET /api/country-code', () => {
     let res = await request(app)
       .get('/api/country-code')
     expect(res.statusCode).toBe(200)
-    expect(res.body).toBe('US')
+    expect(res.body).toBe(env.IPINFO_DEFAULT_COUNTRY)
 
     // test with x-forwarded-for
     res = await request(app)
@@ -53,7 +53,7 @@ describe('GET /api/country-code', () => {
       .get('/api/country-code')
       .set('x-forwarded-for', 'wrong ip address')
     expect(res.statusCode).toBe(200)
-    expect(res.body).toBe('US')
+    expect(res.body).toBe(env.IPINFO_DEFAULT_COUNTRY)
 
     // test failure (wrong api key)
     jest.resetModules()

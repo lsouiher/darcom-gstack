@@ -21,7 +21,7 @@ const Layout = ({
 }: LayoutProps) => {
   useAnalytics()
 
-  const { user, userLoaded, unauthorized } = useUserContext() as UserContextType
+  const { user, setUser, userLoaded, unauthorized } = useUserContext() as UserContextType
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -37,6 +37,30 @@ const Layout = ({
       }
     }
   }, [user, userLoaded, strict]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Poll for verification status every 30s when user is unverified
+  useEffect(() => {
+    if (!user || user.verified) {
+      return undefined
+    }
+
+    const interval = setInterval(async () => {
+      try {
+        const currentUser = UserService.getCurrentUser()
+        if (!currentUser) {
+          return
+        }
+        const freshUser = await UserService.getUser(currentUser._id)
+        if (freshUser && freshUser.verified) {
+          setUser(freshUser)
+        }
+      } catch {
+        // silently ignore polling errors
+      }
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [user, setUser])
 
   const handleResend = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()

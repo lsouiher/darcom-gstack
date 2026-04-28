@@ -92,6 +92,7 @@ describe('mail module', () => {
         user: 'user',
         pass: 'pass',
       },
+      ignoreTLS: false,
     })
 
     expect(sendMailMock).toHaveBeenCalledWith(expect.objectContaining({

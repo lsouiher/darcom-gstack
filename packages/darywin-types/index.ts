@@ -54,6 +54,75 @@ export enum PaymentGateway {
   Stripe = 'stripe',
 }
 
+export enum OnboardingStep {
+  Phone = 'phone',
+  Email = 'email',
+  Details = 'details',
+  Property = 'property',
+  Payout = 'payout',
+  Done = 'done',
+}
+
+export enum OtpChannel {
+  WhatsApp = 'whatsapp',
+  SMS = 'sms',
+}
+
+export interface HostSignupStartPayload {
+  phone: string
+  language?: string
+}
+
+export interface VerifyPhonePayload {
+  code: string
+}
+
+export interface HostSignupDetailsPayload {
+  email: string
+  password: string
+  agencyName: string
+  locationId: string
+}
+
+export interface HostSignupCompletePayload {
+  teaserProperty?: {
+    name: string
+    address: string
+    price: number
+    latitude?: number
+    longitude?: number
+  }
+}
+
+export interface HostSignupResponse {
+  sessionId?: string
+  phoneVerified?: boolean
+  nextStep?: OnboardingStep
+  channel?: OtpChannel
+  user?: User
+}
+
+export interface OnboardingChecklistItem {
+  key: 'phone' | 'email' | 'property' | 'payout' | 'booking'
+  done: boolean
+  cta?: string
+}
+
+export interface OnboardingChecklistResponse {
+  items: OnboardingChecklistItem[]
+  step: OnboardingStep
+}
+
+export interface PendingReviewAgency {
+  _id: string
+  fullName: string
+  email?: string
+  phone?: string
+  createdAt?: Date
+  firstPayoutApproved: boolean
+  flags: string[]
+}
+
 export interface SignUpPayload {
   email: string
   password: string
@@ -267,6 +336,11 @@ export interface User {
   accessToken?: string
   checked?: boolean
   customerId?: string
+  phoneVerified?: boolean
+  firstPayoutApproved?: boolean
+  onboardingStep?: OnboardingStep
+  signupTokenConsumedAt?: Date
+  payoutAccountId?: string
 }
 
 export interface Option {

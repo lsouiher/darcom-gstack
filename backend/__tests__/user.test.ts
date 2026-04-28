@@ -189,34 +189,65 @@ describe('POST /api/sign-up', () => {
 })
 
 describe('POST /api/admin-sign-up', () => {
-  it('should create an admin user', async () => {
-    const payload: darywinTypes.SignUpPayload = {
+  it('rejects unauthenticated callers (security: CSO finding #1)', async () => {
+    const res = await request(app)
+      .post('/api/admin-sign-up')
+      .send({
+        email: 'attacker@evil.example.com',
+        password: testHelper.PASSWORD,
+        fullName: 'pwn',
+        language: testHelper.LANGUAGE,
+      })
+    expect([401, 403]).toContain(res.statusCode)
+    const leaked = await User.findOne({ email: 'attacker@evil.example.com' })
+    expect(leaked).toBeNull()
+  })
+
+  it('should create an admin user (bootstrap admin via direct DB insert + admin-gated route)', async () => {
+    // Bootstrap the first admin the same way `backend/src/setup/seed-prod.ts` does:
+    // direct DB insert. The /api/admin-sign-up route requires an existing admin
+    // session, so the very first admin can never come from the route itself.
+    const bcrypt = (await import('bcrypt')).default
+    const bootstrapPassword = await bcrypt.hash(testHelper.PASSWORD, 10)
+    const bootstrap = await User.create({
       email: ADMIN_EMAIL,
-      password: testHelper.PASSWORD,
+      password: bootstrapPassword,
       fullName: 'admin',
       language: testHelper.LANGUAGE,
       birthDate: new Date(1992, 5, 25),
       phone: '09090909',
-    }
-
-    const res = await request(app)
-      .post('/api/admin-sign-up')
-      .send(payload)
-
-    expect(res.statusCode).toBe(200)
+      type: darywinTypes.UserType.Admin,
+      verified: true,
+      active: true,
+    })
+    ADMIN_ID = bootstrap._id.toString()
 
     const user = await User.findOne({ email: ADMIN_EMAIL })
     expect(user).not.toBeNull()
-    ADMIN_ID = user?._id.toString() || ''
     expect(user?.type).toBe(darywinTypes.UserType.Admin)
-    expect(user?.email).toBe(payload.email)
-    expect(user?.fullName).toBe(payload.fullName)
-    expect(user?.language).toBe(payload.language)
-    expect(user?.birthDate).toStrictEqual(payload.birthDate)
-    expect(user?.phone).toBe(payload.phone)
-    const token = await Token.findOne({ user: ADMIN_ID })
-    expect(token).not.toBeNull()
-    expect(token?.token.length).toBeGreaterThan(0)
+    expect(user?.email).toBe(ADMIN_EMAIL)
+    expect(user?.fullName).toBe('admin')
+    expect(user?.language).toBe(testHelper.LANGUAGE)
+
+    // Verify the admin-gated route works for an authenticated admin: it can
+    // provision a SECOND admin. This proves the hardened gate didn't break
+    // legitimate admin-to-admin onboarding.
+    const adminToken = await testHelper.signinAsAdmin()
+    const secondAdminEmail = `${testHelper.getName('admin2')}@test.darywin.com`
+    const res = await request(app)
+      .post('/api/admin-sign-up')
+      .set(env.X_ACCESS_TOKEN, adminToken)
+      .send({
+        email: secondAdminEmail,
+        password: testHelper.PASSWORD,
+        fullName: 'admin2',
+        language: testHelper.LANGUAGE,
+      })
+    expect(res.statusCode).toBe(200)
+    const second = await User.findOne({ email: secondAdminEmail })
+    expect(second?.type).toBe(darywinTypes.UserType.Admin)
+    await User.deleteOne({ _id: second?._id })
+    await Token.deleteMany({ user: second?._id })
   })
 })
 

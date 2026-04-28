@@ -123,6 +123,23 @@ export const signin = (data: darywinTypes.SignInPayload): Promise<{ status: numb
     })
 
 /**
+ * Exchange the short-TTL httpOnly bridge cookie set by hostSignupController.complete
+ * for an admin auth cookie. The token never touches JavaScript or the URL — it lives
+ * only in the cookie sent automatically with this credentialed request.
+ */
+export const consumeSignupToken = (): Promise<{ status: number, data: darywinTypes.User }> =>
+  axiosInstance
+    .post(
+      '/api/host/signup/session-from-token',
+      {},
+      { withCredentials: true }
+    )
+    .then((res) => {
+      localStorage.setItem('mi-be-user', JSON.stringify(res.data))
+      return { status: res.status, data: res.data }
+    })
+
+/**
  * Sign out.
  *
  * @param {boolean} [redirect=true]
